@@ -42,6 +42,20 @@ def printTabuleiro(tab):
         tabStr = tabStr + "\n";
     print(tabStr);
 
+def verificaMovTorre(type, x_ori, y_ori, x_dest, y_dest):
+    global tabuleiro;
+    if y_ori == y_dest: #anda em x
+        for i in range(x_ori + 1, x_dest):
+            if not checaPeca(VV, i, y_dest):
+                return False
+        return True;
+    elif x_ori == x_dest: #anda em y
+        for i in range(y_ori + 1, y_dest):
+            if not checaPeca(VV, x_dest, i):
+                return False
+        return True;
+    return False;
+
 def verificaMovPeao(type, x_ori, y_ori, x_dest, y_dest):
     global tabuleiro;
     if y_ori == y_dest:  # movimentação normal para frente
@@ -81,7 +95,8 @@ def checaPeca(type, x, y):
 def movimentaPeca(type, x_ori, y_ori, x_dest, y_dest):
     global numJog, tabuleiro
 
-    if x_dest > 8 or x_dest < 0 or y_dest > 8 or x_dest < 0 : # se sair do tabuleiro;
+    if x_dest > 8 or x_dest < 0 or y_dest > 8 or x_dest < 0\
+            or (x_ori== x_dest and y_ori == y_dest): # se sair do tabuleiro ou mesmo lugar;
         return False;
     if type == BP or type == PP:
         if verificaMovPeao(type, x_ori, y_ori, x_dest, y_dest):
@@ -89,6 +104,12 @@ def movimentaPeca(type, x_ori, y_ori, x_dest, y_dest):
             setPeca(type, x_dest, y_dest);
             promocaoPeao(type, x_dest, y_dest);
             return True;
+    if type == BT or type == PT:
+        if verificaMovTorre(type, x_ori, y_ori, x_dest, y_dest):
+            setPeca(VV, x_ori, y_ori);
+            setPeca(type, x_dest, y_dest);
+            return True;
+
     return False;
 
 
