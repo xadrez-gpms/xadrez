@@ -44,14 +44,16 @@ def printTabuleiro(tab):
 
 def verificaMovTorre(type, x_ori, y_ori, x_dest, y_dest):
     global tabuleiro;
+    direction = 1;
+    if is_branca(type): direction = -1; #verifica direcao
     if y_ori == y_dest: #anda em x
-        for i in range(x_ori + 1, x_dest):
-            if not checaPeca(VV, i, y_dest):
+        for i in range(x_ori + direction, x_dest, direction):
+            if not checaPeca(VV, i, y_dest): #verifica se esta vazio ate a penultima posição
                 return False
         return True;
     elif x_ori == x_dest: #anda em y
-        for i in range(y_ori + 1, y_dest):
-            if not checaPeca(VV, x_dest, i):
+        for i in range(y_ori + 1, y_dest, direction):
+            if not checaPeca(VV, x_dest, i): #verifica se esta vazio ate a penultima posição
                 return False
         return True;
     return False;
@@ -67,8 +69,7 @@ def verificaMovPeao(type, x_ori, y_ori, x_dest, y_dest):
                 not is_branca(type) and x_dest - x_ori <= limit and x_dest > x_ori): #verifica se esta dentro do limite
             if tabuleiro[x_dest][y_dest] == VV:  # verifica se a casa esta vazia
                 return True;  # peça anda simples
-    elif y_dest == y_ori + 1 or y_dest == y_ori - 1 and tabuleiro[x_dest][y_dest] != VV and \
-            is_branca(type) != is_branca(tabuleiro[x_dest][y_dest]):  # verifica se o tipo de peca da posicao de destino e uma peca inimiga
+    elif y_dest == y_ori + 1 or y_dest == y_ori - 1 and tabuleiro[x_dest][y_dest] != VV :  # verifica se o tipo de peca da posicao de destino e uma peca inimiga
         if (is_branca(type) and x_dest - x_ori == -1) or (not is_branca(type) and x_dest - x_ori == 1): #andando pra frente no eixo X
             return True;  # peca comida
     return False;  # movimento invalido
@@ -95,9 +96,12 @@ def checaPeca(type, x, y):
 def movimentaPeca(type, x_ori, y_ori, x_dest, y_dest):
     global numJog, tabuleiro
 
-    if x_dest > 8 or x_dest < 0 or y_dest > 8 or x_dest < 0\
-            or (x_ori== x_dest and y_ori == y_dest): # se sair do tabuleiro ou mesmo lugar;
-        return False;
+    if not checaPeca(type, x_ori, y_ori) : return False; #tenta movimentar outra peca
+    if x_dest > 7 or x_dest < 0 or y_dest > 7 or x_dest < 0 : return False; # se sair do tabuleiro
+    if x_ori == x_dest and y_ori == y_dest : return False;       # peca fica nomesmo lugar;
+    if getPeca(x_dest, y_dest) != VV and (is_branca(getPeca(x_ori, y_ori)) == is_branca(getPeca(x_dest, y_dest))):
+        return False; #nao deixa sobrepor peca aliada
+
     if type == BP or type == PP:
         if verificaMovPeao(type, x_ori, y_ori, x_dest, y_dest):
             setPeca(VV, x_ori, y_ori);
@@ -119,4 +123,6 @@ print(movimentaPeca(PP, 1, 1, 2, 1));
 print(movimentaPeca(BP, 6, 0, 4, 0));
 print(movimentaPeca(PP, 1, 0, 3, 0));
 print(movimentaPeca(PP, 3, 0, 1, 0));
+#setPeca(VV, 4, 0);
+print(movimentaPeca(BT, 7, 0, 5, 0));
 printTabuleiro(tabuleiro);
