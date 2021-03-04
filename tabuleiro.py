@@ -60,19 +60,33 @@ def verificaMovPeao(type, x_ori, y_ori, x_dest, y_dest):
     return False;  # movimento invalido
 
 def promocaoPeao(type, x, y): #implementar escolha
-    if is_branca(type) and x == 8 :
+    if is_branca(type) and x == 7 :
         tabuleiro[x][y] == BQ;
     elif not is_branca(type) and x == 0 :
         tabuleiro[x][y] == PQ;
 
+def getPeca(x,y):
+    global tabuleiro;
+    return tabuleiro[x][y]
+
+def setPeca(type, x,y):
+    global tabuleiro;
+    tabuleiro[x][y] = type;
+
+def checaPeca(type, x, y):
+    global tabuleiro;
+    if tabuleiro[x][y] == type: return True;
+    return False;
+
 def movimentaPeca(type, x_ori, y_ori, x_dest, y_dest):
     global numJog, tabuleiro
+
     if x_dest > 8 or x_dest < 0 or y_dest > 8 or x_dest < 0 : # se sair do tabuleiro;
         return False;
     if type == BP or type == PP:
         if verificaMovPeao(type, x_ori, y_ori, x_dest, y_dest):
-            tabuleiro[x_ori][y_ori] = VV;
-            tabuleiro[x_dest][y_dest] = type;
+            setPeca(VV, x_ori, y_ori);
+            setPeca(type, x_dest, y_dest);
             promocaoPeao(type, x_dest, y_dest);
             return True;
     return False;
