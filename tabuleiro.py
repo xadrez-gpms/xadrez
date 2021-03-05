@@ -140,6 +140,17 @@ def movimentaPeca(type, x_ori, y_ori, x_dest, y_dest):
             setPeca(VV, x_ori, y_ori);
             setPeca(type, x_dest, y_dest);
             return True;
+    if type == BQ or type == PQ: #rainha
+        if x_ori == x_dest or y_ori == y_ori:
+            if verificaMovTorre(type, x_ori, y_ori, x_dest, y_dest):
+                setPeca(VV, x_ori, y_ori);
+                setPeca(type, x_dest, y_dest);
+                return True;
+        else:
+            if verificaMovBispo(type, x_ori, y_ori, x_dest, y_dest):
+                setPeca(VV, x_ori, y_ori);
+                setPeca(type, x_dest, y_dest);
+                return True;
     return False;
 
 
