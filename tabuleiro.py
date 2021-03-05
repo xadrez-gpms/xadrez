@@ -27,9 +27,9 @@ tabuleiro = [
     [BT, BC, BB, BQ, BR, BB, BC, BT]
 ]
 
-def is_branca(type):
+def is_branca (type):
     brancas = [BT, BC, BB, BQ, BR, BB, BC, BT, BP];
-    if (type in brancas):
+    if type in brancas:
         return True;
     else:
         return False;
@@ -43,16 +43,38 @@ def printTabuleiro(tab):
     print(tabStr);
 
 def verificaMovTorre(type, x_ori, y_ori, x_dest, y_dest):
+    return verificaMovReto(type, x_ori, y_ori, x_dest, y_dest)
+
+def verificaMovBispo(type, x_ori, y_ori, x_dest, y_dest):
+    return verificaMovDiagonal(type, x_ori, y_ori, x_dest, y_dest)
+
+def verificaMovDiagonal(type, x_ori, y_ori, x_dest, y_dest):
+    x_direction = 1 if x_ori < x_dest else -1;
+    y_direction = 1 if y_ori < y_dest else -1;
+    print(str(x_direction)+","+str(y_direction));
+    if abs(x_ori - x_dest) != abs(y_ori - y_dest):
+        return False;
+    for i in range (abs(x_ori - x_dest)):
+        print(str(x_ori)+","+str(y_ori));
+        x = x_ori + (i * x_direction);
+        y = y_ori + (i * y_direction);
+        if x == x_ori and y == y_ori: continue; #quando i for 1 o valor de x e y sao iguais ao originais
+        if getPeca(x, y) != VV: #verifica se todas as casas ate o dest estao vazias
+            return False;
+    return True;
+
+def verificaMovReto(type, x_ori, y_ori, x_dest, y_dest):
     global tabuleiro;
     direction = 1;
-    if is_branca(type): direction = -1; #verifica direcao
     if y_ori == y_dest: #anda em x
+        if x_ori > x_dest: direction = -1;  # verifica direcao
         for i in range(x_ori + direction, x_dest, direction):
             if not checaPeca(VV, i, y_dest): #verifica se esta vazio ate a penultima posição
                 return False
         return True;
     elif x_ori == x_dest: #anda em y
-        for i in range(y_ori + 1, y_dest, direction):
+        if y_ori > y_dest: direction = -1;  # verifica direcao
+        for i in range(y_ori + direction, y_dest, direction):
             if not checaPeca(VV, x_dest, i): #verifica se esta vazio ate a penultima posição
                 return False
         return True;
@@ -89,8 +111,8 @@ def setPeca(type, x,y):
     tabuleiro[x][y] = type;
 
 def checaPeca(type, x, y):
-    global tabuleiro;
-    if tabuleiro[x][y] == type: return True;
+    if getPeca(x,y) == type:
+        return True;
     return False;
 
 def movimentaPeca(type, x_ori, y_ori, x_dest, y_dest):
@@ -113,7 +135,11 @@ def movimentaPeca(type, x_ori, y_ori, x_dest, y_dest):
             setPeca(VV, x_ori, y_ori);
             setPeca(type, x_dest, y_dest);
             return True;
-
+    if type == BB or type == PB:
+        if verificaMovBispo(type, x_ori, y_ori, x_dest, y_dest):
+            setPeca(VV, x_ori, y_ori);
+            setPeca(type, x_dest, y_dest);
+            return True;
     return False;
 
 
@@ -125,4 +151,9 @@ print(movimentaPeca(PP, 1, 0, 3, 0));
 print(movimentaPeca(PP, 3, 0, 1, 0));
 #setPeca(VV, 4, 0);
 print(movimentaPeca(BT, 7, 0, 5, 0));
+print(movimentaPeca(BT, 7, 0, 5, 1));
+print(movimentaPeca(BT, 5, 0, 7, 0));
+print(movimentaPeca(BB, 7, 2, 5, 0));
+print(movimentaPeca(BB, 5, 0, 1, 4));
+
 printTabuleiro(tabuleiro);
