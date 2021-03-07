@@ -42,6 +42,9 @@ def printTabuleiro(tab):
         tabStr = tabStr + "\n";
     print(tabStr);
     
+def verificaMovRei (type, x_ori, y_ori, x_dest, y_dest):
+    return (abs(x_dest - x_ori) == 1 and abs(y_dest - y_ori) == 1) or (abs(x_dest - x_ori) == 0 and abs(y_dest - y_ori) == 1) or (abs(x_dest - x_ori) == 1 and abs(y_dest - y_ori) == 0);
+    
 def verificaMovCavalo (type, x_ori, y_ori, x_dest, y_dest):
     return (abs(x_dest - x_ori) == 2 and abs(y_dest - y_ori) == 1) or (abs(x_dest - x_ori) == 1 and abs(y_dest - y_ori) == 2);
 
@@ -159,6 +162,12 @@ def movimentaPeca(type, x_ori, y_ori, x_dest, y_dest):
             setPeca(VV, x_ori, y_ori);
             setPeca(type, x_dest, y_dest);
             return True;
+    if type == BR or type == PR:
+        if verificaMovRei(type, x_ori, y_ori, x_dest, y_dest):
+            setPeca(VV, x_ori, y_ori);
+            setPeca(type, x_dest, y_dest);
+            return True;
+            
     return False;
 
 
@@ -178,5 +187,15 @@ print(movimentaPeca(BB, 5, 0, 1, 4));
 
 print(movimentaPeca(BC, 7, 1, 5, 2));
 print(movimentaPeca(PC, 0, 1, 2, 2));
+
+
+
+#testando movimentações do rei 
+#movimenta peao
+print(movimentaPeca(BP, 6, 4, 5, 4));
+print(movimentaPeca(BP, 5, 4, 4, 4));
+#movimenta rei
+print(movimentaPeca(BR, 7, 4, 6, 4));
+print(movimentaPeca(BR, 6, 4, 5, 3));
 
 printTabuleiro(tabuleiro);
