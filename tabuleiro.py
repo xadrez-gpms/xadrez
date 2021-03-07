@@ -41,6 +41,9 @@ def printTabuleiro(tab):
             tabStr = tabStr + str(tab[i][j]) + "\t";
         tabStr = tabStr + "\n";
     print(tabStr);
+    
+def verificaMovCavalo (type, x_ori, y_ori, x_dest, y_dest):
+    return (abs(x_dest - x_ori) == 2 and abs(y_dest - y_ori) == 1) or (abs(x_dest - x_ori) == 1 and abs(y_dest - y_ori) == 2);
 
 def verificaMovTorre(type, x_ori, y_ori, x_dest, y_dest):
     return verificaMovReto(type, x_ori, y_ori, x_dest, y_dest)
@@ -151,6 +154,11 @@ def movimentaPeca(type, x_ori, y_ori, x_dest, y_dest):
                 setPeca(VV, x_ori, y_ori);
                 setPeca(type, x_dest, y_dest);
                 return True;
+    if type == BC or type == PC:
+        if verificaMovCavalo(type, x_ori, y_ori, x_dest, y_dest):
+            setPeca(VV, x_ori, y_ori);
+            setPeca(type, x_dest, y_dest);
+            return True;
     return False;
 
 
@@ -166,5 +174,9 @@ print(movimentaPeca(BT, 7, 0, 5, 1));
 print(movimentaPeca(BT, 5, 0, 7, 0));
 print(movimentaPeca(BB, 7, 2, 5, 0));
 print(movimentaPeca(BB, 5, 0, 1, 4));
+
+
+print(movimentaPeca(BC, 7, 1, 5, 2));
+print(movimentaPeca(PC, 0, 1, 2, 2));
 
 printTabuleiro(tabuleiro);
