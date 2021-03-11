@@ -1,14 +1,14 @@
 # peças brancas (1x)
-BP = "BP";  # piao
-BB = "BB";  # biscpo
+BP = "BP";  # peao
+BB = "BB";  # bispo
 BT = "BT";  # torre
 BC = "BC";  # cavalo
 BQ = "BQ";  # rainha
 BR = "BR";  # rei
 
 # peças pretas (2x)
-PP = "PP";  # piao
-PB = "PB";  # biscpo
+PP = "PP";  # peao
+PB = "PB";  # bispo
 PT = "PT";  # torre
 PC = "PC";  # cavalo
 PQ = "PQ";  # rainha
