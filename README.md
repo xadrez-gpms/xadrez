@@ -15,5 +15,12 @@ https://www.pygame.org/wiki/GettingStarted
 ## Documentação Python 3
 https://docs.python.org/3/index.html
 
-# Imagens utilizadas no projeto obtidas na plataforma OpenGameArt.Org
+# Recursos
+
+
+## Imagens utilizadas no projeto obtidas na plataforma OpenGameArt.Org
 https://opengameart.org/content/chess-pieces-and-a-board
+
+# Licença
+
+Este produto é distribuído através da licença MIT, disponível em: https://mit-license.org/
