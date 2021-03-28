@@ -68,18 +68,14 @@ class App:
         screen = pygame.display.set_mode(size, pygame.HWSURFACE | pygame.DOUBLEBUF);
         self._display_surf = screen;
         self._running = True;
-        #self._display_surf = pygame.display.set_mode(self.size, pygame.HWSURFACE | pygame.DOUBLEBUF)
  
     def on_event(self, event):
         if event.type == pygame.QUIT:
             self._running = False
-        print(event)
+
     def on_loop(self):
         pass
     def on_render(self):
-        print("render step")
-        #self._display_surf.fill()
-        #screen = pygame.display.set_mode(self.size, pygame.HWSURFACE | pygame.DOUBLEBUF);
         self._display_surf.fill(black);
         self._display_surf.blit(board, boardRect);
         pass
