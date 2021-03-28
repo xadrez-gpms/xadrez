@@ -1,4 +1,5 @@
 import sys, pygame
+import tabuleiro
 from pygame.locals import *
 
 BOARD_OFFSET = 14 # sprite do tabuleiro possui borda de 14 pixels
@@ -37,7 +38,14 @@ size = width, height = BOARD_WIDTH, BOARD_HEIGHT
 class App:
 
     screen = pygame.display.set_mode(size, pygame.HWSURFACE | pygame.DOUBLEBUF);
-    
+    w_delimiter = BOARD_WIDTH / 8;
+    h_delimiter = BOARD_HEIGHT / 8;
+
+    tab = tabuleiro.initTab();
+    tabuleiro.printTabuleiro(tab);
+
+    pickUpCord = None;
+
     def obterSprites():
         sprites = {
             VB : white_cell,
@@ -72,6 +80,17 @@ class App:
     def on_event(self, event):
         if event.type == pygame.QUIT:
             self._running = False
+        if event.type == pygame.MOUSEBUTTONUP:
+            self.pickUpCord = self.getPosClick();
+            print(self.pickUpCord)
+
+    def getPosClick(self):
+        pos = pygame.mouse.get_pos()
+        x = pos[1];
+        y = pos[0];
+        lin = int(x // self.w_delimiter);
+        col = int(y // self.h_delimiter);
+        return [lin, col]
 
     def on_loop(self):
         pass
@@ -91,8 +110,12 @@ class App:
                 self.on_event(event)
             self.on_loop()
             self.on_render()
+
             pygame.display.update()
         self.on_cleanup()
+
+
+
 
  
 if __name__ == "__main__" :

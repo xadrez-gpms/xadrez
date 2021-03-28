@@ -16,6 +16,7 @@ PR = "PR";  # rei
 
 VV = "00";  # vazio
 
+
 tabuleiro = [
     [PT, PC, PB, PQ, PR, PB, PC, PT],
     [PP, PP, PP, PP, PP, PP, PP, PP],
@@ -26,7 +27,8 @@ tabuleiro = [
     [BP, BP, BP, BP, BP, BP, BP, BP],
     [BT, BC, BB, BQ, BR, BB, BC, BT]
 ]
-
+def initTab():
+    return tabuleiro;
 def is_branca (type):
     brancas = [BT, BC, BB, BQ, BR, BB, BC, BT, BP];
     if type in brancas:
@@ -41,10 +43,10 @@ def printTabuleiro(tab):
             tabStr = tabStr + str(tab[i][j]) + "\t";
         tabStr = tabStr + "\n";
     print(tabStr);
-    
+
 def verificaMovRei (type, x_ori, y_ori, x_dest, y_dest):
     return (abs(x_dest - x_ori) == 1 and abs(y_dest - y_ori) == 1) or (abs(x_dest - x_ori) == 0 and abs(y_dest - y_ori) == 1) or (abs(x_dest - x_ori) == 1 and abs(y_dest - y_ori) == 0);
-    
+
 def verificaMovCavalo (type, x_ori, y_ori, x_dest, y_dest):
     return (abs(x_dest - x_ori) == 2 and abs(y_dest - y_ori) == 1) or (abs(x_dest - x_ori) == 1 and abs(y_dest - y_ori) == 2);
 
@@ -167,35 +169,6 @@ def movimentaPeca(type, x_ori, y_ori, x_dest, y_dest):
             setPeca(VV, x_ori, y_ori);
             setPeca(type, x_dest, y_dest);
             return True;
-            
+
     return False;
 
-
-print(movimentaPeca(BP, 6, 1, 5, 1));
-print(movimentaPeca(PP, 1, 1, 2, 1));
-
-print(movimentaPeca(BP, 6, 0, 4, 0));
-print(movimentaPeca(PP, 1, 0, 3, 0));
-print(movimentaPeca(PP, 3, 0, 1, 0));
-#setPeca(VV, 4, 0);
-print(movimentaPeca(BT, 7, 0, 5, 0));
-print(movimentaPeca(BT, 7, 0, 5, 1));
-print(movimentaPeca(BT, 5, 0, 7, 0));
-print(movimentaPeca(BB, 7, 2, 5, 0));
-print(movimentaPeca(BB, 5, 0, 1, 4));
-
-
-print(movimentaPeca(BC, 7, 1, 5, 2));
-print(movimentaPeca(PC, 0, 1, 2, 2));
-
-
-
-#testando movimentações do rei 
-#movimenta peao
-print(movimentaPeca(BP, 6, 4, 5, 4));
-print(movimentaPeca(BP, 5, 4, 4, 4));
-#movimenta rei
-print(movimentaPeca(BR, 7, 4, 6, 4));
-print(movimentaPeca(BR, 6, 4, 5, 3));
-
-printTabuleiro(tabuleiro);
