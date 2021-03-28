@@ -2,8 +2,8 @@ import sys, pygame
 from pygame.locals import *
 
 BOARD_OFFSET = 14 # sprite do tabuleiro possui borda de 14 pixels
-BOARD_WIDTH = 451 # largura da janela
-BOARD_HEIGHT = 451 # altura da janela
+BOARD_WIDTH = 423 # largura da janela
+BOARD_HEIGHT = 423 # altura da janela
 
 ## Início da lista dos sprites
 
@@ -35,6 +35,8 @@ black = 0, 0, 0;
 size = width, height = BOARD_WIDTH, BOARD_HEIGHT
 
 class App:
+
+    screen = pygame.display.set_mode(size, pygame.HWSURFACE | pygame.DOUBLEBUF);
     
     def obterSprites():
         sprites = {
@@ -71,12 +73,15 @@ class App:
     def on_event(self, event):
         if event.type == pygame.QUIT:
             self._running = False
+        print(event)
     def on_loop(self):
         pass
     def on_render(self):
-        screen = pygame.display.set_mode(self.size, pygame.HWSURFACE | pygame.DOUBLEBUF);
-        screen.fill(black);
-        screen.blit(board, boardRect);
+        print("render step")
+        #self._display_surf.fill()
+        #screen = pygame.display.set_mode(self.size, pygame.HWSURFACE | pygame.DOUBLEBUF);
+        self._display_surf.fill(black);
+        self._display_surf.blit(board, boardRect);
         pass
     def on_cleanup(self):
         pygame.quit()
