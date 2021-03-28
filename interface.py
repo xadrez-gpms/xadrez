@@ -1,14 +1,15 @@
-import pygame
+import sys, pygame
 from pygame.locals import *
 
-BOARD_OFFSET = 14 # sprite do tabuleiro possui borta de 14 pixels
-BOARD_WIDTH = 540 # largura da janela
-BOARD_HEIGHT = 540 # altura da janela
+BOARD_OFFSET = 14 # sprite do tabuleiro possui borda de 14 pixels
+BOARD_WIDTH = 451 # largura da janela
+BOARD_HEIGHT = 451 # altura da janela
 
 ## Início da lista dos sprites
 
 #tabuleiro
-board = pygame.image.load('sprites/board.png')
+board = pygame.image.load('sprites/chess_board.png')
+boardRect = board.get_rect();
 black_cell = pygame.image.load('sprites/squareB.png')
 white_cell = pygame.image.load('sprites/squareW.png')
 
@@ -30,6 +31,9 @@ white_rook = pygame.image.load('sprites/rookW3.png')
 
 ## Fim da lista dos sprites
 
+black = 0, 0, 0;
+size = width, height = BOARD_WIDTH, BOARD_HEIGHT
+
 class App:
     
     def obterSprites():
@@ -48,6 +52,7 @@ class App:
             BC : white_knight,
             BQ : white_queen,
             BR : white_king,
+            BOARD : board,
         }
         return sprites
 
@@ -58,8 +63,10 @@ class App:
  
     def on_init(self):
         pygame.init()
-        self._display_surf = pygame.display.set_mode(self.size, pygame.HWSURFACE | pygame.DOUBLEBUF)
-        self._running = True
+        screen = pygame.display.set_mode(size, pygame.HWSURFACE | pygame.DOUBLEBUF);
+        self._display_surf = screen;
+        self._running = True;
+        #self._display_surf = pygame.display.set_mode(self.size, pygame.HWSURFACE | pygame.DOUBLEBUF)
  
     def on_event(self, event):
         if event.type == pygame.QUIT:
@@ -67,6 +74,9 @@ class App:
     def on_loop(self):
         pass
     def on_render(self):
+        screen = pygame.display.set_mode(self.size, pygame.HWSURFACE | pygame.DOUBLEBUF);
+        screen.fill(black);
+        screen.blit(board, boardRect);
         pass
     def on_cleanup(self):
         pygame.quit()
@@ -80,7 +90,7 @@ class App:
                 self.on_event(event)
             self.on_loop()
             self.on_render()
-        pygame.display.update()
+            pygame.display.update()
         self.on_cleanup()
 
  
@@ -88,6 +98,8 @@ if __name__ == "__main__" :
     theApp = App()
     theApp.on_execute()
 
-
+class inheritance(pygame.sprite.Sprite):
+    def __init__(self, color, width, height):
+        pygame.sprite.Sprite.__init__(self)
 
 
