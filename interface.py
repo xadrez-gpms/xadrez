@@ -60,7 +60,7 @@ class App:
     spriteOffset.y = h_offset;
 
     # tabuleiro
-    tab = tabuleiro.initTab();
+    tab = tabuleiro.getTab();
     tabuleiro.printTabuleiro(tab);
 
     pickUpCord = None;
@@ -106,8 +106,16 @@ class App:
         if event.type == pygame.QUIT:
             self._running = False
         if event.type == pygame.MOUSEBUTTONUP:
-            self.pickUpCord = self.getPosClick();
             print(self.pickUpCord)
+            if (self.pickUpCord != None): print(tabuleiro.getPeca(self.pickUpCord[0], self.pickUpCord[1]))
+            if (self.pickUpCord == None):
+                self.pickUpCord = self.getPosClick();
+            else:
+                # tabuleiro.movimentaPeca(tabuleiro.getPeca(self.pickUpCord[0],self.pickUpCord[1]))
+                piece = tabuleiro.getPeca(self.pickUpCord[0], self.pickUpCord[1])
+                newPos = self.getPosClick();
+                tabuleiro.movimentaPeca(piece, self.pickUpCord[0], self.pickUpCord[1], newPos[0], newPos[1])
+                self.pickUpCord = None;
 
     def getPosClick(self):
         pos = pygame.mouse.get_pos()

@@ -15,18 +15,17 @@ PQ = "PQ";  # rainha
 PR = "PR";  # rei
 
 VV = "00";  # vazio
-
-def initTab():
-    tabuleiro = [
-        [PT, PC, PB, PQ, PR, PB, PC, PT],
-        [PP, PP, PP, PP, PP, PP, PP, PP],
-        [VV, VV, VV, VV, VV, VV, VV, VV],
-        [VV, VV, VV, VV, VV, VV, VV, VV],
-        [VV, VV, VV, VV, VV, VV, VV, VV],
-        [VV, VV, VV, VV, VV, VV, VV, VV],
-        [BP, BP, BP, BP, BP, BP, BP, BP],
-        [BT, BC, BB, BQ, BR, BB, BC, BT]
-    ]
+tabuleiro = [
+    [PT, PC, PB, PQ, PR, PB, PC, PT],
+    [PP, PP, PP, PP, PP, PP, PP, PP],
+    [VV, VV, VV, VV, VV, VV, VV, VV],
+    [VV, VV, VV, VV, VV, VV, VV, VV],
+    [VV, VV, VV, VV, VV, VV, VV, VV],
+    [VV, VV, VV, VV, VV, VV, VV, VV],
+    [BP, BP, BP, BP, BP, BP, BP, BP],
+    [BT, BC, BB, BQ, BR, BB, BC, BT]
+]
+def getTab():
     return tabuleiro;
 
 def is_branca (type):
