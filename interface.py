@@ -3,14 +3,14 @@ import tabuleiro
 from pygame.locals import *
 
 BOARD_OFFSET = 14 # sprite do tabuleiro possui borda de 14 pixels
-BOARD_WIDTH = 423 # largura da janela
-BOARD_HEIGHT = 423 # altura da janela
+BOARD_WIDTH = 800 # largura da janela
+BOARD_HEIGHT = 800 # altura da janela
+SPRITE_SIZE = 52 # tamanho do sprite das peças
 
 ## Início da lista dos sprites
 
 #tabuleiro
 board = pygame.image.load('sprites/chess_board.png')
-boardRect = board.get_rect();
 black_cell = pygame.image.load('sprites/squareB.png')
 white_cell = pygame.image.load('sprites/squareW.png')
 
@@ -32,15 +32,34 @@ white_rook = pygame.image.load('sprites/rookW3.png')
 
 ## Fim da lista dos sprites
 
-black = 0, 0, 0;
+#adjust the width of the board
+boardSurface = pygame.Surface((BOARD_WIDTH, BOARD_HEIGHT))
 size = width, height = BOARD_WIDTH, BOARD_HEIGHT
+adjustedBoard = pygame.transform.scale(board, (size))
+
+class Coord: # Classe auxiliar
+    x = 0;
+    y = 0;
 
 class App:
 
     screen = pygame.display.set_mode(size, pygame.HWSURFACE | pygame.DOUBLEBUF);
     w_delimiter = BOARD_WIDTH / 8;
     h_delimiter = BOARD_HEIGHT / 8;
+    w_offset = 0;
+    h_offset = 0;
 
+    # ajustes na posição dos sprites
+    if w_delimiter > SPRITE_SIZE:
+        w_offset = (w_delimiter - SPRITE_SIZE) / 2;
+    if h_delimiter > SPRITE_SIZE:
+        h_offset = (h_delimiter - SPRITE_SIZE) / 2;
+
+    spriteOffset = Coord();
+    spriteOffset.x = w_offset;
+    spriteOffset.y = h_offset;
+
+    # tabuleiro
     tab = tabuleiro.initTab();
     tabuleiro.printTabuleiro(tab);
 
@@ -71,12 +90,18 @@ class App:
         self._display_surf = None
         self.size = self.weight, self.height = BOARD_WIDTH, BOARD_HEIGHT
  
+    # Executa na Inicialização | Somente 1 Vez
     def on_init(self):
         pygame.init()
         screen = pygame.display.set_mode(size, pygame.HWSURFACE | pygame.DOUBLEBUF);
         self._display_surf = screen;
         self._running = True;
+
+        #tabuleiro ajustado ao tamanho da tela
+        self._display_surf.blit(adjustedBoard, (0, 0))
+        pygame.display.flip()
  
+    # TRATAR INPUTS DO USUÁRIO AQUI | Executa sempre que um evento novo é detectado
     def on_event(self, event):
         if event.type == pygame.QUIT:
             self._running = False
@@ -90,17 +115,17 @@ class App:
         y = pos[0];
         lin = int(x // self.w_delimiter);
         col = int(y // self.h_delimiter);
+        print('{}{}'.format(chr(col+65), lin+1)) # Conversão para Coluna de A~H
         return [lin, col]
 
+    #GAME LOGIC | Coisas necessárias para cada frame
     def on_loop(self):
         pass
+    # VISUAL LOGIC | Tudo relacionado a interface deve entrar aqui
     def on_render(self):
-        self._display_surf.fill(black);
-        self._display_surf.blit(board, boardRect);
-        #draw tab
         self.displayTab();
-        self.displayTab();
-        pass
+        pygame.display.update();
+    # Quando estiver encerrando o programa
     def on_cleanup(self):
         pygame.quit()
 
@@ -108,8 +133,8 @@ class App:
         tab = self.tab;
         for i in range(len(tab)):
             for j in range(len(tab[i])):
-                lin = int(i * self.w_delimiter);
-                col = int(j * self.h_delimiter);
+                lin = int(i * self.w_delimiter) + self.spriteOffset.x
+                col = int(j * self.h_delimiter) + self.spriteOffset.y;
                 if tab[i][j] == tabuleiro.PB:
                     self.screen.blit(black_bishop, (col, lin))
                 if tab[i][j] == tabuleiro.PR:
@@ -140,6 +165,7 @@ class App:
 
 
 
+    # Inicialização do Programa
     def on_execute(self):
         if self.on_init() == False:
             self._running = False
@@ -149,7 +175,6 @@ class App:
                 self.on_event(event)
             self.on_loop()
             self.on_render()
-            pygame.display.update()
         self.on_cleanup()
 
 
