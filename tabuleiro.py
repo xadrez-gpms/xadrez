@@ -16,19 +16,19 @@ PR = "PR";  # rei
 
 VV = "00";  # vazio
 
-
-tabuleiro = [
-    [PT, PC, PB, PQ, PR, PB, PC, PT],
-    [PP, PP, PP, PP, PP, PP, PP, PP],
-    [VV, VV, VV, VV, VV, VV, VV, VV],
-    [VV, VV, VV, VV, VV, VV, VV, VV],
-    [VV, VV, VV, VV, VV, VV, VV, VV],
-    [VV, VV, VV, VV, VV, VV, VV, VV],
-    [BP, BP, BP, BP, BP, BP, BP, BP],
-    [BT, BC, BB, BQ, BR, BB, BC, BT]
-]
 def initTab():
+    tabuleiro = [
+        [PT, PC, PB, PQ, PR, PB, PC, PT],
+        [PP, PP, PP, PP, PP, PP, PP, PP],
+        [VV, VV, VV, VV, VV, VV, VV, VV],
+        [VV, VV, VV, VV, VV, VV, VV, VV],
+        [VV, VV, VV, VV, VV, VV, VV, VV],
+        [VV, VV, VV, VV, VV, VV, VV, VV],
+        [BP, BP, BP, BP, BP, BP, BP, BP],
+        [BT, BC, BB, BQ, BR, BB, BC, BT]
+    ]
     return tabuleiro;
+
 def is_branca (type):
     brancas = [BT, BC, BB, BQ, BR, BB, BC, BT, BP];
     if type in brancas:

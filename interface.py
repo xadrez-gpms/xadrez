@@ -97,10 +97,49 @@ class App:
     def on_render(self):
         self._display_surf.fill(black);
         self._display_surf.blit(board, boardRect);
+        #draw tab
+        self.displayTab();
+        self.displayTab();
         pass
     def on_cleanup(self):
         pygame.quit()
- 
+
+    def displayTab(self):
+        tab = self.tab;
+        for i in range(len(tab)):
+            for j in range(len(tab[i])):
+                lin = int(i * self.w_delimiter);
+                col = int(j * self.h_delimiter);
+                if tab[i][j] == tabuleiro.PB:
+                    self.screen.blit(black_bishop, (col, lin))
+                if tab[i][j] == tabuleiro.PR:
+                    self.screen.blit(black_king, (col, lin))
+                if tab[i][j] == tabuleiro.PQ:
+                    self.screen.blit(black_queen, (col, lin))
+                if tab[i][j] == tabuleiro.PT:
+                    self.screen.blit(black_rook, (col, lin))
+                if tab[i][j] == tabuleiro.PP:
+                    self.screen.blit(black_pawn, (col, lin))
+                if tab[i][j] == tabuleiro.PC:
+                    self.screen.blit(black_knight, (col, lin))
+                if tab[i][j] == tabuleiro.BB:
+                    self.screen.blit(white_bishop, (col, lin))
+                if tab[i][j] == tabuleiro.BR:
+                    self.screen.blit(white_king, (col, lin))
+                if tab[i][j] == tabuleiro.BQ:
+                    self.screen.blit(white_queen, (col, lin))
+                if tab[i][j] == tabuleiro.BT:
+                    self.screen.blit(white_rook, (col, lin))
+                if tab[i][j] == tabuleiro.BP:
+                    self.screen.blit(white_pawn, (col, lin))
+                if tab[i][j] == tabuleiro.BC:
+                    self.screen.blit(white_knight, (col, lin))
+
+
+
+
+
+
     def on_execute(self):
         if self.on_init() == False:
             self._running = False
@@ -110,11 +149,8 @@ class App:
                 self.on_event(event)
             self.on_loop()
             self.on_render()
-
             pygame.display.update()
         self.on_cleanup()
-
-
 
 
  
