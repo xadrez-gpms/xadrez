@@ -99,7 +99,8 @@ class App:
 
         #tabuleiro ajustado ao tamanho da tela
         self._display_surf.blit(adjustedBoard, (0, 0))
-        pygame.display.flip()
+        #pygame.display.flip()
+        pygame.display.update()
  
     # TRATAR INPUTS DO USUÁRIO AQUI | Executa sempre que um evento novo é detectado
     def on_event(self, event):
@@ -116,6 +117,11 @@ class App:
                 newPos = self.getPosClick();
                 tabuleiro.movimentaPeca(piece, self.pickUpCord[0], self.pickUpCord[1], newPos[0], newPos[1])
                 self.pickUpCord = None;
+        # input do teclado
+        if event.type == KEYDOWN: 
+            if event.key == pygame.K_f:
+                tabuleiro.printTabuleiro(self.tab)
+
 
     def getPosClick(self):
         pos = pygame.mouse.get_pos()
@@ -131,6 +137,16 @@ class App:
         pass
     # VISUAL LOGIC | Tudo relacionado a interface deve entrar aqui
     def on_render(self):
+        """
+        Sobre o BUG:
+        Não está com um problema de comportamento, está incompleto.
+        Antes renderizada o tabuleiro novamente em cada frame => self._display_surf.blit(adjustedBoard, (0, 0))
+        No commit anterior otimizei isso renderizando o tabuleiro somente 1x
+        Por isso agora as peças 'sobram'
+        A função de renderizar as peças está apenas adicionando novas imagens
+        Para solucionar definitivamente esse problema é necessário alterar a forma do render das peças
+        """
+        self._display_surf.blit(adjustedBoard, (0, 0)) # SOLUÇÃO TEMPORÁRIA
         self.displayTab();
         pygame.display.update();
     # Quando estiver encerrando o programa
