@@ -126,10 +126,10 @@ class App:
             if (self.pickUpCord == None):
                 pos = self.getPosClick();
                 piece = tabuleiro.getPeca(pos[0], pos[1]);
-                if not self.verificaRodada(piece): # controlar a rodada aqui tbm
-                    print("Não é sua rodada");
-                elif piece == tabuleiro.VV: # Garante que a peça seja valdia
+                if piece == tabuleiro.VV: # Garante que a peça seja valdia
                     print("Nenhuma peça selecionada");
+                elif not self.verificaRodada(piece): # controlar a rodada aqui tbm
+                    print("Não é sua rodada");
                 else:
                     self.pickUpCord = pos;
             else:

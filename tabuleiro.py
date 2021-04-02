@@ -104,7 +104,6 @@ def verificaMovPeao(type, x_ori, y_ori, x_dest, y_dest):
             if tabuleiro[x_dest][y_dest] == VV:  # verifica se a casa esta vazia
                 return True;  # peça anda simples
     elif (y_dest == y_ori + 1 or y_dest == y_ori - 1) and tabuleiro[x_dest][y_dest] != VV:  # verifica se o tipo de peca da posicao de destino e uma peca inimiga
-        print( tabuleiro[x_dest][y_dest])
         if (is_branca(type) and x_dest - x_ori == -1) or (not is_branca(type) and x_dest - x_ori == 1): #andando pra frente no eixo X
             return True;  # peca comida
     return False;  # movimento invalido
