@@ -103,7 +103,8 @@ def verificaMovPeao(type, x_ori, y_ori, x_dest, y_dest):
                 not is_branca(type) and x_dest - x_ori <= limit and x_dest > x_ori): #verifica se esta dentro do limite
             if tabuleiro[x_dest][y_dest] == VV:  # verifica se a casa esta vazia
                 return True;  # peça anda simples
-    elif y_dest == y_ori + 1 or y_dest == y_ori - 1 and tabuleiro[x_dest][y_dest] != VV :  # verifica se o tipo de peca da posicao de destino e uma peca inimiga
+    elif (y_dest == y_ori + 1 or y_dest == y_ori - 1) and tabuleiro[x_dest][y_dest] != VV:  # verifica se o tipo de peca da posicao de destino e uma peca inimiga
+        print( tabuleiro[x_dest][y_dest])
         if (is_branca(type) and x_dest - x_ori == -1) or (not is_branca(type) and x_dest - x_ori == 1): #andando pra frente no eixo X
             return True;  # peca comida
     return False;  # movimento invalido
@@ -141,31 +142,26 @@ def movimentosPossiveis(tab):
     return arr;
 
 def checaMovimentaPeça(type, x_ori, y_ori, x_dest, y_dest):
-    if type == BP or type == PP:
-        if verificaMovPeao(type, x_ori, y_ori, x_dest, y_dest):
+    if   (type == BP or type == PP) and verificaMovPeao(type, x_ori, y_ori, x_dest, y_dest):
             return True;
-    if type == BT or type == PT:
-        if verificaMovTorre(type, x_ori, y_ori, x_dest, y_dest):
+    elif (type == BT or type == PT) and verificaMovTorre(type, x_ori, y_ori, x_dest, y_dest):
             return True;
-    if type == BB or type == PB:
-        if verificaMovBispo(type, x_ori, y_ori, x_dest, y_dest):
+    elif (type == BB or type == PB) and verificaMovBispo(type, x_ori, y_ori, x_dest, y_dest):
             return True;
-    if type == BQ or type == PQ: #rainha
+    elif (type == BC or type == PC) and verificaMovCavalo(type, x_ori, y_ori, x_dest, y_dest):
+            return True;
+    elif (type == BR or type == PR) and verificaMovRei(type, x_ori, y_ori, x_dest, y_dest):
+            return True;
+    elif (type == BQ or type == PQ): #rainha
         if x_ori == x_dest or y_ori == y_dest:
             if verificaMovTorre(type, x_ori, y_ori, x_dest, y_dest):
                 return True;
         else:
             if verificaMovBispo(type, x_ori, y_ori, x_dest, y_dest):
                 return True;
-    if type == BC or type == PC:
-        if verificaMovCavalo(type, x_ori, y_ori, x_dest, y_dest):
-            return True;
-    if type == BR or type == PR:
-        if verificaMovRei(type, x_ori, y_ori, x_dest, y_dest):
-            return True;
 
 def movimentaPeca(type, x_ori, y_ori, x_dest, y_dest):
-    global numJog, tabuleiro
+    global tabuleiro
 
     if not checaPeca(type, x_ori, y_ori) : return False; #tenta movimentar outra peca
     if x_dest > 7 or x_dest < 0 or y_dest > 7 or x_dest < 0 : return False; # se sair do tabuleiro

@@ -124,7 +124,6 @@ class App:
             self._running = False
         if event.type == pygame.MOUSEBUTTONUP and event.button == 1: # clique com o botão esquerdo
             if (self.pickUpCord == None):
-                self.pickUpCord = self.getPosClick();
                 pos = self.getPosClick();
                 piece = tabuleiro.getPeca(pos[0], pos[1]);
                 if not self.verificaRodada(piece): # controlar a rodada aqui tbm
@@ -146,7 +145,7 @@ class App:
         if event.type == KEYDOWN:
             if event.key == pygame.K_m:
                 mov = tabuleiro.movimentosPossiveis(self.tab) # printa o tabuleiro no console quando aperta a tecla F
-                tabuleiro.printMovmentosPossiveis(mov)
+                tabuleiro.printMovmentosPossiveis(mov);
 
     def proximaRodada(self):
         if self.game_round == BLACK:
