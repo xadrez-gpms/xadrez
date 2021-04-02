@@ -30,6 +30,9 @@ white_pawn = pygame.image.load('sprites/pawnW3.png')
 white_queen = pygame.image.load('sprites/queenW3.png')
 white_rook = pygame.image.load('sprites/rookW3.png')
 
+WHITE = 0;
+BLACK = 1;
+
 ## Fim da lista dos sprites
 
 #adjust the width of the board
@@ -48,6 +51,8 @@ class App:
     piecesLayer = Surface(size, flags=SRCALPHA);
     clock = pygame.time.Clock();
 
+    #primeira rodada branca
+    game_round = WHITE;
 
     w_delimiter = BOARD_WIDTH / 8;
     h_delimiter = BOARD_HEIGHT / 8;
@@ -73,6 +78,7 @@ class App:
     tabuleiro.printTabuleiro(tab);
 
     pickUpCord = None;
+
 
     def obterSprites():
         sprites = {
@@ -110,19 +116,38 @@ class App:
         #tabuleiro ajustado ao tamanho da tela
         self._display_surf.blit(adjustedBoard, (0,0))
         pygame.display.update()
- 
+
+    def proximaRodada(self):
+        if self.game_round == BLACK:
+            self.game_round = WHITE;
+        else:
+            self.game_round = BLACK;
+
+    def verificaRodada(self, piece):
+        if self.game_round == BLACK:
+            if not tabuleiro.is_branca(piece):
+                return True;
+        else:
+            if tabuleiro.is_branca(piece):
+                return True;
+        return False;
+
     # TRATAR INPUTS DO USUÁRIO AQUI | Executa sempre que um evento novo é detectado
     def on_event(self, event):
         if event.type == pygame.QUIT:
             self._running = False
         if event.type == pygame.MOUSEBUTTONUP and event.button == 1: # clique com o botão esquerdo
-            if (self.pickUpCord != None): print(tabuleiro.getPeca(self.pickUpCord[0], self.pickUpCord[1]))
             if (self.pickUpCord == None):
-                self.pickUpCord = self.getPosClick();
+                pos = self.getPosClick();
+                piece = tabuleiro.getPeca(pos[0], pos[1]);
+                if piece != tabuleiro.VV and self.verificaRodada(piece): #controlar a rodada aqui tbm
+                    self.pickUpCord = pos;
             else:
-                piece = tabuleiro.getPeca(self.pickUpCord[0], self.pickUpCord[1])
+                piece = tabuleiro.getPeca(self.pickUpCord[0], self.pickUpCord[1]);
                 newPos = self.getPosClick();
-                tabuleiro.movimentaPeca(piece, self.pickUpCord[0], self.pickUpCord[1], newPos[0], newPos[1])
+                if tabuleiro.movimentaPeca(piece, self.pickUpCord[0], self.pickUpCord[1], newPos[0], newPos[1]):
+                    print(self.game_round);
+                    self.proximaRodada();
                 self.pickUpCord = None;
         # input do teclado
         if event.type == KEYDOWN: 
