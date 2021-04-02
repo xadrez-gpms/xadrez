@@ -35,6 +35,13 @@ def is_branca (type):
     else:
         return False;
 
+def printMovmentosPossiveis(mov):
+    print("#########################")
+    print("MOVIMENTAÇÕES POSSIVEIS")
+    for i in range(len(mov)):
+        print(mov[i]);
+    print("#########################")
+
 def printTabuleiro(tab):
     tabStr = "";
     for i in range(len(tab)):
@@ -58,11 +65,9 @@ def verificaMovBispo(type, x_ori, y_ori, x_dest, y_dest):
 def verificaMovDiagonal(type, x_ori, y_ori, x_dest, y_dest):
     x_direction = 1 if x_ori < x_dest else -1;
     y_direction = 1 if y_ori < y_dest else -1;
-    print(str(x_direction)+","+str(y_direction));
     if abs(x_ori - x_dest) != abs(y_ori - y_dest):
         return False;
     for i in range (abs(x_ori - x_dest)):
-        print(str(x_ori)+","+str(y_ori));
         x = x_ori + (i * x_direction);
         y = y_ori + (i * y_direction);
         if x == x_ori and y == y_ori: continue; #quando i for 1 o valor de x e y sao iguais ao originais
@@ -104,6 +109,7 @@ def verificaMovPeao(type, x_ori, y_ori, x_dest, y_dest):
     return False;  # movimento invalido
 
 def promocaoPeao(type, x, y): #implementar escolha
+    if type != PP or type != BP: return;
     if is_branca(type) and x == 7 :
         tabuleiro[x][y] == BQ;
     elif not is_branca(type) and x == 0 :
@@ -122,6 +128,42 @@ def checaPeca(type, x, y):
         return True;
     return False;
 
+def movimentosPossiveis(tab):
+    arr = [];
+    for x_ori in range(len(tab)):
+        for y_ori in range(len(tab[x_ori])):
+            if tabuleiro[x_ori][y_ori] != VV:
+                piece = getPeca(x_ori, y_ori);
+                for x_dest in range(len(tab)):
+                    for y_dest in range(len(tab[x_ori])):
+                        if checaMovimentaPeça(piece, x_ori, y_ori, x_dest, y_dest):
+                            arr.append([piece, x_ori, y_ori, x_dest, y_dest]);
+    return arr;
+
+def checaMovimentaPeça(type, x_ori, y_ori, x_dest, y_dest):
+    if type == BP or type == PP:
+        if verificaMovPeao(type, x_ori, y_ori, x_dest, y_dest):
+            return True;
+    if type == BT or type == PT:
+        if verificaMovTorre(type, x_ori, y_ori, x_dest, y_dest):
+            return True;
+    if type == BB or type == PB:
+        if verificaMovBispo(type, x_ori, y_ori, x_dest, y_dest):
+            return True;
+    if type == BQ or type == PQ: #rainha
+        if x_ori == x_dest or y_ori == y_dest:
+            if verificaMovTorre(type, x_ori, y_ori, x_dest, y_dest):
+                return True;
+        else:
+            if verificaMovBispo(type, x_ori, y_ori, x_dest, y_dest):
+                return True;
+    if type == BC or type == PC:
+        if verificaMovCavalo(type, x_ori, y_ori, x_dest, y_dest):
+            return True;
+    if type == BR or type == PR:
+        if verificaMovRei(type, x_ori, y_ori, x_dest, y_dest):
+            return True;
+
 def movimentaPeca(type, x_ori, y_ori, x_dest, y_dest):
     global numJog, tabuleiro
 
@@ -131,43 +173,11 @@ def movimentaPeca(type, x_ori, y_ori, x_dest, y_dest):
     if getPeca(x_dest, y_dest) != VV and (is_branca(getPeca(x_ori, y_ori)) == is_branca(getPeca(x_dest, y_dest))):
         return False; #nao deixa sobrepor peca aliada
 
-    if type == BP or type == PP:
-        if verificaMovPeao(type, x_ori, y_ori, x_dest, y_dest):
-            setPeca(VV, x_ori, y_ori);
-            setPeca(type, x_dest, y_dest);
-            promocaoPeao(type, x_dest, y_dest);
-            return True;
-    if type == BT or type == PT:
-        if verificaMovTorre(type, x_ori, y_ori, x_dest, y_dest):
-            setPeca(VV, x_ori, y_ori);
-            setPeca(type, x_dest, y_dest);
-            return True;
-    if type == BB or type == PB:
-        if verificaMovBispo(type, x_ori, y_ori, x_dest, y_dest):
-            setPeca(VV, x_ori, y_ori);
-            setPeca(type, x_dest, y_dest);
-            return True;
-    if type == BQ or type == PQ: #rainha
-        if x_ori == x_dest or y_ori == y_dest:
-            if verificaMovTorre(type, x_ori, y_ori, x_dest, y_dest):
-                setPeca(VV, x_ori, y_ori);
-                setPeca(type, x_dest, y_dest);
-                return True;
-        else:
-            if verificaMovBispo(type, x_ori, y_ori, x_dest, y_dest):
-                setPeca(VV, x_ori, y_ori);
-                setPeca(type, x_dest, y_dest);
-                return True;
-    if type == BC or type == PC:
-        if verificaMovCavalo(type, x_ori, y_ori, x_dest, y_dest):
-            setPeca(VV, x_ori, y_ori);
-            setPeca(type, x_dest, y_dest);
-            return True;
-    if type == BR or type == PR:
-        if verificaMovRei(type, x_ori, y_ori, x_dest, y_dest):
-            setPeca(VV, x_ori, y_ori);
-            setPeca(type, x_dest, y_dest);
-            return True;
+    if checaMovimentaPeça(type, x_ori, y_ori, x_dest, y_dest):
+        setPeca(VV, x_ori, y_ori);
+        setPeca(type, x_dest, y_dest);
+        promocaoPeao(type, x_dest, y_dest);
+        return True;
 
     return False;
 

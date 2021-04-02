@@ -32,9 +32,14 @@ white_rook = pygame.image.load('sprites/rookW3.png')
 
 ## Fim da lista dos sprites
 
+WHITE = 0;
+BLACK = 1;
+
 #adjust the width of the board
 size = width, height = BOARD_WIDTH, BOARD_HEIGHT
 adjustedBoard = pygame.transform.scale(board, (size))
+
+
 
 class Coord: # Classe auxiliar
     x = 0;
@@ -48,6 +53,8 @@ class App:
     piecesLayer = Surface(size, flags=SRCALPHA);
     clock = pygame.time.Clock();
 
+    # primeira rodada branca
+    game_round = WHITE;
 
     w_delimiter = BOARD_WIDTH / 8;
     h_delimiter = BOARD_HEIGHT / 8;
@@ -116,19 +123,45 @@ class App:
         if event.type == pygame.QUIT:
             self._running = False
         if event.type == pygame.MOUSEBUTTONUP and event.button == 1: # clique com o botão esquerdo
-            if (self.pickUpCord != None): print(tabuleiro.getPeca(self.pickUpCord[0], self.pickUpCord[1]))
             if (self.pickUpCord == None):
                 self.pickUpCord = self.getPosClick();
+                pos = self.getPosClick();
+                piece = tabuleiro.getPeca(pos[0], pos[1]);
+                if not self.verificaRodada(piece): # controlar a rodada aqui tbm
+                    print("Não é sua rodada");
+                elif piece == tabuleiro.VV: # Garante que a peça seja valdia
+                    print("Nenhuma peça selecionada");
+                else:
+                    self.pickUpCord = pos;
             else:
                 piece = tabuleiro.getPeca(self.pickUpCord[0], self.pickUpCord[1])
                 newPos = self.getPosClick();
-                tabuleiro.movimentaPeca(piece, self.pickUpCord[0], self.pickUpCord[1], newPos[0], newPos[1])
+                if tabuleiro.movimentaPeca(piece, self.pickUpCord[0], self.pickUpCord[1], newPos[0], newPos[1]):
+                    self.proximaRodada();
                 self.pickUpCord = None;
         # input do teclado
         if event.type == KEYDOWN: 
             if event.key == pygame.K_f:
                 tabuleiro.printTabuleiro(self.tab) # printa o tabuleiro no console quando aperta a tecla F
+        if event.type == KEYDOWN:
+            if event.key == pygame.K_m:
+                mov = tabuleiro.movimentosPossiveis(self.tab) # printa o tabuleiro no console quando aperta a tecla F
+                tabuleiro.printMovmentosPossiveis(mov)
 
+    def proximaRodada(self):
+        if self.game_round == BLACK:
+            self.game_round = WHITE;
+        else:
+            self.game_round = BLACK;
+
+    def verificaRodada(self, piece):
+        if self.game_round == BLACK:
+            if not tabuleiro.is_branca(piece):
+                return True;
+        else:
+            if tabuleiro.is_branca(piece):
+                return True;
+        return False;
 
     def getPosClick(self):
         pos = pygame.mouse.get_pos()
@@ -136,7 +169,7 @@ class App:
         y = pos[0];
         lin = int(x // self.w_delimiter);
         col = int(y // self.h_delimiter);
-        print('{}{}'.format(chr(col+65), lin+1)) # Conversão para Coluna de A~H
+        print('{}{}'.format(chr(col+65), lin+1)+" - "+tabuleiro.getPeca(lin, col)) # Conversão para Coluna de A~H
         return [lin, col]
 
     #GAME LOGIC | Coisas necessárias para cada frame
