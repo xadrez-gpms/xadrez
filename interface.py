@@ -1,3 +1,4 @@
+from copy import copy, deepcopy
 import sys, pygame
 import tabuleiro
 from pygame import *
@@ -148,6 +149,21 @@ class App:
         else:
             piece = tabuleiro.getPeca(self.tab, self.pickUpCord[0], self.pickUpCord[1])
             newPos = self.getPosClick();
+            if (self.xeque_preto or self.xeque_branco):
+                tabAux = deepcopy(self.tab);
+                tabuleiro.setPeca(tabAux, tabuleiro.VV, self.pickUpCord[0], self.pickUpCord[1]);
+                tabuleiro.setPeca(tabAux, piece, newPos[0], newPos[1]);
+                newMov = tabuleiro.movimentosPossiveis(tabAux);
+                nextRound = PRETO if self.game_round == BRANCO else BRANCO;
+                if tabuleiro.verificaXeque(tabAux, newMov, nextRound):
+                    print("É necessario salvar o rei")
+                    self.pickUpCord = None;
+                    return;
+                else:
+                    if self.game_round == BRANCO:
+                        self.xeque_branco = False;
+                    if self.game_round == PRETO:
+                        self.xeque_preto = False;
             if tabuleiro.movimentaPeca(self.tab, piece, self.pickUpCord[0], self.pickUpCord[1], newPos[0], newPos[1]):
                 self.movPossiveis = tabuleiro.movimentosPossiveis(self.tab);
                 if tabuleiro.verificaXeque(self.tab, self.movPossiveis, self.game_round):

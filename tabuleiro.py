@@ -198,8 +198,8 @@ def verificaXequeMate(tab, movs, game_round):
         x_dest = movs[i][3];
         y_dest = movs[i][4];
         if (is_branca(piece) and nextRound == BRANCO) or (not is_branca(piece) and nextRound == PRETO):
-            tabAux[x_ori][y_ori] = VV;
-            tabAux[x_dest][y_dest] = piece;
+            setPeca(tabAux,VV, x_ori, y_ori);
+            setPeca(tabAux, piece, x_dest, y_dest);
             newMov = movimentosPossiveis(tabAux);
             if not verificaXeque(tabAux, newMov, game_round) :
                 return False;
