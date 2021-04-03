@@ -32,8 +32,8 @@ white_rook = pygame.image.load('sprites/rookW3.png')
 
 ## Fim da lista dos sprites
 
-WHITE = 0;
-BLACK = 1;
+BRANCO = tabuleiro.BRANCO;
+PRETO  = tabuleiro.PRETO;
 
 #adjust the width of the board
 size = width, height = BOARD_WIDTH, BOARD_HEIGHT
@@ -53,8 +53,9 @@ class App:
     piecesLayer = Surface(size, flags=SRCALPHA);
     clock = pygame.time.Clock();
 
+
     # primeira rodada branca
-    game_round = WHITE;
+    game_round = BRANCO;
 
     w_delimiter = BOARD_WIDTH / 8;
     h_delimiter = BOARD_HEIGHT / 8;
@@ -76,9 +77,11 @@ class App:
     spriteOffset.y = h_offset;
 
     # tabuleiro
-    tab = tabuleiro.getTab();
+    tab = tabuleiro.initTab();
     tabuleiro.printTabuleiro(tab);
-
+    movPossiveis = tabuleiro.movimentosPossiveis(tab);
+    xeque_branco = False;
+    xeque_preto  = False;
     pickUpCord = None;
 
     def obterSprites():
@@ -123,38 +126,52 @@ class App:
         if event.type == pygame.QUIT:
             self._running = False
         if event.type == pygame.MOUSEBUTTONUP and event.button == 1: # clique com o botão esquerdo
-            if (self.pickUpCord == None):
-                pos = self.getPosClick();
-                piece = tabuleiro.getPeca(pos[0], pos[1]);
-                if piece == tabuleiro.VV: # Garante que a peça seja valdia
-                    print("Nenhuma peça selecionada");
-                elif not self.verificaRodada(piece): # controlar a rodada aqui tbm
-                    print("Não é sua rodada");
-                else:
-                    self.pickUpCord = pos;
-            else:
-                piece = tabuleiro.getPeca(self.pickUpCord[0], self.pickUpCord[1])
-                newPos = self.getPosClick();
-                if tabuleiro.movimentaPeca(piece, self.pickUpCord[0], self.pickUpCord[1], newPos[0], newPos[1]):
-                    self.proximaRodada();
-                self.pickUpCord = None;
+            self.movimentacao();
         # input do teclado
         if event.type == KEYDOWN: 
             if event.key == pygame.K_f:
                 tabuleiro.printTabuleiro(self.tab) # printa o tabuleiro no console quando aperta a tecla F
         if event.type == KEYDOWN:
             if event.key == pygame.K_m:
-                mov = tabuleiro.movimentosPossiveis(self.tab) # printa o tabuleiro no console quando aperta a tecla F
-                tabuleiro.printMovmentosPossiveis(mov);
+                tabuleiro.printMovmentosPossiveis(tabuleiro.movimentosPossiveis(self.tab)); # printa o tabuleiro no console quando aperta a tecla F
+
+    def movimentacao(self):
+        if self.pickUpCord == None :
+            pos = self.getPosClick();
+            piece = tabuleiro.getPeca(self.tab, pos[0], pos[1]);
+            if piece == tabuleiro.VV:  # Garante que a peça seja valdia
+                print("Nenhuma peça selecionada");
+            elif not self.verificaRodada(piece):  # controlar a rodada aqui tbm
+                print("Não é sua rodada");
+            else:
+                self.pickUpCord = pos;
+        else:
+            piece = tabuleiro.getPeca(self.tab, self.pickUpCord[0], self.pickUpCord[1])
+            newPos = self.getPosClick();
+            if tabuleiro.movimentaPeca(self.tab, piece, self.pickUpCord[0], self.pickUpCord[1], newPos[0], newPos[1]):
+                self.movPossiveis = tabuleiro.movimentosPossiveis(self.tab);
+                if tabuleiro.verificaXeque(self.tab, self.movPossiveis, self.game_round):
+                    if not tabuleiro.verificaXequeMate(self.tab, self.movPossiveis, self.game_round):
+                        if self.game_round == BRANCO:
+                            print("O Rei branco esta em xeque");
+                            self.xeque_branco = True;
+                        else:
+                            print("O Rei preto esta em xeque");
+                            self.xeque_preto = True;
+                    else:
+                        print("Xeque mate");
+
+                self.proximaRodada();
+            self.pickUpCord = None;
 
     def proximaRodada(self):
-        if self.game_round == BLACK:
-            self.game_round = WHITE;
+        if self.game_round == PRETO:
+            self.game_round = BRANCO;
         else:
-            self.game_round = BLACK;
+            self.game_round = PRETO;
 
     def verificaRodada(self, piece):
-        if self.game_round == BLACK:
+        if self.game_round == PRETO:
             if not tabuleiro.is_branca(piece):
                 return True;
         else:
@@ -168,7 +185,7 @@ class App:
         y = pos[0];
         lin = int(x // self.w_delimiter);
         col = int(y // self.h_delimiter);
-        print('{}{}'.format(chr(col+65), lin+1)+" - "+tabuleiro.getPeca(lin, col)) # Conversão para Coluna de A~H
+        print('{}{}'.format(chr(col+65), lin+1)+" - "+tabuleiro.getPeca(self.tab,lin, col)) # Conversão para Coluna de A~H
         return [lin, col]
 
     #GAME LOGIC | Coisas necessárias para cada frame
@@ -179,6 +196,7 @@ class App:
         self._display_surf.blit(adjustedBoard, (0, 0)) # Necessário para não duplicar as peças no tabuleiro
         self.displayTab();
         pygame.display.flip();
+
     # Quando estiver encerrando o programa
     def on_cleanup(self):
         pygame.quit()
@@ -220,9 +238,6 @@ class App:
         self.screen.blit(self.piecesLayer, (0,0))
 
 
-
-
-
     # Inicialização do Programa
     def on_execute(self):
         if self.on_init() == False:
@@ -238,8 +253,6 @@ class App:
             self.on_render()
         self.on_cleanup()
 
-
- 
 if __name__ == "__main__" :
     theApp = App()
     theApp.on_execute()
