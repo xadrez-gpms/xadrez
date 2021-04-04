@@ -77,13 +77,21 @@ class App:
     spriteOffset.x = w_offset;
     spriteOffset.y = h_offset;
 
-    # tabuleiro
     tab = tabuleiro.initTab();
     tabuleiro.printTabuleiro(tab);
     movPossiveis = tabuleiro.movimentosPossiveis(tab);
     xeque_branco = False;
-    xeque_preto  = False;
+    xeque_preto = False;
     pickUpCord = None;
+
+    # tabuleiro
+    def initGame(self):
+        self.tab = tabuleiro.initTab();
+        tabuleiro.printTabuleiro(self.tab);
+        self.movPossiveis = tabuleiro.movimentosPossiveis(self.tab);
+        self.xeque_branco = False;
+        self.xeque_preto  = False;
+        self.pickUpCord = None;
 
     def obterSprites():
         sprites = {
@@ -134,7 +142,11 @@ class App:
                 tabuleiro.printTabuleiro(self.tab) # printa o tabuleiro no console quando aperta a tecla F
         if event.type == KEYDOWN:
             if event.key == pygame.K_m:
-                tabuleiro.printMovmentosPossiveis(tabuleiro.movimentosPossiveis(self.tab)); # printa o tabuleiro no console quando aperta a tecla F
+                tabuleiro.printMovmentosPossiveis(tabuleiro.movimentosPossiveis(self.tab)); # printa o tabuleiro no
+                                                                                            # console quando aperta a tecla F
+        if event.type == KEYDOWN:
+            if event.key == pygame.K_r:
+                self.initGame();
 
     def movimentacao(self):
         if self.pickUpCord == None :
@@ -149,35 +161,39 @@ class App:
         else:
             piece = tabuleiro.getPeca(self.tab, self.pickUpCord[0], self.pickUpCord[1])
             newPos = self.getPosClick();
-            if (self.xeque_preto or self.xeque_branco):
-                tabAux = deepcopy(self.tab);
-                tabuleiro.setPeca(tabAux, tabuleiro.VV, self.pickUpCord[0], self.pickUpCord[1]);
-                tabuleiro.setPeca(tabAux, piece, newPos[0], newPos[1]);
-                newMov = tabuleiro.movimentosPossiveis(tabAux);
-                nextRound = PRETO if self.game_round == BRANCO else BRANCO;
-                if tabuleiro.verificaXeque(tabAux, newMov, nextRound):
-                    print("É necessario salvar o rei")
-                    self.pickUpCord = None;
-                    return;
-                else:
-                    if self.game_round == BRANCO:
-                        self.xeque_branco = False;
-                    if self.game_round == PRETO:
-                        self.xeque_preto = False;
-            if tabuleiro.movimentaPeca(self.tab, piece, self.pickUpCord[0], self.pickUpCord[1], newPos[0], newPos[1]):
-                self.movPossiveis = tabuleiro.movimentosPossiveis(self.tab);
-                if tabuleiro.verificaXeque(self.tab, self.movPossiveis, self.game_round):
-                    if not tabuleiro.verificaXequeMate(self.tab, self.movPossiveis, self.game_round):
-                        if self.game_round == BRANCO:
-                            print("O Rei branco esta em xeque");
-                            self.xeque_branco = True;
-                        else:
-                            print("O Rei preto esta em xeque");
-                            self.xeque_preto = True;
-                    else:
-                        print("Xeque mate");
 
-                self.proximaRodada();
+            # Verifica se o movimento deixa o rei em cheque ou se tira condição de xeque
+            tabAux = deepcopy(self.tab);
+            tabuleiro.setPeca(tabAux, tabuleiro.VV, self.pickUpCord[0], self.pickUpCord[1]);
+            tabuleiro.setPeca(tabAux, piece, newPos[0], newPos[1]);
+            newMov = tabuleiro.movimentosPossiveis(tabAux);
+            nextRound = PRETO if self.game_round == BRANCO else BRANCO;
+            if tabuleiro.verificaXeque(tabAux, newMov, nextRound):
+                if self.xeque_preto or self.xeque_branco:
+                    print("É necessario salvar o rei")
+                else:
+                    print("Você não pode colocar o rei em cheque")
+                self.pickUpCord = None;
+                return;
+            else: # movimento valido
+                if tabuleiro.movimentaPeca(self.tab, piece, self.pickUpCord[0], self.pickUpCord[1], newPos[0], newPos[1]):
+                    self.movPossiveis = tabuleiro.movimentosPossiveis(self.tab);
+                    if tabuleiro.verificaXeque(self.tab, self.movPossiveis, self.game_round):
+                        if not tabuleiro.verificaXequeMate(self.tab, self.movPossiveis, self.game_round):
+                            if self.game_round == PRETO and self.game_round == PRETO:
+                                print("O Rei branco esta em xeque");
+                                self.xeque_branco = True;
+                            elif self.game_round == BRANCO and self.game_round == BRANCO:
+                                print("O Rei preto esta em xeque");
+                                self.xeque_preto = True;
+                        else:
+                            print("Xeque mate");
+                    else:
+                        if self.game_round == BRANCO:
+                            self.xeque_branco = False;
+                        if self.game_round == PRETO:
+                            self.xeque_preto = False;
+                    self.proximaRodada();
             self.pickUpCord = None;
 
     def proximaRodada(self):
