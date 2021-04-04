@@ -33,6 +33,16 @@ def initTab():
         [BP, BP, BP, BP, BP, BP, BP, BP],
         [BT, BC, BB, BQ, BR, BB, BC, BT]
     ]
+    tabuleiro = [
+        [PT, VV, PB, PQ, PR, PB, PC, PT],
+        [PP, BP, PP, PP, PP, PP, PP, PP],
+        [VV, VV, VV, VV, VV, VV, VV, VV],
+        [VV, VV, VV, VV, VV, VV, VV, VV],
+        [VV, VV, VV, VV, VV, VV, VV, VV],
+        [VV, VV, VV, VV, VV, VV, VV, VV],
+        [BP, PP, BP, BP, BP, BP, BP, BP],
+        [BT, VV, BB, BQ, BR, BB, BC, BT]
+    ]
     return tabuleiro;
 
 def is_branca (type):
@@ -65,7 +75,12 @@ def printTabuleiro(tab):
     print(tabStr);
 
 def verificaMovRei (tab, type, x_ori, y_ori, x_dest, y_dest):
-    return (abs(x_dest - x_ori) == 1 and abs(y_dest - y_ori) == 1) or (abs(x_dest - x_ori) == 0 and abs(y_dest - y_ori) == 1) or (abs(x_dest - x_ori) == 1 and abs(y_dest - y_ori) == 0);
+    if (abs(x_dest - x_ori) == 1 and abs(y_dest - y_ori) == 1) or (
+            abs(x_dest - x_ori) == 0 and abs(y_dest - y_ori) == 1) or (
+            abs(x_dest - x_ori) == 1 and abs(y_dest - y_ori) == 0):
+        return True;
+
+    return
 
 def verificaMovCavalo (tab, type, x_ori, y_ori, x_dest, y_dest):
     return (abs(x_dest - x_ori) == 2 and abs(y_dest - y_ori) == 1) or (abs(x_dest - x_ori) == 1 and abs(y_dest - y_ori) == 2);
@@ -121,11 +136,35 @@ def verificaMovPeao(tab, type, x_ori, y_ori, x_dest, y_dest):
     return False;  # movimento invalido
 
 def promocaoPeao(tab, type, x, y): #implementar escolha
-    if type != PP or type != BP: return;
-    if is_branca(type) and x == 7 :
-        tab[x][y] == BQ;
-    elif not is_branca(type) and x == 0 :
-        tab[x][y] == PQ;
+    if type != PP and type != BP: return;
+    if (is_branca(type) and x == 0) or (not is_branca(type) and x == 7):
+        print("#########################################");
+        print("Para promover o peão digite sua escolha:")
+        print("1 - Rainha")
+        print("2 - Torre")
+        print("3 - Bispo")
+        print("4 - Cavalo")
+        num = 0;
+        while num <= 0 or num >= 4  :
+            str = input("Escolha de 1 a 4:")
+            if isnumber(str):
+                num = int(str);
+        if num == 1:
+            tab[x][y] = BQ if is_branca(tab[x][y]) else PQ;
+        elif num == 2:
+            tab[x][y] = BT if is_branca(tab[x][y]) else PT;
+        elif num == 3:
+            tab[x][y] = BB if is_branca(tab[x][y]) else PB;
+        elif num == 4:
+            tab[x][y] = BC if is_branca(tab[x][y]) else PC;
+        print("#########################################");
+
+def isnumber(value):
+    try:
+         float(value)
+    except ValueError:
+         return False
+    return True
 
 def getPeca(tab, x,y):
     return tab[x][y]

@@ -80,9 +80,11 @@ class App:
     tab = tabuleiro.initTab();
     tabuleiro.printTabuleiro(tab);
     movPossiveis = tabuleiro.movimentosPossiveis(tab);
-    xeque_branco = False;
-    xeque_preto = False;
-    pickUpCord = None;
+    xeque_branco    = False;
+    xeque_preto     = False;
+    rei_branco_mov  = False;
+    rei_preto_mov   = False;
+    pickUpCord      = None;
 
     # tabuleiro
     def initGame(self):
@@ -92,6 +94,8 @@ class App:
         self.xeque_branco = False;
         self.xeque_preto  = False;
         self.pickUpCord = None;
+        self.rei_branco_mov = False;
+        self.rei_preto_mov = False;
 
     def obterSprites():
         sprites = {
