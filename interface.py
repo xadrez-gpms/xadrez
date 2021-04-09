@@ -78,7 +78,7 @@ class App:
     spriteOffset.y = h_offset;
 
     tab = tabuleiro.initTab();
-    tabuleiro.printTabuleiro(tab);
+    #tabuleiro.printTabuleiro(tab);
     movPossiveis = tabuleiro.movimentosPossiveis(tab);
     xeque_branco    = False;
     xeque_preto     = False;
@@ -96,26 +96,7 @@ class App:
         self.pickUpCord = None;
         self.rei_branco_mov = False;
         self.rei_preto_mov = False;
-
-    def obterSprites():
-        sprites = {
-            VB : white_cell,
-            VP : black_cell,
-            PP : black_pawn,
-            PB : black_bishop,
-            PT : black_rook,
-            PC : black_knight,
-            PQ : black_queen,
-            PR : black_king,
-            BP : white_pawn,
-            BB : white_bishop,
-            BT : white_rook,
-            BC : white_knight,
-            BQ : white_queen,
-            BR : white_king,
-            BOARD : board,
-        }
-        return sprites
+        self.game_round = BRANCO;
 
     def __init__(self):
         self._running = True
@@ -144,13 +125,13 @@ class App:
         if event.type == KEYDOWN: 
             if event.key == pygame.K_f:
                 tabuleiro.printTabuleiro(self.tab) # printa o tabuleiro no console quando aperta a tecla F
-        if event.type == KEYDOWN:
             if event.key == pygame.K_m:
                 tabuleiro.printMovmentosPossiveis(tabuleiro.movimentosPossiveis(self.tab)); # printa o tabuleiro no
                                                                                             # console quando aperta a tecla F
-        if event.type == KEYDOWN:
             if event.key == pygame.K_r:
                 self.initGame();
+            if event.key == pygame.K_ESCAPE:
+                exit(0);
 
     def movimentacao(self):
         if self.pickUpCord == None :
