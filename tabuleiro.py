@@ -259,7 +259,10 @@ def movimentaPeca(tab, type, x_ori, y_ori, x_dest, y_dest):
     if checaMovimentaPeça(tab, type, x_ori, y_ori, x_dest, y_dest):
         setPeca(tab, VV, x_ori, y_ori);
         setPeca(tab, type, x_dest, y_dest);
-        promocaoPeao(tab, type, x_dest, y_dest);
+        if(type == BR or type == PR or type == BT or type == PT): # Se for movimentação da torre ou do rei, ajusta o dicionário para o roque
+            ajustaStatusRoque(type, Coord(x_ori, y_ori));
+        if(type == PP or type == BP): # Se a peça não for peão não tem porque verificar promoção
+            promocaoPeao(tab, type, x_dest, y_dest);
         return True;
 
     return False;
