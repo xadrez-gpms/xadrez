@@ -1,4 +1,5 @@
 from copy import copy, deepcopy
+from auxiliares import Coord
 
 # peças brancas (1x)
 BP = "BP";  # peao
@@ -20,6 +21,23 @@ VV = "00";  # vazio
 
 BRANCO = 0;
 PRETO  = 1;
+
+"""
+Dicionário com as torres e rei para movimentação do roque
+Torre E -> Torre ao lado esquerdo do Rei (mais distante)
+Torre D -> Torre ao lado direito do Rei (mais próxima)
+True quando a peça ainda não foi movida
+False quando a peça já foi movida
+"""
+
+status_roque = {
+    "torre_jogador_E": True, # Coord(7, 0)
+    "torre_jogador_D": True, # Coord(7, 7)
+    "rei_jogador": True, # Coord(7, 4)
+    "torre_IA_E": True, # Coord (0, 7)
+    "torre_IA_D": True, # Coord (0, 0)
+    "rei_IA": True # Coord (0, 4)
+}
 
 
 def initTab():
@@ -125,7 +143,7 @@ def verificaMovPeao(tab, type, x_ori, y_ori, x_dest, y_dest):
             return True;  # peca comida
     return False;  # movimento invalido
 
-def promocaoPeao(tab, type, x, y): #implementar escolha
+def promocaoPeao(tab, type, x, y): # TODO implementar escolha
     if type != PP and type != BP: return;
     if (is_branca(type) and x == 0) or (not is_branca(type) and x == 7):
         print("#########################################");
@@ -241,10 +259,75 @@ def movimentaPeca(tab, type, x_ori, y_ori, x_dest, y_dest):
     if checaMovimentaPeça(tab, type, x_ori, y_ori, x_dest, y_dest):
         setPeca(tab, VV, x_ori, y_ori);
         setPeca(tab, type, x_dest, y_dest);
-        promocaoPeao(tab, type, x_dest, y_dest);
+        if(type == BR or type == PR or type == BT or type == PT): # Se for movimentação da torre ou do rei, ajusta o dicionário para o roque
+            ajustaStatusRoque(type, Coord(x_ori, y_ori));
+        if(type == PP or type == BP): # Se a peça não for peão não tem porque verificar promoção
+            promocaoPeao(tab, type, x_dest, y_dest);
         return True;
 
     return False;
 
+def ajustaStatusRoque(peca, start_pos):
+    if(peca != BR or peca != PR or peca != BT or peca != PT): # Se a peça não for rei ou peão sai do método
+        return;
+    if(start_pos.x == 0): # Linha inicial das peças pretas
+        if(peca == PR): #Rei Preto
+            if(start_pos.y == 4 and status_roque.get({"rei_IA"})): # Rei Preto foi movimentado
+                status_roque.update({"rei_IA": False});
+                return;
+        elif(peca == PT): #Torre Preta
+            if(start_pos.y == 7 and status_roque.get({"torre_IA_E"})):
+                status_roque.update({"torre_IA_E": False});
+                return;
+            elif(start_pos.y == 0 and status_roque.get({"torre_IA_D"})):
+                status_roque.update({"torre_IA_D": False});
+                return;
+    elif(start_pos.x == 7): # Linha inicial das peças brancas
+        if(peca == BR): #Rei Branco
+            if(start_pos.y == 4 and status_roque.get({"rei_jogador"})): # Rei Branco foi movimentado
+                status_roque.update({"rei_jogador": False});
+                return;
+        elif(peca == BT): #Torre Branca
+            if(start_pos.y == 7 and status_roque.get({"torre_jogador_D"})):
+                status_roque.update({"torre_jogador_D": False});
+                return;
+            elif(start_pos.y == 0 and status_roque.get({"torre_jogador_E"})):
+                status_roque.update({"torre_jogador_E": False});
+                return;
+    # print(status_roque); # print utilizado para debug | usar quando for implementar o roque
+    return;
 
+
+def verificaRoque(tab, rei, torre, pos_torre):
+   
+    if(rei != BR or rei != PR):
+        return False; # Não chegou um Rei
+    elif(torre != PT or torre != BT):
+        return False; # Não chegou torre
+    
+    if(rei == BR):
+        if(not status_roque.get("rei_jogador")):
+            return False; # Rei Branco já foi movido
+        else:
+            if(pos_torre.x != 7):
+                return False; # Torre Branca fora da coluna inicial
+            else:
+                if(pos_torre.y == 0 and status_roque.get("torre_jogador_E")):
+                    return True; # Grande Roque para o Jogador (peças brancas)
+                elif(pos_torre.y == 7 and status_roque.get("torre_jogador_D")):
+                    return True; # Pequeno Roque para o Jogador (peças brancas)
+
+    else:
+        if(not status_roque.get("rei_IA")):
+            return False; # Rei Preto já foi movido
+        else:
+            if(pos_torre.x != 0):
+                return False; # Torre Preta fora da coluna inicial
+            else:
+                if(pos_torre.y == 7 and status_roque.get("torre_IA_E")):
+                    return True; # Grande Roque para a IA (peças pretas)
+                elif(pos_torre.y == 0 and status_roque.get("torre_IA_D")):
+                    return True; # Pequeno Roque para a IA (peças pretas)
+    
+    return False;
 
