@@ -1,12 +1,14 @@
 from copy import copy, deepcopy
 import sys, pygame
 import tabuleiro
+from auxiliares import Coord
 from pygame import *
 
 BOARD_OFFSET = 14 # sprite do tabuleiro possui borda de 14 pixels
 BOARD_WIDTH = 800 # largura da janela
 BOARD_HEIGHT = 800 # altura da janela
 SPRITE_SIZE = 52 # tamanho do sprite das peças
+TARGET_FPS = 60 # Taxa Desejada de Quadros por segundo
 
 ## Início da lista dos sprites
 
@@ -42,9 +44,7 @@ adjustedBoard = pygame.transform.scale(board, (size))
 
 
 
-class Coord: # Classe auxiliar
-    x = 0;
-    y = 0;
+
 
 class App:
 
@@ -69,13 +69,9 @@ class App:
     if h_delimiter > SPRITE_SIZE:
         h_offset = (h_delimiter - SPRITE_SIZE) / 2;
 
-    origin = Coord();
-    origin.x = 0;
-    origin.y = 0;
+    origin = Coord(0, 0);
 
-    spriteOffset = Coord();
-    spriteOffset.x = w_offset;
-    spriteOffset.y = h_offset;
+    spriteOffset = Coord(w_offset, h_offset);
 
     tab = tabuleiro.initTab();
     #tabuleiro.printTabuleiro(tab);
@@ -137,7 +133,7 @@ class App:
         if self.pickUpCord == None :
             pos = self.getPosClick();
             piece = tabuleiro.getPeca(self.tab, pos[0], pos[1]);
-            if piece == tabuleiro.VV:  # Garante que a peça seja valdia
+            if piece == tabuleiro.VV:  # Garante que a peça seja válida
                 print("Nenhuma peça selecionada");
             elif not self.verificaRodada(piece):  # controlar a rodada aqui tbm
                 print("Não é sua rodada");
@@ -202,6 +198,7 @@ class App:
         y = pos[0];
         lin = int(x // self.w_delimiter);
         col = int(y // self.h_delimiter);
+        print('Mouse X:{} Mouse Y:{}\nLinha:{} Coluna:{}'.format(x, y, lin, col));
         print('{}{}'.format(chr(col+65), lin+1)+" - "+tabuleiro.getPeca(self.tab,lin, col)) # Conversão para Coluna de A~H
         return [lin, col]
 
@@ -227,7 +224,9 @@ class App:
             for j in range(len(tab[i])):
                 lin = int(i * self.w_delimiter) + self.spriteOffset.x
                 col = int(j * self.h_delimiter) + self.spriteOffset.y;
-                if tab[i][j] == tabuleiro.PB:
+                if tab[i][j] == tabuleiro.VV:
+                    continue;
+                elif tab[i][j] == tabuleiro.PB:
                     self.piecesLayer.blit(black_bishop, (col, lin))
                 elif tab[i][j] == tabuleiro.PR:
                     self.piecesLayer.blit(black_king, (col, lin))
@@ -261,7 +260,7 @@ class App:
             self._running = False
  
         while( self._running ):
-            self.clock.tick(60); # define o FPS em 60 fps. | Alterar o valor para alterar o FPS.
+            self.clock.tick(TARGET_FPS); # define o FPS em 60 fps. | Alterar o valor para alterar o FPS.
             
             for event in pygame.event.get():
                 self.on_event(event)
