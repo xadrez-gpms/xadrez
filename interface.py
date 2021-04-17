@@ -1,12 +1,13 @@
 from copy import copy, deepcopy
 import sys, pygame
 import tabuleiro
+import ai_module
 from auxiliares import Coord
 from pygame import *
 
 BOARD_OFFSET = 14 # sprite do tabuleiro possui borda de 14 pixels
-BOARD_WIDTH = 800 # largura da janela
-BOARD_HEIGHT = 800 # altura da janela
+BOARD_WIDTH = 900 # largura da janela
+BOARD_HEIGHT = 900 # altura da janela
 SPRITE_SIZE = 52 # tamanho do sprite das peças
 TARGET_FPS = 60 # Taxa Desejada de Quadros por segundo
 
@@ -98,7 +99,11 @@ class App:
         self._running = True
         self._display_surf = None
         self.size = self.weight, self.height = BOARD_WIDTH, BOARD_HEIGHT
- 
+        self.movimentos = tabuleiro.movimentosPossiveis(self.tab);
+        print(self.movimentos)
+        self.ai = ai_module.ai_module();
+        self.ai.cache = self.ai.estruturarCache(self.movimentos);
+    
     # Executa na Inicialização | Somente 1 Vez
     def on_init(self):
         pygame.init()
@@ -117,6 +122,8 @@ class App:
             self._running = False
         if event.type == pygame.MOUSEBUTTONUP and event.button == 1: # clique com o botão esquerdo
             self.movimentacao();
+            self.movimentos = tabuleiro.movimentosPossiveis(self.tab);
+            print(self.movimentos);
         # input do teclado
         if event.type == KEYDOWN: 
             if event.key == pygame.K_f:
@@ -260,7 +267,7 @@ class App:
             self._running = False
  
         while( self._running ):
-            self.clock.tick(TARGET_FPS); # define o FPS em 60 fps. | Alterar o valor para alterar o FPS.
+            self.clock.tick(TARGET_FPS); # define o FPS em TARGET_FPS
             
             for event in pygame.event.get():
                 self.on_event(event)
