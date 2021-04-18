@@ -1,5 +1,5 @@
-import tabuleiro
-from auxiliares import AuxiliarCacheMovimentacao, Coord
+import tabuleiro, random
+from auxiliares import AuxiliarCacheMovimentacao, Coord, TipoPeca, CorPeca
 
 # dicionário com o valor das peças para cálculo da ia
 valor_pecas = {
@@ -26,11 +26,34 @@ class ai_module:
 
     #cacheEstruturada = estruturarCache(cacheMovimentacao);
 
-    def selecionarPeça(tabuleiro, cacheMovimentacao): #assume-se que sempre a cor da sua peça é preta
-        for x_ori in range(len(tab)):
-            for y_ori in range(len(tab[x_ori])):
-                if(tabuleiro[x_ori][y_ori] == tabuleiro.VV):
-                    continue;
+    def selecionarMovimento(tabuleiro, cacheMovimentacao: [AuxiliarCacheMovimentacao]): #assume-se que sempre a cor da sua peça é preta
+
+        jogadas = [];
+        tipoPecaDisponivel = [];
+        for i in range(len(cacheMovimentacao)):
+            if(cacheMovimentacao[i].peca.cor != CorPeca.Preta): # para tornar adaptavel basta adicionar um parametro de cor e substitui-lo aqui
+                continue;
+            else:
+                jogadas.append(cacheMovimentacao[i]);
+
+            if(not(cacheMovimentacao[i].peca.type in tipoPecaDisponivel)):
+                tipoPecaDisponivel.append(cacheMovimentacao[i].peca.type);
+
+        if(len(jogadas) == 0):
+            return None;
+        
+        randomHelper = random.randint(0, len(tipoPecaDisponivel)-1);
+        tipoPeca = tipoPecaDisponivel[randomHelper];
+        jogadasPeca = [];
+
+        for i in range(len(jogadas)):
+            if(jogadas[i].peca.type == tipoPeca):
+                jogadasPeca.append(jogadas[i]);
+        
+        randomHelper = random.randint(0, len(jogadasPeca)-1);
+        print(randomHelper);
+        return jogadasPeca[randomHelper];
+
     def __init__(self, cache=None):
         self.cache = cache;
 

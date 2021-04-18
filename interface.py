@@ -131,6 +131,8 @@ class App:
             if event.key == pygame.K_m:
                 tabuleiro.printMovmentosPossiveis(tabuleiro.movimentosPossiveis(self.tab)); # printa o tabuleiro no
                                                                                             # console quando aperta a tecla F
+            if event.key == pygame.K_a:
+                movimento = self.ai.selecionarMovimento(self.ai.cache);
             if event.key == pygame.K_r:
                 self.initGame();
             if event.key == pygame.K_ESCAPE:
