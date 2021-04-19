@@ -123,6 +123,7 @@ class App:
         if event.type == pygame.MOUSEBUTTONUP and event.button == 1: # clique com o botão esquerdo
             self.movimentacao();
             self.movimentos = tabuleiro.movimentosPossiveis(self.tab);
+            self.ai.cache = self.ai.estruturarCache(self.movimentos);
             print(self.movimentos);
         # input do teclado
         if event.type == KEYDOWN: 
@@ -142,7 +143,12 @@ class App:
                         Peca.convertePecaParaTipoTabuleiro(movimento.peca.type, movimento.peca.cor),
                         movimento.peca.pos.x, movimento.peca.pos.y, 
                         movimento.pos_fin.x, movimento.pos_fin.y);
-                self.game_round = BRANCO;
+                
+                if(self.game_round == PRETO):
+                    self.game_round = BRANCO;
+
+                self.movimentos = tabuleiro.movimentosPossiveis(self.tab);
+                self.ai.cache = self.ai.estruturarCache(self.movimentos);
 
 
             if event.key == pygame.K_r:
