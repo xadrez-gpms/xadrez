@@ -1,5 +1,5 @@
 import tabuleiro, random
-from auxiliares import AuxiliarCacheMovimentacao, Coord, TipoPeca, CorPeca
+from auxiliares import AuxiliarCacheMovimentacao, Coord, TipoPeca, CorPeca, Peca
 
 # dicionário com o valor das peças para cálculo da ia
 valor_pecas = {
@@ -24,7 +24,11 @@ class ai_module:
                 resultado.append(atual);
         return resultado;
 
-    #cacheEstruturada = estruturarCache(cacheMovimentacao);
+    def aplicarMovimentoNoTabuleiro(tab, movimento: AuxiliarCacheMovimentacao):
+        tabuleiro.movimentaPeca(tab, 
+                               Peca.convertePecaParaTipoTabuleiro(movimento.peca.type, movimento.peca.cor),
+                               movimento.peca.pos.x, movimento.peca.pos.y, 
+                               movimento.pos_fin.x, movimento.pos_fin.y);
 
     def selecionarMovimento(tabuleiro, cacheMovimentacao: [AuxiliarCacheMovimentacao]): #assume-se que sempre a cor da sua peça é preta
 
@@ -51,7 +55,6 @@ class ai_module:
                 jogadasPeca.append(jogadas[i]);
         
         randomHelper = random.randint(0, len(jogadasPeca)-1);
-        print(randomHelper);
         return jogadasPeca[randomHelper];
 
     def __init__(self, cache=None):

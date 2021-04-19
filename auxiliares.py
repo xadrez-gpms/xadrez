@@ -25,6 +25,46 @@ class Peca:
         self.cor = CorPeca(cor); 
         self.pos = Coord(coord.x, coord.y);
         self.lastPos = Coord(coord.x, coord.y);
+
+    def convertePecaParaTipoTabuleiro(tipo: TipoPeca, cor: CorPeca):
+        
+        if(tipo == TipoPeca.Peao):
+            if(cor == CorPeca.Branca):
+                return "BP";
+            else:
+                return "PP";
+
+        elif(tipo == TipoPeca.Bispo):
+            if(cor == CorPeca.Branca):
+                return "BB";
+            else:
+                return "PB";
+
+        elif(tipo == TipoPeca.Cavalo):
+            if(cor == CorPeca.Branca):
+                return "BC";
+            else:
+                return "PC";
+
+        elif(tipo == TipoPeca.Torre):
+            if(cor == CorPeca.Branca):
+                return "BT";
+            else:
+                return "PT";
+
+        elif(tipo == TipoPeca.Rainha):
+            if(cor == CorPeca.Branca):
+                return "BQ";
+            else:
+                return "PQ";
+
+        elif(tipo == TipoPeca.Rei):
+            if(cor == CorPeca.Branca):
+                return "BR";
+            else:
+                return "PR";
+        else:
+            return None;
     
     def descobreTipoPeca(tipo):
 

@@ -2,7 +2,7 @@ from copy import copy, deepcopy
 import sys, pygame
 import tabuleiro
 import ai_module
-from auxiliares import Coord
+from auxiliares import Coord, Peca
 from pygame import *
 
 BOARD_OFFSET = 14 # sprite do tabuleiro possui borda de 14 pixels
@@ -128,13 +128,26 @@ class App:
         if event.type == KEYDOWN: 
             if event.key == pygame.K_f:
                 tabuleiro.printTabuleiro(self.tab) # printa o tabuleiro no console quando aperta a tecla F
+
             if event.key == pygame.K_m:
-                tabuleiro.printMovmentosPossiveis(tabuleiro.movimentosPossiveis(self.tab)); # printa o tabuleiro no
-                                                                                            # console quando aperta a tecla F
+                tabuleiro.printMovmentosPossiveis(tabuleiro.movimentosPossiveis(self.tab)); # printa o tabuleiro no console quando aperta a tecla F
+            
+            # Por hora a IA está sendo ativada por aqui
             if event.key == pygame.K_a:
+                if(self.game_round != PRETO):
+                    return;
+
                 movimento = self.ai.selecionarMovimento(self.ai.cache);
+                tabuleiro.movimentaPeca(self.tab, 
+                        Peca.convertePecaParaTipoTabuleiro(movimento.peca.type, movimento.peca.cor),
+                        movimento.peca.pos.x, movimento.peca.pos.y, 
+                        movimento.pos_fin.x, movimento.pos_fin.y);
+                self.game_round = BRANCO;
+
+
             if event.key == pygame.K_r:
                 self.initGame();
+
             if event.key == pygame.K_ESCAPE:
                 exit(0);
 
