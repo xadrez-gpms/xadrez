@@ -1,12 +1,26 @@
 # Xadrez
 Trabalho da Disciplina *Gerência de Projeto e Manutenção de Software* da **UNIVERSIDADE FEDERAL FLUMINENSE** para o segundo período letivo de 2020 (2020.2).
 
-- No momento o jogo não possui IA (está em desenvolvimento).
+- No momento o jogo possui uma **IA BÁSICA**:
+	- Movimentação aleatória.
+	- IA mais sofisticada está nos planos de desenvolvimento.
 - Está validando os movimentos do jogador. 
 	- Não há feedback visual no momento.
 	- Todo o feedback está sendo dado no console por hora.
 - Os movimentos "Pequeno Roque" e "Grande Roque" ainda não estão disponíveis.
 - Atualmente o jogo está configurado para rodar a 60 quadros por segundo (60 FPS).
+
+___
+
+# Como Jogar?
+1. Navegar até a pasta do projeto e executar o arquivo *interface.py*.
+1. Para movimentação do jogador utilize o mouse clicando com o botão esquerdo.
+1. O jogador **SEMPRE** está com as peças **brancas**.
+2. O jogador **pode** mover as peças pretas com o seu mouse.
+    1. No turno das peças pretas você pode ativar o uso da IA.
+    2. Para ativar o uso da IA utilize a tecla ***A***.
+
+___ 
 
 # Integração com o PyGames:
 
@@ -21,6 +35,8 @@ https://www.pygame.org/wiki/GettingStarted
 
 ## Documentação Python 3
 https://docs.python.org/3/index.html
+
+___
 
 # Recursos
 
