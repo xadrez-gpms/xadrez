@@ -4,12 +4,17 @@ import tabuleiro
 import ai_module
 from auxiliares import Coord, Peca
 from pygame import *
-from win32api import GetSystemMetrics
+try:
+    from win32api import GetSystemMetrics
+    BOARD_WIDTH = int(GetSystemMetrics(1)/3*2) # largura da janela
+    BOARD_HEIGHT =int(GetSystemMetrics(1)/3*2) # altura da janela
+except ImportError:
+    BOARD_WIDTH = 600 # largura da janela
+    BOARD_HEIGHT = 600 # altura da janela
+
 
 
 BOARD_OFFSET = 14 # sprite do tabuleiro possui borda de 14 pixels
-BOARD_WIDTH = int(GetSystemMetrics(1)/3*2) # largura da janela
-BOARD_HEIGHT =int(GetSystemMetrics(1)/3*2) # altura da janela
 SPRITE_SIZE = 52 # tamanho do sprite das peças
 TARGET_FPS = 60 # Taxa Desejada de Quadros por segundo
 SCREEN_TITLE = "Xadrez GPMS UFF 2020.2"
