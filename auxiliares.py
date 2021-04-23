@@ -1,11 +1,20 @@
-# Documento respons�vel por conter classes e/ou fun��es auxiliares
-# TODO escrever controlador de l�gica para estruturar melhor o projeto
+# Documento responsavel por conter classes e/ou funcoes auxiliares
+# TODO escrever controlador de logica para estruturar melhor o projeto
 from enum import Enum
 
 class Coord: # Classe auxiliar
     def __init__(self, x, y):
         self.x = x;
         self.y = y;
+
+class SceneState(Enum):
+    Empty = 0,
+    Created = 1,
+    Initialized = 2,
+    Loaded = 3,
+    Running = 4,
+    Awaiting = 5,
+    ToBeDestroyed = 6
 
 class TipoPeca(Enum):
     Peao = 100,
@@ -95,10 +104,6 @@ class Peca:
             return CorPeca.Preta;
 
 class AuxiliarCacheMovimentacao:
-
-    def printMe(self):
-        self.peca.printMe();
-        print("\nPosição Final: ({},{})".format(self.pos_fin.x, self.pos_fin.y));
 
     def __init__(self, pos_ini: Coord, pos_fin: Coord, peca: str):
         self.pos_fin = Coord(pos_fin.x, pos_fin.y);

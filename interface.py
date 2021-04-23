@@ -10,6 +10,7 @@ BOARD_WIDTH = 900 # largura da janela
 BOARD_HEIGHT = 900 # altura da janela
 SPRITE_SIZE = 52 # tamanho do sprite das peças
 TARGET_FPS = 60 # Taxa Desejada de Quadros por segundo
+SCREEN_TITLE = "Xadrez GPMS UFF 2020.2"
 
 ## Início da lista dos sprites
 
@@ -113,6 +114,7 @@ class App:
     def on_init(self):
         pygame.init()
         screen = pygame.display.set_mode(size, pygame.HWSURFACE | pygame.DOUBLEBUF);
+        pygame.display.set_caption(SCREEN_TITLE);
         self._display_surf = screen;
         self.piecesLayer = screen.copy();
         self._running = True;
@@ -141,11 +143,16 @@ class App:
         if event.type == pygame.QUIT:
             self._running = False
         if event.type == pygame.MOUSEBUTTONUP and event.button == 1: # clique com o botão esquerdo
-            if (self.pickUpCord != None): print(tabuleiro.getPeca(self.pickUpCord[0], self.pickUpCord[1]))
+            if (self.pickUpCord != None): 
+                print(tabuleiro.getPeca(self.tab, self.pickUpCord[0], self.pickUpCord[1]))
             if (self.pickUpCord == None):
+                pos = self.getPosClick();
+                piece = tabuleiro.getPeca(self.tab, pos[0], pos[1]);
+                if piece != tabuleiro.VV and self.verificaRodada(piece): #controlar a rodada aqui tbm
+                    self.pickUpCord = pos;
                 self.pickUpCord = self.getPosClick();
             else:
-                piece = tabuleiro.getPeca(self.pickUpCord[0], self.pickUpCord[1])
+                piece = tabuleiro.getPeca(self.tab, self.pickUpCord[0], self.pickUpCord[1])
                 newPos = self.getPosClick();
                 tabuleiro.movimentaPeca(piece, self.pickUpCord[0], self.pickUpCord[1], newPos[0], newPos[1])
                 self.pickUpCord = None;
@@ -159,8 +166,8 @@ class App:
             
             # Por hora a IA está sendo ativada por aqui
             if event.key == pygame.K_a:
-                if(self.game_round != PRETO):
-                    return;
+                #if(self.game_round != PRETO):
+                    #return;
 
                 movimento = self.ai.selecionarMovimento(self.ai.cache);
                 tabuleiro.movimentaPeca(self.tab, 
