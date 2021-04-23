@@ -135,9 +135,14 @@ def verificaMovPeao(tab, type, x_ori, y_ori, x_dest, y_dest):
                 (not is_branca(type) and x_ori == 1):  # se for primeira rodada anda ate 2
             limit = 2;
         if (is_branca(type) and x_dest - x_ori >= (limit * -1) and x_dest < x_ori) or (
-                not is_branca(type) and x_dest - x_ori <= limit and x_dest > x_ori): #verifica se esta dentro do limite
-            if tab[x_dest][y_dest] == VV:  # verifica se a casa esta vazia
-                return True;  # peça anda simples
+                not is_branca(type) and x_dest - x_ori <= limit and x_dest > x_ori):  # verifica se esta dentro do limite
+            movLen = x_dest - x_ori;
+            if tab[x_dest][y_dest] == VV:  # verifica se a casa final esta vazia
+                if movLen == 2 or movLen == -2: # caso seja movimento duplo
+                    if tab[x_ori + int(movLen / 2)][y_dest] == VV:  # verifica se a casa intermediaria esta vazia
+                        return True;  # peça anda para frente 2 casas
+                else:
+                    return True;  # peça anda para frente 1 casa
     elif (y_dest == y_ori + 1 or y_dest == y_ori - 1) and tab[x_dest][y_dest] != VV:  # verifica se o tipo de peca da posicao de destino e uma peca inimiga
         if (is_branca(type) and x_dest - x_ori == -1) or (not is_branca(type) and x_dest - x_ori == 1): #andando pra frente no eixo X
             return True;  # peca comida
