@@ -22,6 +22,12 @@ ___
 
 ___ 
 
+# Releases:
+
+Informações sobre o release estão [disponíveis aqui](https://github.com/xadrez-gpms/xadrez/blob/main/RELEASE.md)
+
+___
+
 # Integração com o PyGames:
 
 1. Instalar o Python em seu sistema. Para o Windows 10 há a versão 3.9 disponível na *Microsoft Store*.
