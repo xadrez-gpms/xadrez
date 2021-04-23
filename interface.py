@@ -154,7 +154,7 @@ class App:
             else:
                 piece = tabuleiro.getPeca(self.tab, self.pickUpCord[0], self.pickUpCord[1])
                 newPos = self.getPosClick();
-                tabuleiro.movimentaPeca(piece, self.pickUpCord[0], self.pickUpCord[1], newPos[0], newPos[1])
+                tabuleiro.movimentaPeca(self.tab, piece, self.pickUpCord[0], self.pickUpCord[1], newPos[0], newPos[1])
                 self.pickUpCord = None;
         # input do teclado
         if event.type == KEYDOWN: 
