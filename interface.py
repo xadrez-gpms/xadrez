@@ -23,6 +23,8 @@ SCREEN_TITLE = "Xadrez GPMS UFF 2020.2"
 
 #tabuleiro
 board = pygame.image.load('sprites/chess_board.png')
+promocaoBranco = pygame.image.load('sprites/promocao_branco.png')
+promocaoPreto = pygame.image.load('sprites/promocao_preto.png')
 black_cell = pygame.image.load('sprites/squareB.png')
 white_cell = pygame.image.load('sprites/squareW.png')
 
@@ -53,6 +55,8 @@ PRETO  = tabuleiro.PRETO;
 #adjust the width of the board
 size = width, height = BOARD_WIDTH, BOARD_HEIGHT
 adjustedBoard = pygame.transform.scale(board, (size))
+promocaoBranco = pygame.transform.scale(promocaoBranco, (size))
+promocaoPreto = pygame.transform.scale(promocaoPreto, (size))
 
 
 
@@ -95,7 +99,8 @@ class App:
     rei_branco_mov  = False;
     rei_preto_mov   = False;
     pickUpCord      = None;
-
+    promocaoPeao    = False;
+    statusPromocao  = None;
     # tabuleiro
     def initGame(self):
         self.tab = tabuleiro.initTab();
@@ -107,7 +112,8 @@ class App:
         self.rei_branco_mov = False;
         self.rei_preto_mov = False;
         self.game_round = BRANCO;
-
+        self.promocaoPeao = False;
+        self.statusPromocao = None;
     def __init__(self):
         self._running = True
         self._display_surf = None
@@ -150,8 +156,9 @@ class App:
         if event.type == pygame.QUIT:
             self._running = False
         if event.type == pygame.MOUSEBUTTONUP and event.button == 1: # clique com o botão esquerdo
-           self.movimentacao();
-
+            if not self.promocaoPeao:
+                self.movimentacao();
+            else: self.promovePeao();
         # input do teclado
         if event.type == KEYDOWN: 
             if event.key == pygame.K_f:
@@ -181,6 +188,28 @@ class App:
 
             if event.key == pygame.K_ESCAPE:
                 exit(0);
+
+    def promovePeao(self):
+        type = self.statusPromocao[0];
+        x = self.statusPromocao[1];
+        y = self.statusPromocao[2];
+        escolha = None;
+        pos = pygame.mouse.get_pos()
+        w_delimitador = int(self.weight/12);
+        h_delimitador = int(self.height/10);
+        if pos[1] >= 5.5 * w_delimitador and pos[1] <= 7 * w_delimitador:
+            if pos[0] >= 2.1*h_delimitador and pos[0] <= 2.9*h_delimitador:
+                escolha = tabuleiro.BT if tabuleiro.is_branca(type) else tabuleiro.PT;
+            if pos[0] >= 3.86 * h_delimitador and pos[0] <= 4.4 * h_delimitador:
+                escolha = tabuleiro.BB if tabuleiro.is_branca(type) else tabuleiro.PB;
+            if pos[0] >= 5.5 * h_delimitador and pos[0] <= 6.29 * h_delimitador:
+                escolha = tabuleiro.BC if tabuleiro.is_branca(type) else tabuleiro.PC;
+            if pos[0] >= 7.3 * h_delimitador and pos[0] <= 7.84 * h_delimitador:
+                escolha = tabuleiro.BQ if tabuleiro.is_branca(type) else tabuleiro.PQ;
+        if escolha != None:
+            tabuleiro.setPeca(self.tab, escolha, x, y);
+            self.promocaoPeao = False;
+            self.proximaRodada();
 
     def movimentacao(self):
         if self.pickUpCord == None :
@@ -227,7 +256,11 @@ class App:
                             self.xeque_branco = False;
                         if self.game_round == PRETO:
                             self.xeque_preto = False;
-                    self.proximaRodada();
+                    self.promocaoPeao = tabuleiro.promocaoPeao(piece, newPos[0]);
+                    if self.promocaoPeao:
+                        self.statusPromocao = [piece, newPos[0], newPos[1]];
+                        self.promovePeao();
+                    else: self.proximaRodada();
             self.pickUpCord = None;
             self.movimentos = tabuleiro.movimentosPossiveis(self.tab);
             self.ai.cache = self.ai.estruturarCache(self.movimentos);
@@ -264,6 +297,11 @@ class App:
     def on_render(self):
         self._display_surf.blit(adjustedBoard, (0, 0)) # Necessário para não duplicar as peças no tabuleiro
         self.displayTab();
+        if self.promocaoPeao :
+            if self.game_round == BRANCO:
+                self._display_surf.blit(promocaoBranco, (0, 0))
+            else:
+                self._display_surf.blit(promocaoPreto, (0, 0))
         pygame.display.flip();
 
     # Quando estiver encerrando o programa
@@ -274,7 +312,6 @@ class App:
         
         tab = self.tab;
         self.piecesLayer = self.screen.copy();
-        
         for i in range(len(tab)):
             for j in range(len(tab[i])):
                 lin = int(i * self.w_delimiter) + self.spriteOffset.x
@@ -305,6 +342,7 @@ class App:
                     self.piecesLayer.blit(white_pawn, (col, lin))
                 elif tab[i][j] == tabuleiro.BC:
                     self.piecesLayer.blit(white_knight, (col, lin))
+
 
         self.screen.blit(self.piecesLayer, (0,0))
 

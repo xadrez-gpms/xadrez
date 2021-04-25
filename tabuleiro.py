@@ -148,29 +148,11 @@ def verificaMovPeao(tab, type, x_ori, y_ori, x_dest, y_dest):
             return True;  # peca comida
     return False;  # movimento invalido
 
-def promocaoPeao(tab, type, x, y): # TODO implementar escolha
-    if type != PP and type != BP: return;
-    if (is_branca(type) and x == 0) or (not is_branca(type) and x == 7):
-        print("#########################################");
-        print("Para promover o peão digite sua escolha:")
-        print("1 - Rainha")
-        print("2 - Torre")
-        print("3 - Bispo")
-        print("4 - Cavalo")
-        num = 0;
-        while num <= 0 or num >= 4  :
-            str = input("Escolha de 1 a 4:")
-            if isnumber(str):
-                num = int(str);
-        if num == 1:
-            tab[x][y] = BQ if is_branca(tab[x][y]) else PQ;
-        elif num == 2:
-            tab[x][y] = BT if is_branca(tab[x][y]) else PT;
-        elif num == 3:
-            tab[x][y] = BB if is_branca(tab[x][y]) else PB;
-        elif num == 4:
-            tab[x][y] = BC if is_branca(tab[x][y]) else PC;
-        print("#########################################");
+def promocaoPeao(type, y): # TODO implementar escolha
+    if type != PP and type != BP: return False;
+    if (is_branca(type) and y == 0) or (not is_branca(type) and y == 7):
+       return True;
+    return False;
 
 def isnumber(value):
     try:
@@ -266,8 +248,6 @@ def movimentaPeca(tab, type, x_ori, y_ori, x_dest, y_dest):
         setPeca(tab, type, x_dest, y_dest);
         if(type == BR or type == PR or type == BT or type == PT): # Se for movimentação da torre ou do rei, ajusta o dicionário para o roque
             ajustaStatusRoque(type, Coord(x_ori, y_ori));
-        if(type == PP or type == BP): # Se a peça não for peão não tem porque verificar promoção
-            promocaoPeao(tab, type, x_dest, y_dest);
         return True;
 
     return False;
