@@ -20,7 +20,7 @@ TARGET_FPS = 60 # Taxa Desejada de Quadros por segundo
 SCREEN_TITLE = "Xadrez GPMS UFF 2020.2"
 
 ## Início da lista dos sprites
-
+menuGame = pygame.image.load('sprites/menuGame.png');
 #tabuleiro
 board = pygame.image.load('sprites/chess_board.png')
 promocaoBranco = pygame.image.load('sprites/promocao_branco.png')
@@ -57,7 +57,7 @@ size = width, height = BOARD_WIDTH, BOARD_HEIGHT
 adjustedBoard = pygame.transform.scale(board, (size))
 promocaoBranco = pygame.transform.scale(promocaoBranco, (size))
 promocaoPreto = pygame.transform.scale(promocaoPreto, (size))
-
+menuGame = pygame.transform.scale(menuGame, (size))
 
 
 
@@ -101,6 +101,13 @@ class App:
     pickUpCord      = None;
     promocaoPeao    = False;
     statusPromocao  = None;
+    game_mode       = 0;
+        # gamemode
+        # 0 = no game
+        # 1 = player vs player
+        # 2 = player vs IA
+        # 3 = IA vs IA
+
     # tabuleiro
     def initGame(self):
         self.tab = tabuleiro.initTab();
@@ -151,24 +158,41 @@ class App:
                 return True;
         return False;
 
+    def modoDeJogo(self):
+        pos = pygame.mouse.get_pos()
+        w_delimitador = int(self.weight / 10);
+        h_delimitador = int(self.height / 10);
+        if pos[0] >= 2.6 * h_delimitador and pos[0] <= 7.2 * h_delimitador:
+            if pos[1] >= 1.6 * w_delimitador and pos[1] <= 3.3 * w_delimitador:
+                self.game_mode = 1;
+            if pos[1] >= 4 * w_delimitador and pos[1] <= 5.5 * w_delimitador:
+                self.game_mode = 2;
+            if pos[1] >= 6.2 * w_delimitador and pos[1] <= 7.6 * w_delimitador:
+                self.game_mode = 3;
     # TRATAR INPUTS DO USUÁRIO AQUI | Executa sempre que um evento novo é detectado
     def on_event(self, event):
         if event.type == pygame.QUIT:
             self._running = False
         if event.type == pygame.MOUSEBUTTONUP and event.button == 1: # clique com o botão esquerdo
-            if not self.promocaoPeao:
-                self.movimentacao();
-            else: self.promovePeao();
+            if self.game_mode != 0:
+                if not self.promocaoPeao:
+                    self.movimentacao();
+                else: self.promovePeao();
+            else:
+                self.modoDeJogo();
         # input do teclado
         if event.type == KEYDOWN: 
             if event.key == pygame.K_f:
-                tabuleiro.printTabuleiro(self.tab) # printa o tabuleiro no console quando aperta a tecla F
+                if self.game_mode != 0:
+                    tabuleiro.printTabuleiro(self.tab) # printa o tabuleiro no console quando aperta a tecla F
 
             if event.key == pygame.K_m:
-                tabuleiro.printMovmentosPossiveis(tabuleiro.movimentosPossiveis(self.tab)); # printa o tabuleiro no console quando aperta a tecla F
+                if self.game_mode != 0:
+                    tabuleiro.printMovmentosPossiveis(tabuleiro.movimentosPossiveis(self.tab)); # printa o tabuleiro no console quando aperta a tecla F
             
             # Por hora a IA está sendo ativada por aqui
             if event.key == pygame.K_a:
+                # tratar caso jogador aperte A antes de começar o jogo (no menu)
                 #if(self.game_round != PRETO):
                     #return;
 
@@ -184,10 +208,12 @@ class App:
 
 
             if event.key == pygame.K_r:
-                self.initGame();
+                if self.game_mode != 0:
+                    self.initGame();
 
             if event.key == pygame.K_ESCAPE:
-                exit(0);
+                if self.game_mode != 0: self.game_mode = 0
+                else: exit(0);
 
     def promovePeao(self):
         type = self.statusPromocao[0];
@@ -295,13 +321,16 @@ class App:
         pass
     # VISUAL LOGIC | Tudo relacionado a interface deve entrar aqui
     def on_render(self):
-        self._display_surf.blit(adjustedBoard, (0, 0)) # Necessário para não duplicar as peças no tabuleiro
-        self.displayTab();
-        if self.promocaoPeao :
-            if self.game_round == BRANCO:
-                self._display_surf.blit(promocaoBranco, (0, 0))
-            else:
-                self._display_surf.blit(promocaoPreto, (0, 0))
+        if self.game_mode == 0:
+            self._display_surf.blit(menuGame, (0, 0))
+        else:
+            self._display_surf.blit(adjustedBoard, (0, 0)) # Necessário para não duplicar as peças no tabuleiro
+            self.displayTab();
+            if self.promocaoPeao :
+                if self.game_round == BRANCO:
+                    self._display_surf.blit(promocaoBranco, (0, 0))
+                else:
+                    self._display_surf.blit(promocaoPreto, (0, 0))
         pygame.display.flip();
 
     # Quando estiver encerrando o programa
