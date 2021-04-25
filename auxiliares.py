@@ -28,6 +28,14 @@ class CorPeca(Enum):
     Preta = True,
     Branca = False
 
+    def converteDeTabuleiro(cor_tab):
+        if(cor_tab == 0):
+            return CorPeca.Branca;
+        elif(cor_tab == 1):
+            return CorPeca.Preta;
+        else:
+            return None;
+
 class Peca: 
     def __init__(self, tipo: TipoPeca, cor: CorPeca, coord: Coord):
         self.type = TipoPeca(tipo);

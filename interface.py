@@ -2,7 +2,7 @@ from copy import copy, deepcopy
 import sys, pygame
 import tabuleiro
 import ai_module
-from auxiliares import Coord, Peca
+from auxiliares import Coord, Peca, CorPeca
 from pygame import *
 try:
     from win32api import GetSystemMetrics
@@ -150,19 +150,8 @@ class App:
         if event.type == pygame.QUIT:
             self._running = False
         if event.type == pygame.MOUSEBUTTONUP and event.button == 1: # clique com o botão esquerdo
-            if (self.pickUpCord != None): 
-                print(tabuleiro.getPeca(self.tab, self.pickUpCord[0], self.pickUpCord[1]))
-            if (self.pickUpCord == None):
-                pos = self.getPosClick();
-                piece = tabuleiro.getPeca(self.tab, pos[0], pos[1]);
-                if piece != tabuleiro.VV and self.verificaRodada(piece): #controlar a rodada aqui tbm
-                    self.pickUpCord = pos;
-                self.pickUpCord = self.getPosClick();
-            else:
-                piece = tabuleiro.getPeca(self.tab, self.pickUpCord[0], self.pickUpCord[1])
-                newPos = self.getPosClick();
-                tabuleiro.movimentaPeca(self.tab, piece, self.pickUpCord[0], self.pickUpCord[1], newPos[0], newPos[1])
-                self.pickUpCord = None;
+           self.movimentacao();
+
         # input do teclado
         if event.type == KEYDOWN: 
             if event.key == pygame.K_f:
@@ -176,15 +165,13 @@ class App:
                 #if(self.game_round != PRETO):
                     #return;
 
-                movimento = self.ai.selecionarMovimento(self.ai.cache);
+                movimento = self.ai.selecionarMovimento(self.ai.cache, CorPeca.converteDeTabuleiro(self.game_round));
                 tabuleiro.movimentaPeca(self.tab, 
                         Peca.convertePecaParaTipoTabuleiro(movimento.peca.type, movimento.peca.cor),
                         movimento.peca.pos.x, movimento.peca.pos.y, 
                         movimento.pos_fin.x, movimento.pos_fin.y);
                 
-                if(self.game_round == PRETO):
-                    self.game_round = BRANCO;
-
+                self.proximaRodada();
                 self.movimentos = tabuleiro.movimentosPossiveis(self.tab);
                 self.ai.cache = self.ai.estruturarCache(self.movimentos);
 
@@ -242,6 +229,8 @@ class App:
                             self.xeque_preto = False;
                     self.proximaRodada();
             self.pickUpCord = None;
+            self.movimentos = tabuleiro.movimentosPossiveis(self.tab);
+            self.ai.cache = self.ai.estruturarCache(self.movimentos);
 
     def proximaRodada(self):
         if self.game_round == PRETO:

@@ -30,12 +30,12 @@ class ai_module:
                                movimento.peca.pos.x, movimento.peca.pos.y, 
                                movimento.pos_fin.x, movimento.pos_fin.y);
 
-    def selecionarMovimento(tabuleiro, cacheMovimentacao: [AuxiliarCacheMovimentacao]): #assume-se que sempre a cor da sua peça é preta
+    def selecionarMovimento(tabuleiro, cacheMovimentacao: [AuxiliarCacheMovimentacao], cor: CorPeca):
 
         jogadas = [];
         tipoPecaDisponivel = [];
         for i in range(len(cacheMovimentacao)):
-            if(cacheMovimentacao[i].peca.cor != CorPeca.Preta): # para tornar adaptavel basta adicionar um parametro de cor e substitui-lo aqui
+            if(cacheMovimentacao[i].peca.cor != cor): 
                 continue;
             else:
                 jogadas.append(cacheMovimentacao[i]);
