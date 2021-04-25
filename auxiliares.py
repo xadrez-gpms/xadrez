@@ -8,31 +8,37 @@ class Coord: # Classe auxiliar
         self.y = y;
 
 class SceneState(Enum):
-    Empty = 0,
-    Created = 1,
-    Initialized = 2,
-    Loaded = 3,
-    Running = 4,
-    Awaiting = 5,
-    ToBeDestroyed = 6
+    EMPTY = 0,
+    CREATED = 1,
+    INITIALIZED = 2,
+    LOADED = 3,
+    RUNNING = 4,
+    AWAITING = 5,
+    TO_BE_DESTROYED = 6
 
 class TipoPeca(Enum):
-    Peao = 100,
-    Bispo = 301,
-    Cavalo = 302,
-    Torre = 500,
-    Rainha = 900,
-    Rei = 1500
+    PEAO = 100,
+    BISPO = 301,
+    CAVALO = 302,
+    TORRE = 500,
+    RAINHA = 900,
+    REI = 1500
+
+class GameMode(Enum):
+    MENU = 0,
+    PLAYER_VS_PLAYER = 1,
+    PLAYER_VS_IA = 2,
+    IA_VS_IA = 3
 
 class CorPeca(Enum):
-    Preta = True,
-    Branca = False
+    PRETA = True,
+    BRANCA = False
 
     def converteDeTabuleiro(cor_tab):
         if(cor_tab == 0):
-            return CorPeca.Branca;
+            return CorPeca.BRANCA;
         elif(cor_tab == 1):
-            return CorPeca.Preta;
+            return CorPeca.PRETA;
         else:
             return None;
 
@@ -45,38 +51,38 @@ class Peca:
 
     def convertePecaParaTipoTabuleiro(tipo: TipoPeca, cor: CorPeca):
         
-        if(tipo == TipoPeca.Peao):
-            if(cor == CorPeca.Branca):
+        if(tipo == TipoPeca.PEAO):
+            if(cor == CorPeca.BRANCA):
                 return "BP";
             else:
                 return "PP";
 
-        elif(tipo == TipoPeca.Bispo):
-            if(cor == CorPeca.Branca):
+        elif(tipo == TipoPeca.BISPO):
+            if(cor == CorPeca.BRANCA):
                 return "BB";
             else:
                 return "PB";
 
-        elif(tipo == TipoPeca.Cavalo):
-            if(cor == CorPeca.Branca):
+        elif(tipo == TipoPeca.CAVALO):
+            if(cor == CorPeca.BRANCA):
                 return "BC";
             else:
                 return "PC";
 
-        elif(tipo == TipoPeca.Torre):
-            if(cor == CorPeca.Branca):
+        elif(tipo == TipoPeca.TORRE):
+            if(cor == CorPeca.BRANCA):
                 return "BT";
             else:
                 return "PT";
 
         elif(tipo == TipoPeca.Rainha):
-            if(cor == CorPeca.Branca):
+            if(cor == CorPeca.BRANCA):
                 return "BQ";
             else:
                 return "PQ";
 
-        elif(tipo == TipoPeca.Rei):
-            if(cor == CorPeca.Branca):
+        elif(tipo == TipoPeca.REI):
+            if(cor == CorPeca.BRANCA):
                 return "BR";
             else:
                 return "PR";
@@ -88,17 +94,17 @@ class Peca:
         if(tipo == '00'):
             return None;
         elif(tipo[1] == 'P'):
-            return TipoPeca.Peao;
+            return TipoPeca.PEAO;
         elif(tipo[1] == 'B'):
-            return TipoPeca.Bispo;
+            return TipoPeca.BISPO;
         elif(tipo[1] == 'C'):
-            return TipoPeca.Cavalo;
+            return TipoPeca.CAVALO;
         elif(tipo[1] == 'T'):
-            return TipoPeca.Torre;
+            return TipoPeca.TORRE;
         elif(tipo[1] == 'Q'):
-            return TipoPeca.Rainha;
+            return TipoPeca.RAINHA;
         else:
-            return TipoPeca.Rei;
+            return TipoPeca.REI;
 
     def descobreCorPeca(peca):
         
@@ -107,9 +113,9 @@ class Peca:
         if(peca == '00'):
             return None;
         elif(peca[0] == 'B'):
-            return CorPeca.Branca;
+            return CorPeca.BRANCA;
         else:
-            return CorPeca.Preta;
+            return CorPeca.PRETA;
 
 class AuxiliarCacheMovimentacao:
 

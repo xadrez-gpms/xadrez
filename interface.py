@@ -2,7 +2,7 @@ from copy import copy, deepcopy
 import sys, pygame
 import tabuleiro
 import ai_module
-from auxiliares import Coord, Peca, CorPeca
+from auxiliares import Coord, Peca, CorPeca, GameMode
 from pygame import *
 try:
     from win32api import GetSystemMetrics
@@ -101,12 +101,6 @@ class App:
     pickUpCord      = None;
     promocaoPeao    = False;
     statusPromocao  = None;
-    game_mode       = 0;
-        # gamemode
-        # 0 = no game
-        # 1 = player vs player
-        # 2 = player vs IA
-        # 3 = IA vs IA
 
     # tabuleiro
     def initGame(self):
@@ -121,11 +115,13 @@ class App:
         self.game_round = BRANCO;
         self.promocaoPeao = False;
         self.statusPromocao = None;
+
     def __init__(self):
         self._running = True
         self._display_surf = None
         self.size = self.weight, self.height = BOARD_WIDTH, BOARD_HEIGHT
         self.movimentos = tabuleiro.movimentosPossiveis(self.tab);
+        self.game_mode = GameMode.MENU;
         print(self.movimentos)
         self.ai = ai_module.ai_module();
         self.ai.cache = self.ai.estruturarCache(self.movimentos);
@@ -164,17 +160,17 @@ class App:
         h_delimitador = int(self.height / 10);
         if pos[0] >= 2.6 * h_delimitador and pos[0] <= 7.2 * h_delimitador:
             if pos[1] >= 1.6 * w_delimitador and pos[1] <= 3.3 * w_delimitador:
-                self.game_mode = 1;
+                self.game_mode = GameMode.PLAYER_VS_PLAYER;
             if pos[1] >= 4 * w_delimitador and pos[1] <= 5.5 * w_delimitador:
-                self.game_mode = 2;
+                self.game_mode = GameMode.PLAYER_VS_IA;
             if pos[1] >= 6.2 * w_delimitador and pos[1] <= 7.6 * w_delimitador:
-                self.game_mode = 3;
+                self.game_mode = GameMode.IA_VS_IA;
     # TRATAR INPUTS DO USUÁRIO AQUI | Executa sempre que um evento novo é detectado
     def on_event(self, event):
         if event.type == pygame.QUIT:
             self._running = False
         if event.type == pygame.MOUSEBUTTONUP and event.button == 1: # clique com o botão esquerdo
-            if self.game_mode != 0:
+            if self.game_mode != GameMode.MENU:
                 if not self.promocaoPeao:
                     self.movimentacao();
                 else: self.promovePeao();
@@ -183,11 +179,11 @@ class App:
         # input do teclado
         if event.type == KEYDOWN: 
             if event.key == pygame.K_f:
-                if self.game_mode != 0:
+                if self.game_mode != GameMode.MENU:
                     tabuleiro.printTabuleiro(self.tab) # printa o tabuleiro no console quando aperta a tecla F
 
             if event.key == pygame.K_m:
-                if self.game_mode != 0:
+                if self.game_mode != GameMode.MENU:
                     tabuleiro.printMovmentosPossiveis(tabuleiro.movimentosPossiveis(self.tab)); # printa o tabuleiro no console quando aperta a tecla F
             
             # Por hora a IA está sendo ativada por aqui
@@ -208,11 +204,11 @@ class App:
 
 
             if event.key == pygame.K_r:
-                if self.game_mode != 0:
+                if self.game_mode != GameMode.MENU:
                     self.initGame();
 
             if event.key == pygame.K_ESCAPE:
-                if self.game_mode != 0: self.game_mode = 0
+                if self.game_mode != GameMode.MENU: self.game_mode = GameMode.MENU;
                 else: exit(0);
 
     def promovePeao(self):
@@ -321,7 +317,7 @@ class App:
         pass
     # VISUAL LOGIC | Tudo relacionado a interface deve entrar aqui
     def on_render(self):
-        if self.game_mode == 0:
+        if self.game_mode == GameMode.MENU:
             self._display_surf.blit(menuGame, (0, 0))
         else:
             self._display_surf.blit(adjustedBoard, (0, 0)) # Necessário para não duplicar as peças no tabuleiro
