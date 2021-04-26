@@ -3,9 +3,11 @@ Trabalho da Disciplina [***Gerência de Projeto e Manutenção de Software***](http
 
 - No momento o jogo possui uma **IA BÁSICA**:
 	> Movimentação aleatória.
+	
 	> IA mais sofisticada está nos planos de desenvolvimento.
 - Está validando os movimentos do jogador. 
 	> Não há feedback visual no momento.
+	
 	> Todo o feedback está sendo dado no console por hora.
 - Atualmente o jogo está configurado para rodar a 60 quadros por segundo (60 FPS).
 ___
@@ -14,12 +16,14 @@ ___
 1. Navegar até a pasta do projeto e executar o arquivo *interface.py*.
 2. Escolha o modo de jogo no menu
     > No momento não está implementado, sempre inicia no modo __Jogador vs Jogador__ independente da sua escolha.
-![Imagem do Menu Inicial do Jogo](https://i.imgur.com/Xs23UTW.png "Menu Inicial do Jogo")
+
+    > ![Imagem do Menu Inicial do Jogo](https://i.imgur.com/Xs23UTW.png "Menu Inicial do Jogo")
 1. Para movimentação do jogador utilize o mouse clicando com o botão esquerdo.
     >![Imagem do Tabuleiro com as peças em posição inicial](https://i.imgur.com/czQfjVv.png "Imagem do Tabuleiro com as peças em posição inicial")
 1. O jogador **SEMPRE** está com as peças **brancas** no modo __Jogador vs IA__.
 1. O jogador **PODE** mover as peças de ambas as cores, *alternadamente*, no modo __Jogador vs Jogador__.
-    1. Em qualquer turno você pode ativar a IA para realizar __1 jogada__ por você. ~~No turno das peças pretas você pode ativar o uso da IA.~~ 
+    1. Em qualquer turno você pode ativar a IA para realizar __1 jogada__ por você. 
+        > ~~No turno das peças pretas você pode ativar o uso da IA.~~ 
     1. Para ativar o uso da IA utilize a tecla ***A***.
 
 
