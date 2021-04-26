@@ -16,6 +16,10 @@ class SceneState(Enum):
     AWAITING = 5,
     TO_BE_DESTROYED = 6
 
+class Roque(Enum):
+    PEQUENO = 0,
+    GRANDE = 1
+
 class TipoPeca(Enum):
     PEAO = 100,
     BISPO = 301,

@@ -1,5 +1,5 @@
 from copy import copy, deepcopy
-from auxiliares import Coord
+from auxiliares import Coord, Roque
 
 # peças brancas (1x)
 BP = "BP";  # peao
@@ -36,20 +36,21 @@ status_roque = {
     "rei_jogador": True, # Coord(7, 4)
     "torre_IA_E": True, # Coord (0, 7)
     "torre_IA_D": True, # Coord (0, 0)
-    "rei_IA": True # Coord (0, 4)
+    "rei_IA": True # Coord (0, 4) 
 }
 
 
 def initTab():
+    # atenção para não se confundir no tabuleiro. Eixo vertical está sendo chamado de X e o eixo horizontal de Y.
     tabuleiro = [
-        [PT, PC, PB, PQ, PR, PB, PC, PT],
-        [PP, PP, PP, PP, PP, PP, PP, PP],
-        [VV, VV, VV, VV, VV, VV, VV, VV],
-        [VV, VV, VV, VV, VV, VV, VV, VV],
-        [VV, VV, VV, VV, VV, VV, VV, VV],
-        [VV, VV, VV, VV, VV, VV, VV, VV],
-        [BP, BP, BP, BP, BP, BP, BP, BP],
-        [BT, BC, BB, BQ, BR, BB, BC, BT]
+        [PT, PC, PB, PQ, PR, PB, PC, PT], # x = 0
+        [PP, PP, PP, PP, PP, PP, PP, PP], # x = 1
+        [VV, VV, VV, VV, VV, VV, VV, VV], # x = 2
+        [VV, VV, VV, VV, VV, VV, VV, VV], # x = 3
+        [VV, VV, VV, VV, VV, VV, VV, VV], # x = 4
+        [VV, VV, VV, VV, VV, VV, VV, VV], # x = 5
+        [BP, BP, BP, BP, BP, BP, BP, BP], # x = 6
+        [BT, BC, BB, BQ, BR, BB, BC, BT]  # x = 7
     ]
     return tabuleiro;
 
@@ -82,10 +83,28 @@ def printTabuleiro(tab):
         tabStr = tabStr + "\n";
     print(tabStr);
 
+def auxiliarCasoRoque(tab, type, x_ori, y_ori, x_dest, y_dest):
+    roque = None;
+    if(y_ori == 4): # posição inicial do rei
+        otherType = getPeca(tab, x_dest, y_dest);
+        res = None;
+
+        if(x_ori == 0 and status_roque.get("rei_IA")): # Validar se roque está disponível
+            res = verificaRoque(tab, type, otherType, Coord(x_dest, y_dest));
+        elif(x_ori == 7 and status_roque.get("rei_jogador")): 
+            res = verificaRoque(tab, type, otherType, Coord(x_dest, y_dest));
+
+        if(res == Roque.PEQUENO or res == Roque.GRANDE):
+            return True;
+        else:
+            return False;
+
 def verificaMovRei (tab, type, x_ori, y_ori, x_dest, y_dest):
-    if (abs(x_dest - x_ori) == 1 and abs(y_dest - y_ori) == 1) or (
-            abs(x_dest - x_ori) == 0 and abs(y_dest - y_ori) == 1) or (
-            abs(x_dest - x_ori) == 1 and abs(y_dest - y_ori) == 0):
+    
+    if ((abs(x_dest - x_ori) == 1 and abs(y_dest - y_ori) == 1) 
+        or (abs(x_dest - x_ori) == 0 and abs(y_dest - y_ori) == 1)
+        or (abs(x_dest - x_ori) == 1 and abs(y_dest - y_ori) == 0)
+        ):
         return True;
 
     return
@@ -189,8 +208,27 @@ def checaMovimentaPeça(tab, type, x_ori, y_ori, x_dest, y_dest):
     if not checaPeca(tab, type, x_ori, y_ori) : return False; #tenta movimentar outra peca
     if x_dest > 7 or x_dest < 0 or y_dest > 7 or x_dest < 0 : return False; # se sair do tabuleiro
     if x_ori == x_dest and y_ori == y_dest : return False;       # peca fica nomesmo lugar;
-    if getPeca(tab, x_dest, y_dest) != VV and (is_branca(getPeca(tab, x_ori, y_ori)) == is_branca(getPeca(tab, x_dest, y_dest))):
-        return False; #nao deixa sobrepor peca aliada
+    if (type != BR and type != PR):
+        if(getPeca(tab, x_dest, y_dest) != VV 
+        and (is_branca(getPeca(tab, x_ori, y_ori)) == is_branca(getPeca(tab, x_dest, y_dest)))
+        ):
+            return False; #nao deixa sobrepor peca aliada
+    elif(type == BR):
+        destPeca = getPeca(tab, x_dest, y_dest);
+        if(destPeca == BT): # caso de roque
+            return auxiliarCasoRoque(tab, type, x_ori, y_ori, x_dest, y_dest);
+        elif(destPeca != VV
+             and (is_branca(getPeca(tab, x_ori, y_ori)) == is_branca(getPeca(tab, x_dest, y_dest)))
+            ):
+            return False;
+    elif(type == PR):
+        destPeca = getPeca(tab, x_dest, y_dest);
+        if(destPeca == PT): # caso de roque
+            return auxiliarCasoRoque(tab, type, x_ori, y_ori, x_dest, y_dest);
+        elif(destPeca != VV
+             and (is_branca(getPeca(tab, x_ori, y_ori)) == is_branca(destPeca))
+             ):
+            return False;
 
     if   (type == BP or type == PP) and verificaMovPeao(tab, type, x_ori, y_ori, x_dest, y_dest):
             return True;
@@ -243,6 +281,8 @@ def verificaXequeMate(tab, movs, game_round):
     return True
 
 def movimentaPeca(tab, type, x_ori, y_ori, x_dest, y_dest):
+    if(movimentaPecasRoque(tab, type, x_ori, y_ori, x_dest, y_dest)): # movimento foi 1 roque
+        return True;
     if checaMovimentaPeça(tab, type, x_ori, y_ori, x_dest, y_dest):
         setPeca(tab, VV, x_ori, y_ori);
         setPeca(tab, type, x_dest, y_dest);
@@ -251,6 +291,66 @@ def movimentaPeca(tab, type, x_ori, y_ori, x_dest, y_dest):
         return True;
 
     return False;
+
+# Roque, por definição, é uma movimentação do Rei. Logo só será implementado sua funcionalidade a partir do rei.
+def movimentaPecasRoque(tab, type, x_ori, y_ori, x_dest, y_dest): 
+    
+    otherType = getPeca(tab, x_dest, y_dest);
+    otherTab = tab;
+    
+    if(type != PR and type != BR): #clique inicial no rei, peça no destino deve ser uma torre
+        return False;
+    if(otherType != PT and otherType != BT):
+        return False;
+
+    if(type == PR and otherType == PT): # roque preto
+        turno = "Preto";
+        if(verificaRoque(otherTab, type, otherType, Coord(x_dest, y_dest)) == Roque.PEQUENO):
+            # rei
+            setPeca(otherTab, type, x_dest, y_dest-1); 
+            setPeca(otherTab, VV, x_ori, y_ori);
+            # torre
+            setPeca(otherTab, otherType, x_dest, y_dest-2);
+            setPeca(otherTab, VV, x_dest, y_dest);
+
+        elif(verificaRoque(otherTab, type, otherType, Coord(x_dest, y_dest)) == Roque.GRANDE):
+            # rei
+            setPeca(otherTab, type, x_ori, y_ori-2); 
+            setPeca(otherTab, VV, x_ori, y_ori);
+            # torre
+            setPeca(otherTab, otherType, x_ori, y_ori-1);
+            setPeca(otherTab, VV, x_dest, y_dest);
+
+        else: 
+            return False;
+
+    elif(type == BR and otherType == BT): # roque branco
+        turno = "Branco";
+        if(verificaRoque(otherTab, type, otherType, Coord(x_dest, y_dest)) == Roque.PEQUENO):
+            # rei
+            setPeca(otherTab, type, x_dest, y_dest-1); 
+            setPeca(otherTab, VV, x_ori, y_ori);
+            # torre
+            setPeca(otherTab, otherType, x_dest, y_dest-2);
+            setPeca(otherTab, VV, x_dest, y_dest);
+
+        elif(verificaRoque(otherTab, type, otherType, Coord(x_dest, y_dest)) == Roque.GRANDE):
+            # rei
+            setPeca(otherTab, type, x_ori, y_ori-2); 
+            setPeca(otherTab, VV, x_ori, y_ori);
+            # torre
+            setPeca(otherTab, otherType, x_ori, y_dest-1);
+            setPeca(otherTab, VV, x_dest, y_dest);
+
+        else: 
+            return False;
+
+    otherMoves = movimentosPossiveis(otherTab);
+    if(verificaXeque(otherTab, otherMoves, turno)):
+        return False;
+    print("{}: Roque!".format(turno));
+    tab = otherTab;
+    return True;
 
 def ajustaStatusRoque(peca, start_pos):
     if(peca != BR or peca != PR or peca != BT or peca != PT): # Se a peça não for rei ou peão sai do método
@@ -283,11 +383,11 @@ def ajustaStatusRoque(peca, start_pos):
     return;
 
 
-def verificaRoque(tab, rei, torre, pos_torre):
+def verificaRoque(tab, rei, torre, pos_torre: Coord):
    
-    if(rei != BR or rei != PR):
+    if(rei != BR and rei != PR):
         return False; # Não chegou um Rei
-    elif(torre != PT or torre != BT):
+    elif(torre != PT and torre != BT):
         return False; # Não chegou torre
     
     if(rei == BR):
@@ -297,10 +397,12 @@ def verificaRoque(tab, rei, torre, pos_torre):
             if(pos_torre.x != 7):
                 return False; # Torre Branca fora da coluna inicial
             else:
-                if(pos_torre.y == 0 and status_roque.get("torre_jogador_E")):
-                    return True; # Grande Roque para o Jogador (peças brancas)
-                elif(pos_torre.y == 7 and status_roque.get("torre_jogador_D")):
-                    return True; # Pequeno Roque para o Jogador (peças brancas)
+                if(pos_torre.y == 0 and status_roque.get("torre_jogador_E")
+                   and (getPeca(tab, 7, 1) == VV) and (getPeca(tab, 7, 2) == VV) and getPeca(tab, 7, 3) == VV):
+                    return Roque.GRANDE; # Grande Roque para o Jogador (peças brancas)
+                elif(pos_torre.y == 7 and status_roque.get("torre_jogador_D")
+                     and (getPeca(tab, 7, 5) == VV) and (getPeca(tab, 7, 6) == VV)):
+                    return Roque.PEQUENO; # Pequeno Roque para o Jogador (peças brancas)
 
     else:
         if(not status_roque.get("rei_IA")):
@@ -309,10 +411,12 @@ def verificaRoque(tab, rei, torre, pos_torre):
             if(pos_torre.x != 0):
                 return False; # Torre Preta fora da coluna inicial
             else:
-                if(pos_torre.y == 7 and status_roque.get("torre_IA_E")):
-                    return True; # Grande Roque para a IA (peças pretas)
-                elif(pos_torre.y == 0 and status_roque.get("torre_IA_D")):
-                    return True; # Pequeno Roque para a IA (peças pretas)
+                if(pos_torre.y == 0 and status_roque.get("torre_IA_E")
+                   and (getPeca(tab, 0, 1) == VV) and (getPeca(tab, 0, 2) == VV) and getPeca(tab, 0, 3) == VV):
+                    return Roque.GRANDE; # Grande Roque para a IA (peças pretas)
+                elif(pos_torre.y == 7 and status_roque.get("torre_IA_D")
+                     and (getPeca(tab, 0, 5) == VV) and (getPeca(tab, 0, 6) == VV)):
+                    return Roque.PEQUENO; # Pequeno Roque para a IA (peças pretas)
     
     return False;
 
