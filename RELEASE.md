@@ -62,6 +62,8 @@
 - dd61dc5 (Adicionando o release da primeira versão jogada)
 > Commit para a primeira versão jogada junto com a tag
 
+___
+
 # RELEASE 2
 
 ### 32 commits
@@ -165,8 +167,10 @@ feat: adicionado métodos para conversão de dados para o formato aproriado em a
 
 -  (Adicionando lista de bugs a serem corrigidos e commits da release 2 no arquivo de releases)
 
-# To Do list (bugs)
+___
 
-- Peão está passando por cima de algumas peças de adversários (Resolvido commit: 8bfa65b)
+# To Do list (bugs conhecidos)
 
-- IA não está respeitando os turnos
+- Peão está passando por cima de algumas peças de adversários (Resolvido - [commit: 8bfa65b](https://github.com/xadrez-gpms/xadrez/commit/8bfa65b0dcdf95ce5d35d2d816fb8b2bd3c3bb12))
+
+- IA não está respeitando os turnos (Resolvido - [commit: b2e6b72](https://github.com/xadrez-gpms/xadrez/commit/b2e6b721646cdce097cf8db6085926be3bc92e1c))
