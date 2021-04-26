@@ -79,7 +79,7 @@ class Peca:
             else:
                 return "PT";
 
-        elif(tipo == TipoPeca.RAINHA:
+        elif(tipo == TipoPeca.RAINHA):
             if(cor == CorPeca.BRANCA):
                 return "BQ";
             else:
