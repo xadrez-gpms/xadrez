@@ -1,30 +1,54 @@
 # Xadrez
-Trabalho da Disciplina *Gerência de Projeto e Manutenção de Software* da **UNIVERSIDADE FEDERAL FLUMINENSE** para o segundo período letivo de 2020 (2020.2).
+Trabalho da Disciplina [***Gerência de Projeto e Manutenção de Software***](http://www.ic.uff.br/~troy/courses/2020.2/gpms.html) da **UNIVERSIDADE FEDERAL FLUMINENSE** para o segundo período letivo de 2020 (2020.2).
 
 - No momento o jogo possui uma **IA BÁSICA**:
-	- Movimentação aleatória.
-	- IA mais sofisticada está nos planos de desenvolvimento.
+	> Movimentação aleatória.
+	> IA mais sofisticada está nos planos de desenvolvimento.
 - Está validando os movimentos do jogador. 
-	- Não há feedback visual no momento.
-	- Todo o feedback está sendo dado no console por hora.
-- Os movimentos "Pequeno Roque" e "Grande Roque" ainda não estão disponíveis.
+	> Não há feedback visual no momento.
+	> Todo o feedback está sendo dado no console por hora.
 - Atualmente o jogo está configurado para rodar a 60 quadros por segundo (60 FPS).
-
 ___
 
 # Como Jogar?
 1. Navegar até a pasta do projeto e executar o arquivo *interface.py*.
+2. Escolha o modo de jogo no menu
+    > No momento não está implementado, sempre inicia no modo __Jogador vs Jogador__ independente da sua escolha.
+![Imagem do Menu Inicial do Jogo](https://i.imgur.com/Xs23UTW.png "Menu Inicial do Jogo")
 1. Para movimentação do jogador utilize o mouse clicando com o botão esquerdo.
-1. O jogador **SEMPRE** está com as peças **brancas**.
-2. O jogador **pode** mover as peças pretas com o seu mouse.
-    1. No turno das peças pretas você pode ativar o uso da IA.
-    2. Para ativar o uso da IA utilize a tecla ***A***.
+    >![Imagem do Tabuleiro com as peças em posição inicial](https://i.imgur.com/czQfjVv.png "Imagem do Tabuleiro com as peças em posição inicial")
+1. O jogador **SEMPRE** está com as peças **brancas** no modo __Jogador vs IA__.
+1. O jogador **PODE** mover as peças de ambas as cores, *alternadamente*, no modo __Jogador vs Jogador__.
+    1. Em qualquer turno você pode ativar a IA para realizar __1 jogada__ por você. ~~No turno das peças pretas você pode ativar o uso da IA.~~ 
+    1. Para ativar o uso da IA utilize a tecla ***A***.
 
-___ 
+
+
+# Problemas Conhecidos:
+
+- O movimento especial *En Passant* não está disponível.
+- A movimentação da IA **não está fazendo validação da jogada**.
+    >> Isso significa que a IA pode realizar jogadas ilegais. 
+    >> Exemplo: Rei Preto está em xeque mas a IA move o Cavalo preto de G8 para H6, ainda mantendo o Rei Preto em xeque.
+- O Menu para escolha de Modo de Jogo não tem efeito prático.
+- ~~Os movimentos "Pequeno Roque" e "Grande Roque" ainda não estão disponíveis.~~ 
+___
 
 # Releases:
 
 Informações sobre o release estão [disponíveis aqui](https://github.com/xadrez-gpms/xadrez/blob/main/RELEASE.md)
+
+Você pode realizar o download de um binário para instalação através deste link. (*indisponível no momento*)
+___
+# Recursos
+
+ Imagens utilizadas no projeto obtidas na plataforma OpenGameArt.Org:
+> https://opengameart.org/content/chess-pieces-and-a-board
+> Alguns sprites foram modificados.
+
+# Licença
+
+Este produto é distribuído através da licença MIT, disponível em: https://mit-license.org/
 
 ___
 
@@ -43,14 +67,3 @@ https://www.pygame.org/wiki/GettingStarted
 https://docs.python.org/3/index.html
 
 ___
-
-# Recursos
-
-
-## Imagens utilizadas no projeto obtidas na plataforma OpenGameArt.Org
-https://opengameart.org/content/chess-pieces-and-a-board
-> Alguns sprites foram modificados.
-
-# Licença
-
-Este produto é distribuído através da licença MIT, disponível em: https://mit-license.org/
