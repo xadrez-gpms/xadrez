@@ -18,7 +18,7 @@ ___
     > No momento não está implementado, sempre inicia no modo __Jogador vs Jogador__ independente da sua escolha.
 
     > ![Imagem do Menu Inicial do Jogo](https://i.imgur.com/Xs23UTW.png "Menu Inicial do Jogo")
-1. Para movimentação do jogador utilize o mouse clicando com o botão esquerdo.
+1. Para mover as peças utilize o mouse clicando com o botão esquerdo.
     >![Imagem do Tabuleiro com as peças em posição inicial](https://i.imgur.com/czQfjVv.png "Imagem do Tabuleiro com as peças em posição inicial")
 1. O jogador **SEMPRE** está com as peças **brancas** no modo __Jogador vs IA__.
 1. O jogador **PODE** mover as peças de ambas as cores, *alternadamente*, no modo __Jogador vs Jogador__.
@@ -32,8 +32,8 @@ ___
 
 - O movimento especial *En Passant* não está disponível.
 - A movimentação da IA **não está fazendo validação da jogada**.
-    >> Isso significa que a IA pode realizar jogadas ilegais. 
-    >> Exemplo: Rei Preto está em xeque mas a IA move o Cavalo preto de G8 para H6, ainda mantendo o Rei Preto em xeque.
+    > Isso significa que a IA pode realizar jogadas ilegais. 
+    > Exemplo: Rei Preto está em xeque mas a IA move o Cavalo preto de G8 para H6, ainda mantendo o Rei Preto em xeque.
 - O Menu para escolha de Modo de Jogo não tem efeito prático.
 - ~~Os movimentos "Pequeno Roque" e "Grande Roque" ainda não estão disponíveis.~~ 
 ___
