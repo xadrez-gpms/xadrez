@@ -39,6 +39,16 @@ status_roque = {
     "rei_IA": True # Coord (0, 4) 
 }
 
+status_en_passant = {
+    "col_A": False, # Coord(0, ?)
+    "col_B": False, # Coord(1, ?)
+    "col_C": False, # Coord(2, ?)
+    "col_D": False, # Coord(3, ?)
+    "col_E": False, # Coord(4, ?)
+    "col_F": False, # Coord(5, ?)
+    "col_G": False, # Coord(6, ?)
+    "col_H": False, # Coord(7, ?)
+}
 
 def initTab():
     # atenção para não se confundir no tabuleiro. Eixo vertical está sendo chamado de X e o eixo horizontal de Y.
@@ -98,6 +108,8 @@ def auxiliarCasoRoque(tab, type, x_ori, y_ori, x_dest, y_dest):
             return True;
         else:
             return False;
+    else:
+        return False;
 
 def verificaMovRei (tab, type, x_ori, y_ori, x_dest, y_dest):
     
@@ -107,7 +119,7 @@ def verificaMovRei (tab, type, x_ori, y_ori, x_dest, y_dest):
         ):
         return True;
 
-    return
+    return False;
 
 def verificaMovCavalo (tab, type, x_ori, y_ori, x_dest, y_dest):
     return (abs(x_dest - x_ori) == 2 and abs(y_dest - y_ori) == 1) or (abs(x_dest - x_ori) == 1 and abs(y_dest - y_ori) == 2);
@@ -303,9 +315,12 @@ def movimentaPecasRoque(tab, type, x_ori, y_ori, x_dest, y_dest):
     if(otherType != PT and otherType != BT):
         return False;
 
+    tipoRoque = verificaRoque(otherTab, type, otherType, Coord(x_dest, y_dest));
+
     if(type == PR and otherType == PT): # roque preto
         turno = "Preto";
-        if(verificaRoque(otherTab, type, otherType, Coord(x_dest, y_dest)) == Roque.PEQUENO):
+
+        if(tipoRoque == Roque.PEQUENO):
             # rei
             setPeca(otherTab, type, x_dest, y_dest-1); 
             setPeca(otherTab, VV, x_ori, y_ori);
@@ -313,7 +328,7 @@ def movimentaPecasRoque(tab, type, x_ori, y_ori, x_dest, y_dest):
             setPeca(otherTab, otherType, x_dest, y_dest-2);
             setPeca(otherTab, VV, x_dest, y_dest);
 
-        elif(verificaRoque(otherTab, type, otherType, Coord(x_dest, y_dest)) == Roque.GRANDE):
+        elif(tipoRoque == Roque.GRANDE):
             # rei
             setPeca(otherTab, type, x_ori, y_ori-2); 
             setPeca(otherTab, VV, x_ori, y_ori);
@@ -326,7 +341,8 @@ def movimentaPecasRoque(tab, type, x_ori, y_ori, x_dest, y_dest):
 
     elif(type == BR and otherType == BT): # roque branco
         turno = "Branco";
-        if(verificaRoque(otherTab, type, otherType, Coord(x_dest, y_dest)) == Roque.PEQUENO):
+
+        if(tipoRoque == Roque.PEQUENO):
             # rei
             setPeca(otherTab, type, x_dest, y_dest-1); 
             setPeca(otherTab, VV, x_ori, y_ori);
@@ -334,12 +350,12 @@ def movimentaPecasRoque(tab, type, x_ori, y_ori, x_dest, y_dest):
             setPeca(otherTab, otherType, x_dest, y_dest-2);
             setPeca(otherTab, VV, x_dest, y_dest);
 
-        elif(verificaRoque(otherTab, type, otherType, Coord(x_dest, y_dest)) == Roque.GRANDE):
+        elif(tipoRoque == Roque.GRANDE):
             # rei
             setPeca(otherTab, type, x_ori, y_ori-2); 
             setPeca(otherTab, VV, x_ori, y_ori);
             # torre
-            setPeca(otherTab, otherType, x_ori, y_dest-1);
+            setPeca(otherTab, otherType, x_ori, y_ori-1);
             setPeca(otherTab, VV, x_dest, y_dest);
 
         else: 
@@ -348,7 +364,7 @@ def movimentaPecasRoque(tab, type, x_ori, y_ori, x_dest, y_dest):
     otherMoves = movimentosPossiveis(otherTab);
     if(verificaXeque(otherTab, otherMoves, turno)):
         return False;
-    print("{}: Roque!".format(turno));
+    print("{}: {} Roque!".format(turno, "Grande" if tipoRoque == Roque.GRANDE else "Pequeno"));
     tab = otherTab;
     return True;
 

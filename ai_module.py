@@ -24,12 +24,6 @@ class ai_module:
                 resultado.append(atual);
         return resultado;
 
-    def aplicarMovimentoNoTabuleiro(tab, movimento: AuxiliarCacheMovimentacao):
-        tabuleiro.movimentaPeca(tab, 
-                               Peca.convertePecaParaTipoTabuleiro(movimento.peca.type, movimento.peca.cor),
-                               movimento.peca.pos.x, movimento.peca.pos.y, 
-                               movimento.pos_fin.x, movimento.pos_fin.y);
-
     def selecionarMovimento(tabuleiro, cacheMovimentacao: [AuxiliarCacheMovimentacao], cor: CorPeca):
 
         jogadas = [];
