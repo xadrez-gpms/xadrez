@@ -209,7 +209,9 @@ class App:
                     self.initGame();
 
             if event.key == pygame.K_ESCAPE:
-                if self.game_mode != GameMode.MENU: self.game_mode = GameMode.MENU;
+                if self.game_mode != GameMode.MENU:
+                    self.game_mode = GameMode.MENU;
+                    self.initGame();
                 else: exit(0);
 
     def promovePeao(self):
