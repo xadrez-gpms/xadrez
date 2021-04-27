@@ -2,6 +2,7 @@ from copy import copy, deepcopy
 import sys, pygame
 import tabuleiro
 import ai_module
+import random
 
 from auxiliares import Coord, Peca, CorPeca, GameMode
 from pygame import *
@@ -193,9 +194,6 @@ class App:
             # Por hora a IA está sendo ativada por aqui
             if event.key == pygame.K_a:
                 self.movimentaIA();
-
-
-
             if event.key == pygame.K_r:
                 if self.game_mode != GameMode.MENU:
                     self.initGame();
@@ -205,6 +203,7 @@ class App:
                     self.game_mode = GameMode.MENU;
                     self.initGame();
                 else: exit(0);
+
     def movimentaIA(self):
         # tratar caso jogador aperte A antes de começar o jogo (no menu)
         # if(self.game_round != PRETO):
@@ -215,8 +214,14 @@ class App:
                                 Peca.convertePecaParaTipoTabuleiro(movimento.peca.type, movimento.peca.cor),
                                 movimento.peca.pos.x, movimento.peca.pos.y,
                                 movimento.pos_fin.x, movimento.pos_fin.y);
-
-        self.proximaRodada();
+        self.promocaoPeao = tabuleiro.promocaoPeao(tabuleiro.getPeca(self.tab, movimento.pos_fin.x, movimento.pos_fin.y), movimento.pos_fin.x);
+        if self.promocaoPeao:
+            print("new x: "+str(movimento.pos_fin.x));
+            print("new y: " + str(movimento.pos_fin.y));
+            self.statusPromocao = [tabuleiro.getPeca(self.tab, movimento.pos_fin.x, movimento.pos_fin.y), movimento.pos_fin.x, movimento.pos_fin.y];
+            self.promovePeao();
+        else:
+            self.proximaRodada();
         self.movimentos = tabuleiro.movimentosPossiveis(self.tab);
         self.ai.cache = self.ai.estruturarCache(self.movimentos);
 
@@ -225,18 +230,23 @@ class App:
         x = self.statusPromocao[1];
         y = self.statusPromocao[2];
         escolha = None;
-        pos = pygame.mouse.get_pos()
-        w_delimitador = int(self.weight/12);
-        h_delimitador = int(self.height/10);
-        if pos[1] >= 5.5 * w_delimitador and pos[1] <= 7 * w_delimitador:
-            if pos[0] >= 2.1*h_delimitador and pos[0] <= 2.9*h_delimitador:
-                escolha = tabuleiro.BT if tabuleiro.is_branca(type) else tabuleiro.PT;
-            if pos[0] >= 3.86 * h_delimitador and pos[0] <= 4.4 * h_delimitador:
-                escolha = tabuleiro.BB if tabuleiro.is_branca(type) else tabuleiro.PB;
-            if pos[0] >= 5.5 * h_delimitador and pos[0] <= 6.29 * h_delimitador:
-                escolha = tabuleiro.BC if tabuleiro.is_branca(type) else tabuleiro.PC;
-            if pos[0] >= 7.3 * h_delimitador and pos[0] <= 7.84 * h_delimitador:
-                escolha = tabuleiro.BQ if tabuleiro.is_branca(type) else tabuleiro.PQ;
+        if (self.game_round != self.corJogador and self.game_mode == GameMode.PLAYER_VS_IA) or self.game_mode == GameMode.IA_VS_IA:
+            pretas = [tabuleiro.PT,tabuleiro.PB,tabuleiro.PC,tabuleiro.PQ];
+            branca = [tabuleiro.BT,tabuleiro.BB,tabuleiro.BC,tabuleiro.BQ];
+            escolha = random.choice(branca if tabuleiro.is_branca(type) else pretas);
+        else:
+            pos = pygame.mouse.get_pos()
+            w_delimitador = int(self.weight/12);
+            h_delimitador = int(self.height/10);
+            if pos[1] >= 5.5 * w_delimitador and pos[1] <= 7 * w_delimitador:
+                if pos[0] >= 2.1*h_delimitador and pos[0] <= 2.9*h_delimitador:
+                    escolha = tabuleiro.BT if tabuleiro.is_branca(type) else tabuleiro.PT;
+                if pos[0] >= 3.86 * h_delimitador and pos[0] <= 4.4 * h_delimitador:
+                    escolha = tabuleiro.BB if tabuleiro.is_branca(type) else tabuleiro.PB;
+                if pos[0] >= 5.5 * h_delimitador and pos[0] <= 6.29 * h_delimitador:
+                    escolha = tabuleiro.BC if tabuleiro.is_branca(type) else tabuleiro.PC;
+                if pos[0] >= 7.3 * h_delimitador and pos[0] <= 7.84 * h_delimitador:
+                    escolha = tabuleiro.BQ if tabuleiro.is_branca(type) else tabuleiro.PQ;
         if escolha != None:
             tabuleiro.setPeca(self.tab, escolha, x, y);
             self.promocaoPeao = False;
