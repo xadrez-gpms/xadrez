@@ -2,6 +2,7 @@ from copy import copy, deepcopy
 import sys, pygame
 import tabuleiro
 import ai_module
+
 from auxiliares import Coord, Peca, CorPeca, GameMode
 from pygame import *
 try:
@@ -102,6 +103,7 @@ class App:
     pickUpCord      = None;
     promocaoPeao    = False;
     statusPromocao  = None;
+    corJogador      = BRANCO;
 
     # tabuleiro
     def initGame(self):
@@ -126,7 +128,7 @@ class App:
         print(self.movimentos)
         self.ai = ai_module.ai_module();
         self.ai.cache = self.ai.estruturarCache(self.movimentos);
-    
+
     # Executa na Inicialização | Somente 1 Vez
     def on_init(self):
         pygame.init()
@@ -166,6 +168,7 @@ class App:
                 self.game_mode = GameMode.PLAYER_VS_IA;
             if pos[1] >= 6.2 * w_delimitador and pos[1] <= 7.6 * w_delimitador:
                 self.game_mode = GameMode.IA_VS_IA;
+
     # TRATAR INPUTS DO USUÁRIO AQUI | Executa sempre que um evento novo é detectado
     def on_event(self, event):
         if event.type == pygame.QUIT:
@@ -178,7 +181,7 @@ class App:
             else:
                 self.modoDeJogo();
         # input do teclado
-        if event.type == KEYDOWN: 
+        if event.type == KEYDOWN:
             if event.key == pygame.K_f:
                 if self.game_mode != GameMode.MENU:
                     tabuleiro.printTabuleiro(self.tab) # printa o tabuleiro no console quando aperta a tecla F
@@ -186,22 +189,11 @@ class App:
             if event.key == pygame.K_m:
                 if self.game_mode != GameMode.MENU:
                     tabuleiro.printMovmentosPossiveis(tabuleiro.movimentosPossiveis(self.tab)); # printa o tabuleiro no console quando aperta a tecla F
-            
+
             # Por hora a IA está sendo ativada por aqui
             if event.key == pygame.K_a:
-                # tratar caso jogador aperte A antes de começar o jogo (no menu)
-                #if(self.game_round != PRETO):
-                    #return;
+                self.movimentaIA();
 
-                movimento = self.ai.selecionarMovimento(self.ai.cache, CorPeca.converteDeTabuleiro(self.game_round));
-                tabuleiro.movimentaPeca(self.tab, 
-                        Peca.convertePecaParaTipoTabuleiro(movimento.peca.type, movimento.peca.cor),
-                        movimento.peca.pos.x, movimento.peca.pos.y, 
-                        movimento.pos_fin.x, movimento.pos_fin.y);
-                
-                self.proximaRodada();
-                self.movimentos = tabuleiro.movimentosPossiveis(self.tab);
-                self.ai.cache = self.ai.estruturarCache(self.movimentos);
 
 
             if event.key == pygame.K_r:
@@ -213,6 +205,20 @@ class App:
                     self.game_mode = GameMode.MENU;
                     self.initGame();
                 else: exit(0);
+    def movimentaIA(self):
+        # tratar caso jogador aperte A antes de começar o jogo (no menu)
+        # if(self.game_round != PRETO):
+        # return;
+
+        movimento = self.ai.selecionarMovimento(self.ai.cache, CorPeca.converteDeTabuleiro(self.game_round));
+        tabuleiro.movimentaPeca(self.tab,
+                                Peca.convertePecaParaTipoTabuleiro(movimento.peca.type, movimento.peca.cor),
+                                movimento.peca.pos.x, movimento.peca.pos.y,
+                                movimento.pos_fin.x, movimento.pos_fin.y);
+
+        self.proximaRodada();
+        self.movimentos = tabuleiro.movimentosPossiveis(self.tab);
+        self.ai.cache = self.ai.estruturarCache(self.movimentos);
 
     def promovePeao(self):
         type = self.statusPromocao[0];
@@ -317,6 +323,9 @@ class App:
 
     #GAME LOGIC | Coisas necessárias para cada frame
     def on_loop(self):
+        if(self.game_round != self.corJogador and self.game_mode == GameMode.PLAYER_VS_IA) or self.game_mode == GameMode.IA_VS_IA:
+            pygame.time.wait(1000)
+            self.movimentaIA();
         pass
     # VISUAL LOGIC | Tudo relacionado a interface deve entrar aqui
     def on_render(self):
@@ -337,7 +346,7 @@ class App:
         pygame.quit()
 
     def displayTab(self):
-        
+
         tab = self.tab;
         self.piecesLayer = self.screen.copy();
         for i in range(len(tab)):
@@ -379,15 +388,15 @@ class App:
     def on_execute(self):
         if self.on_init() == False:
             self._running = False
- 
+
         while( self._running ):
             self.clock.tick(TARGET_FPS); # define o FPS em TARGET_FPS
-            
+
             for event in pygame.event.get():
                 self.on_event(event)
-            
-            self.on_loop()
+
             self.on_render()
+            self.on_loop()
         self.on_cleanup()
 
 if __name__ == "__main__" :
