@@ -20,6 +20,10 @@ class Roque(Enum):
     PEQUENO = 0,
     GRANDE = 1
 
+class EnPassant(Enum):
+    DIREITA = 0,
+    ESQUERDA = 1
+
 class TipoPeca(Enum):
     PEAO = 100,
     BISPO = 301,

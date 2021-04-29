@@ -1,5 +1,5 @@
 from copy import copy, deepcopy
-from auxiliares import Coord, Roque
+from auxiliares import Coord, Roque, EnPassant
 
 # peças brancas (1x)
 BP = "BP";  # peao
@@ -111,7 +111,7 @@ def printTabuleiro(tab):
     print(tabStr);
 
 def auxiliarCasoRoque(tab, type, x_ori, y_ori, x_dest, y_dest):
-    roque = None;
+
     if(y_ori == 4): # posição inicial do rei
         otherType = getPeca(tab, x_dest, y_dest);
         res = None;
@@ -191,9 +191,12 @@ def verificaMovPeao(tab, type, x_ori, y_ori, x_dest, y_dest):
                         return True;  # peça anda para frente 2 casas
                 else:
                     return True;  # peça anda para frente 1 casa
-    elif (y_dest == y_ori + 1 or y_dest == y_ori - 1) and tab[x_dest][y_dest] != VV:  # verifica se o tipo de peca da posicao de destino e uma peca inimiga
-        if (is_branca(type) and x_dest - x_ori == -1) or (is_preta(type) and x_dest - x_ori == 1): #andando pra frente no eixo X
-            return True;  # peca comida
+    elif (y_dest == y_ori + 1 or y_dest == y_ori - 1): # Destino é movimentação para comer peça inimiga
+       if(tab[x_dest][y_dest] != VV):  # verifica se o tipo de peca da posicao de destino e uma peca inimiga
+           if (is_branca(type) and x_dest - x_ori == -1) or (is_preta(type) and x_dest - x_ori == 1): #andando pra frente no eixo X
+               return True;  # peca comida
+       else: #destino é casa vazia, só pode movimentar se for En Passant
+           return verificaEnPassant(tab, type, Coord(x_ori, y_ori));
     return False;  # movimento invalido
 
 def promocaoPeao(type, y): # TODO implementar escolha
@@ -259,8 +262,12 @@ def checaMovimentaPeça(tab, type, x_ori, y_ori, x_dest, y_dest):
              ):
             return False;
 
-    if   (type == BP or type == PP) and verificaMovPeao(tab, type, x_ori, y_ori, x_dest, y_dest):
+    if   (type == BP or type == PP):
+        ver = verificaMovPeao(tab, type, x_ori, y_ori, x_dest, y_dest);
+        if(ver == True):
             return True;
+        elif(ver == EnPassant.ESQUERDA or ver == EnPassant.DIREITA):
+            return ver;
     elif (type == BT or type == PT) and verificaMovTorre(tab, type, x_ori, y_ori, x_dest, y_dest):
             return True;
     elif (type == BB or type == PB) and verificaMovBispo(tab, type, x_ori, y_ori, x_dest, y_dest):
@@ -311,12 +318,28 @@ def verificaXequeMate(tab, movs, game_round):
 
 def movimentaPeca(tab, type, x_ori, y_ori, x_dest, y_dest):
     if(movimentaPecasRoque(tab, type, x_ori, y_ori, x_dest, y_dest)): # movimento foi 1 roque
+        ajustarStatusEnPassant();
         return True;
-    if checaMovimentaPeça(tab, type, x_ori, y_ori, x_dest, y_dest):
+
+    aux = checaMovimentaPeça(tab, type, x_ori, y_ori, x_dest, y_dest);
+    if (aux == True):
         setPeca(tab, VV, x_ori, y_ori);
         setPeca(tab, type, x_dest, y_dest);
         if(type == BR or type == PR or type == BT or type == PT): # Se for movimentação da torre ou do rei, ajusta o dicionário para o roque
             ajustaStatusRoque(type, Coord(x_ori, y_ori));
+        ajustarStatusEnPassant();
+        return True;
+    elif(aux == EnPassant.ESQUERDA):
+        setPeca(tab, VV, x_ori, y_ori);
+        setPeca(tab, VV, x_ori, y_ori-1);
+        setPeca(tab, type, x_dest, y_dest);
+        ajustarStatusEnPassant();
+        return True;
+    elif(aux == EnPassant.DIREITA):
+        setPeca(tab, VV, x_ori, y_ori);
+        setPeca(tab, type, x_dest, y_dest);
+        setPeca(tab, VV, x_ori, y_ori+1);
+        ajustarStatusEnPassant();
         return True;
 
     return False;
@@ -391,26 +414,26 @@ def ajustaStatusRoque(peca, start_pos):
         return;
     if(start_pos.x == 0): # Linha inicial das peças pretas
         if(peca == PR): #Rei Preto
-            if(start_pos.y == 4 and status_roque.get({"rei_IA"})): # Rei Preto foi movimentado
+            if(start_pos.y == 4 and status_roque.get("rei_IA")): # Rei Preto foi movimentado
                 status_roque.update({"rei_IA": False});
                 return;
         elif(peca == PT): #Torre Preta
-            if(start_pos.y == 7 and status_roque.get({"torre_IA_E"})):
+            if(start_pos.y == 7 and status_roque.get("torre_IA_E")):
                 status_roque.update({"torre_IA_E": False});
                 return;
-            elif(start_pos.y == 0 and status_roque.get({"torre_IA_D"})):
+            elif(start_pos.y == 0 and status_roque.get("torre_IA_D")):
                 status_roque.update({"torre_IA_D": False});
                 return;
     elif(start_pos.x == 7): # Linha inicial das peças brancas
         if(peca == BR): #Rei Branco
-            if(start_pos.y == 4 and status_roque.get({"rei_jogador"})): # Rei Branco foi movimentado
+            if(start_pos.y == 4 and status_roque.get("rei_jogador")): # Rei Branco foi movimentado
                 status_roque.update({"rei_jogador": False});
                 return;
         elif(peca == BT): #Torre Branca
-            if(start_pos.y == 7 and status_roque.get({"torre_jogador_D"})):
+            if(start_pos.y == 7 and status_roque.get("torre_jogador_D")):
                 status_roque.update({"torre_jogador_D": False});
                 return;
-            elif(start_pos.y == 0 and status_roque.get({"torre_jogador_E"})):
+            elif(start_pos.y == 0 and status_roque.get("torre_jogador_E")):
                 status_roque.update({"torre_jogador_E": False});
                 return;
     # print(status_roque); # print utilizado para debug | usar quando for implementar o roque
@@ -454,3 +477,45 @@ def verificaRoque(tab, rei, torre, pos_torre: Coord):
     
     return False;
 
+def ajustarStatusEnPassant():
+    for i in range(8):
+        if(status_en_passant.get("col_{}".format(chr(i+65))) != False): # Coluna i está com o En Passant disponível para ela
+            status_en_passant.update({"col_{}".format(chr(i+65)): False});
+            print("En Passant da col_{} não está mais disponível!".format(chr(i+65)));
+
+def verificaEnPassant(tab, peao, pos_peao: Coord):
+    left = False;
+    right = False;
+    cor = None;
+
+    if(peao == PP):
+        cor = PRETO;
+    else:
+        cor = BRANCO;
+
+    if(pos_peao.y == 0):
+        right = True;
+    elif(pos_peao.y == 7):
+        left = True;
+    else:
+        right = left = True;
+
+    if(right): # verifica se a peça à direita é o peão para o En Passant
+        dir = getPeca(tab, pos_peao.x, pos_peao.y+1);
+        if(cor == BRANCO 
+           and dir == PP):
+                return EnPassant.DIREITA;
+        elif(cor == PRETO
+           and dir == BP):
+                return EnPassant.DIREITA;
+
+    if(left): # verifica se a peça à esquerda é o peão para o En Passant
+        esq = getPeca(tab, pos_peao.x, pos_peao.y-1);
+        if(cor == BRANCO 
+           and esq == PP):
+                return EnPassant.ESQUERDA;
+        elif(cor == PRETO
+           and esq == BP):
+                return EnPassant.ESQUERDA;
+
+    return False;
