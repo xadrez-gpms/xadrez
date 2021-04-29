@@ -60,7 +60,7 @@ ___
 
 ## Movimentos Especiais
 
-### Roque
+### [Roque](https://pt.wikipedia.org/wiki/Roque_(xadrez))
 > O Roque é uma jogada especial que envolve a movimentação de duas peças em um único lance, o rei e uma das torres. O objetivo da jogada é proteger o rei, tirando-o do centro.
 
 - Antes de executar a jogada, é necessário o atendimento aos seguintes requisitos:
@@ -72,8 +72,10 @@ ___
 		**Não Implementado!**
 ___
 - ##### Exemplo de tabuleiro onde é possível fazer o ***Roque***:
-<img src="https://i.imgur.com/ri5m0ZU.png" title="Tabuleiro de xadrez onde as peças brancas podem fazer um pequeno roque e as peças pretas podem fazer um grande roque" width="300" />
-<img src="https://i.imgur.com/gpC0au4.png" title="Tabuleiro de xadrez após as peças brancas realizarem um pequeno roque e as peças pretas realizarem um grande roque." width="300"/>
+<div width="810">
+<img src="https://i.imgur.com/ri5m0ZU.png" title="Tabuleiro de xadrez onde as peças brancas podem fazer um pequeno roque e as peças pretas podem fazer um grande roque" width="400" />
+<img src="https://i.imgur.com/gpC0au4.png" title="Tabuleiro de xadrez após as peças brancas realizarem um pequeno roque e as peças pretas realizarem um grande roque." width="400"/>
+</div>
 1. Selecionar o Rei Branco.
 1. Selecionar a Torre Branca.
 	1. O resultado é um Pequeno Roque nas peças Brancas.
@@ -85,7 +87,7 @@ ___
 1. Uma vez que tenha selecionado o Rei, selecione a Torre a qual deseja realizar o Roque.
 1. Lembre-se que, caso não atenda aos requisitos, a jogada não será realizada.
 
-### En Passant
+### [En Passant](https://pt.wikipedia.org/wiki/En_passant)
 >En passant é um movimento especial de captura do Peão no jogo de xadrez. Na ocasião do avanço por duas casas do peão, caso haja um peão adversário na coluna adjacente na quarta fileira para as brancas, ou quinta para as pretas, este pode capturar o peão como se "de passagem", movendo-o para a casa por onde o peão capturado passou sobre. 
 
 - A captura en passant deve ser feita imediatamente após o peão ter sido movido por duas casas, caso contrário o jogador adversário perde o direito de fazê-lo posteriormente. 
@@ -116,7 +118,7 @@ ___
 
 # Releases:
 
-Informações sobre o release estão [disponíveis aqui](https://github.com/xadrez-gpms/xadrez/blob/main/RELEASE.md)
+Informações sobre o release estão [disponíveis aqui.](https://github.com/xadrez-gpms/xadrez/blob/main/RELEASE.md)
 
 Você pode realizar o download de um binário para instalação através deste link. (*indisponível no momento*)
 ___
