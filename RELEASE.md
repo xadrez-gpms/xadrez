@@ -41,7 +41,6 @@ Quando ocorre, abre uma lista de opções no console para o jogador escolher a p
 - 30+ commits
 - Correção de bugs da release anterior
 - Disponibilização de modos de jogo diferentes
-- Disponibilização de um binário para jogar
 - Interação gráfica em diferentes momentos
 
 ### Novos modos de jogo disponibilizados
@@ -49,26 +48,47 @@ Quando ocorre, abre uma lista de opções no console para o jogador escolher a p
 - IA contra IA
 - Jogador contra IA
 
-### Novas interações gráficas
-
-- Menu para escolha de modo de jogo
-- Menu para escolha de promoção do peão
-
 ### Novas funcionalidades
 
 - Controle de rodada
 - Promoção do peão pela IA
-- IA não se coloca em xeque e consegue se defender de xeque
+- Movimentação da IA apertando tecla 'a'
+
+### Comandos disponíveis durante o jogo
+
+- "A" movimenta IA
+- "R" reinicia o jogo
+- "F" printa o tabuleiro no console
+- "M" mostra movimentos possíveis
+- "Esc" retorna para o menu
+
+## Release 3
+
+### O que fizemos?
+
+- Adicionamos feedback gráfico para o usuário
+- Correção de bugs da release anterior
+- Peso para a escolha de promoção do peão pela IA
+- Disponibilização de um binário para jogar
+
+### Novas funcionalidades
+
+- Verificação de jogo afogado
 - Comandos para acelerar o jogo quando é IA contra IA
+- IA não se coloca em xeque e consegue se defender de xeque
 
 ### Movimentos especiais adicionados
 
 - Roque
 - En passant
 
+### Novas interações gráficas
+
+- Menu para escolha de modo de jogo
+- Menu para escolha de promoção do peão
+
 ### Comandos disponíveis durante o jogo
 
-- "A" faz com que a IA movimente uma peça
 - "R" reinicia o jogo
 - "F" printa o tabuleiro no console
 - "M" mostra movimentos possíveis
