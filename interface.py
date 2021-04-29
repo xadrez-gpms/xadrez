@@ -358,12 +358,12 @@ class App:
 
     #GAME LOGIC | Coisas necessárias para cada frame
     def on_loop(self):
+        if not self.empate:
+            self.verificaEmpate();
         if not self.is_xeque_mate and not self.empate:
             if(self.game_round != self.corJogador and self.game_mode == GameMode.PLAYER_VS_IA) or self.game_mode == GameMode.IA_VS_IA:
                 pygame.time.wait(AI_TIMER)
                 self.movimentaIA();
-        if not self.empate:
-            self.verificaEmpate();
         pass
     # VISUAL LOGIC | Tudo relacionado a interface deve entrar aqui
     def on_render(self):
