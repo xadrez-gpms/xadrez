@@ -102,6 +102,7 @@ class App:
     promocaoPeao    = False;
     statusPromocao  = None;
     is_xeque_mate   = False;
+    empate     = False;
     corJogador      = BRANCO;
 
     # tabuleiro
@@ -117,6 +118,8 @@ class App:
         self.game_round = BRANCO;
         self.promocaoPeao = False;
         self.statusPromocao = None;
+        self.is_xeque_mate = False;
+        self.empate = False;
 
     def __init__(self):
         self._running = True
@@ -149,12 +152,16 @@ class App:
 
     def verificaRodada(self, piece):
         if self.game_round == BLACK:
-            if not tabuleiro.is_branca(piece):
+            if tabuleiro.is_preta(piece):
                 return True;
         else:
             if tabuleiro.is_branca(piece):
                 return True;
         return False;
+
+    def verificaEmpate(self):
+        if tabuleiro.verificaEmpate(self.tab):
+            self.empate = True;
 
     def modoDeJogo(self):
         pos = pygame.mouse.get_pos()
@@ -174,7 +181,7 @@ class App:
             self._running = False
         if event.type == pygame.MOUSEBUTTONUP and event.button == 1: # clique com o botão esquerdo
             if self.game_mode != GameMode.MENU:
-                if not self.promocaoPeao and not self.is_xeque_mate:
+                if not self.promocaoPeao and not self.is_xeque_mate and not self.empate:
                     self.movimentacao();
                 else: self.promovePeao();
             else:
@@ -333,7 +340,7 @@ class App:
 
     def verificaRodada(self, piece):
         if self.game_round == PRETO:
-            if not tabuleiro.is_branca(piece):
+            if tabuleiro.is_preta(piece):
                 return True;
         else:
             if tabuleiro.is_branca(piece):
@@ -352,10 +359,12 @@ class App:
 
     #GAME LOGIC | Coisas necessárias para cada frame
     def on_loop(self):
-        if not self.is_xeque_mate:
+        if not self.is_xeque_mate and not self.empate:
             if(self.game_round != self.corJogador and self.game_mode == GameMode.PLAYER_VS_IA) or self.game_mode == GameMode.IA_VS_IA:
-                pygame.time.wait(1000)
+                #pygame.time.wait(1000)
                 self.movimentaIA();
+        if not self.empate:
+            self.verificaEmpate();
         pass
     # VISUAL LOGIC | Tudo relacionado a interface deve entrar aqui
     def on_render(self):

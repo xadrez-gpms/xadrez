@@ -70,6 +70,12 @@ def is_branca (type):
         return True;
     else:
         return False;
+def is_preta (type):
+    preta = [PT, PC, PB, PQ, PR, PB, PC, PT, PP];
+    if type in preta:
+        return True;
+    else:
+        return False;
 
 def printMovmentosPossiveis(mov):
     print("#########################")
@@ -84,6 +90,17 @@ def printMovmentosPossiveisPiece(mov, type):
     for i in range(len(mov)):
         if mov[i][0] == type: print(mov[i]);
     print("#########################")
+def verificaEmpate(tab):
+    brancas = [];
+    pretas  = [];
+    for i in range(len(tab)):
+        for j in range(len(tab[i])):
+            if is_branca(tab[i][j]):
+                brancas.append(tab[i][j]);
+            if is_preta(tab[i][j]):
+                pretas.append(tab[i][j]);
+    if len(brancas) <= 1 or len(pretas) <= 1:
+        return True;
 
 def printTabuleiro(tab):
     tabStr = "";
@@ -163,10 +180,10 @@ def verificaMovPeao(tab, type, x_ori, y_ori, x_dest, y_dest):
     if y_ori == y_dest:  # movimentação normal para frente
         limit = 1;
         if (is_branca(type) and x_ori == 6) or \
-                (not is_branca(type) and x_ori == 1):  # se for primeira rodada anda ate 2
+                (is_preta(type) and x_ori == 1):  # se for primeira rodada anda ate 2
             limit = 2;
         if (is_branca(type) and x_dest - x_ori >= (limit * -1) and x_dest < x_ori) or (
-                not is_branca(type) and x_dest - x_ori <= limit and x_dest > x_ori):  # verifica se esta dentro do limite
+                is_preta(type) and x_dest - x_ori <= limit and x_dest > x_ori):  # verifica se esta dentro do limite
             movLen = x_dest - x_ori;
             if tab[x_dest][y_dest] == VV:  # verifica se a casa final esta vazia
                 if movLen == 2 or movLen == -2: # caso seja movimento duplo
@@ -175,13 +192,13 @@ def verificaMovPeao(tab, type, x_ori, y_ori, x_dest, y_dest):
                 else:
                     return True;  # peça anda para frente 1 casa
     elif (y_dest == y_ori + 1 or y_dest == y_ori - 1) and tab[x_dest][y_dest] != VV:  # verifica se o tipo de peca da posicao de destino e uma peca inimiga
-        if (is_branca(type) and x_dest - x_ori == -1) or (not is_branca(type) and x_dest - x_ori == 1): #andando pra frente no eixo X
+        if (is_branca(type) and x_dest - x_ori == -1) or (is_preta(type) and x_dest - x_ori == 1): #andando pra frente no eixo X
             return True;  # peca comida
     return False;  # movimento invalido
 
 def promocaoPeao(type, y): # TODO implementar escolha
     if type != PP and type != BP: return False;
-    if (is_branca(type) and y == 0) or (not is_branca(type) and y == 7):
+    if (is_branca(type) and y == 0) or (is_preta(type) and y == 7):
        return True;
     return False;
 
@@ -265,8 +282,8 @@ def verificaXeque(tab, movs, game_round):
         piece = movs[i][0];
         x_dest = movs[i][3];
         y_dest = movs[i][4];
-        if (is_branca(piece) and game_round == BRANCO) or (not is_branca(piece) and game_round == PRETO):
-            if not is_branca(piece) and tab[x_dest][y_dest] == BR :
+        if (is_branca(piece) and game_round == BRANCO) or (is_preta(piece) and game_round == PRETO):
+            if is_preta(piece) and tab[x_dest][y_dest] == BR :
                 return True;
             elif is_branca(piece) and tab[x_dest][y_dest] == PR:
                 return True;
@@ -281,7 +298,7 @@ def verificaXequeMate(tab, movs, game_round):
         y_ori = movs[i][2];
         x_dest = movs[i][3];
         y_dest = movs[i][4];
-        if (is_branca(piece) and nextRound == BRANCO) or (not is_branca(piece) and nextRound == PRETO):
+        if (is_branca(piece) and nextRound == BRANCO) or (is_preta(piece) and nextRound == PRETO):
             setPeca(tabAux,VV, x_ori, y_ori);
             setPeca(tabAux, piece, x_dest, y_dest);
             newMov = movimentosPossiveis(tabAux);
