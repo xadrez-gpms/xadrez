@@ -137,7 +137,7 @@ class App:
         self.size = self.weight, self.height = BOARD_WIDTH, BOARD_HEIGHT
         self.movimentos = tabuleiro.movimentosPossiveis(self.tab);
         self.game_mode = GameMode.MENU;
-        print(self.movimentos)
+        # print(self.movimentos)
         self.ai = ai_module.ai_module();
         self.ai.cache = self.ai.estruturarCache(self.movimentos);
 
@@ -172,7 +172,6 @@ class App:
     def verificaEmpate(self):
         if tabuleiro.verificaEmpate(self.tab, self.game_round):
             self.empate = True;
-            print("Empate")
 
     def modoDeJogo(self):
         pos = pygame.mouse.get_pos()
@@ -246,12 +245,6 @@ class App:
             nextRound = PRETO if self.game_round == BRANCO else BRANCO;
             if not tabuleiro.verificaXeque(tabAux, newMov, nextRound):
                 movimentoValido = True;
-            else: # else deve ser removido na versao final
-                if self.xeque_preto or self.xeque_branco:
-                    print("IA tentou movimento que não salva o rei")
-                else:
-                    print("IA tentou colocar seu proprio rei em cheque")
-
 
         tabuleiro.movimentaPeca(self.tab, piece, movimento.peca.pos.x, movimento.peca.pos.y,
                                 movimento.pos_fin.x, movimento.pos_fin.y, False);
@@ -301,13 +294,10 @@ class App:
             if not tabuleiro.verificaXequeMate(self.tab, self.movPossiveis, self.game_round):
 
                 if self.game_round == PRETO and self.game_round == PRETO:
-                    print("O Rei branco esta em xeque");
                     self.xeque_branco = True;
                 elif self.game_round == BRANCO and self.game_round == BRANCO:
-                    print("O Rei preto esta em xeque");
                     self.xeque_preto = True;
             else:
-                print("Xeque mate");
                 self.is_xeque_mate = True;
         else:
             if self.game_round == BRANCO:
@@ -336,10 +326,6 @@ class App:
             newMov = tabuleiro.movimentosPossiveis(tabAux);
             nextRound = PRETO if self.game_round == BRANCO else BRANCO;
             if tabuleiro.verificaXeque(tabAux, newMov, nextRound):
-                if self.xeque_preto or self.xeque_branco:
-                    print("É necessario salvar o rei")
-                else:
-                    print("Você não pode colocar o rei em cheque")
                 self.pickUpCord = None;
                 return;
             else: # movimento valido
@@ -377,7 +363,7 @@ class App:
         lin = int(x // self.w_delimiter);
         col = int(y // self.h_delimiter);
         # print('Mouse X:{} Mouse Y:{}\nLinha:{} Coluna:{}'.format(x, y, lin, col)); # Print auxiliar para desenvolvimento
-        print('{}{}'.format(chr(col+65), lin+1)+" - "+tabuleiro.getPeca(self.tab,lin, col)) # Conversão para Coluna de A~H
+        # print('{}{}'.format(chr(col+65), lin+1)+" - "+tabuleiro.getPeca(self.tab,lin, col)) # Conversão para Coluna de A~H
         return [lin, col]
 
     #GAME LOGIC | Coisas necessárias para cada frame
