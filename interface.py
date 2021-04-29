@@ -51,6 +51,8 @@ WHITE = 0;
 BLACK = 1;
 
 xeque = pygame.image.load('sprites/xeque.png');
+xequemate = pygame.image.load('sprites/xeque-mate.png');
+
 
 ## Fim da lista dos sprites
 
@@ -64,6 +66,7 @@ promocaoBranco = pygame.transform.scale(promocaoBranco, (size))
 promocaoPreto = pygame.transform.scale(promocaoPreto, (size))
 menuGame = pygame.transform.scale(menuGame, (size))
 xeque   = pygame.transform.scale(xeque, (size));
+xequemate   = pygame.transform.scale(xequemate, (size));
 
 class App:
 
@@ -397,6 +400,8 @@ class App:
                     self._display_surf.blit(promocaoBranco, (0, 0))
                 else:
                     self._display_surf.blit(promocaoPreto, (0, 0))
+            if self.is_xeque_mate:
+                self._display_surf.blit(xequemate, (0, 0))
         pygame.display.flip();
         if (self.xeque_preto or self.xeque_branco) and not self.exibeXeque:
             self._display_surf.blit(xeque, (0, 0))
