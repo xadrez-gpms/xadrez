@@ -26,7 +26,7 @@ ___
     > <img title="Imagem do Tabuleiro com as peças em posição inicial" src="https://i.imgur.com/czQfjVv.png" width="400" />
 1. O jogador **SEMPRE** está com as peças **brancas** no modo __Jogador vs IA__.
 1. O jogador **PODE** mover as peças de ambas as cores, *alternadamente*, no modo __Jogador vs Jogador__.
-    1. ~~Em qualquer turno você pode ativar a IA para realizar __1 jogada__ por você. ~~
+    1. ~~Em qualquer turno você pode ativar a IA para realizar __1 jogada__ por você.~~
         > ~~No turno das peças pretas você pode ativar o uso da IA.~~ 
     1. ~~Para ativar o uso da IA utilize a tecla ***A***.~~
         > Função desabilitada!
