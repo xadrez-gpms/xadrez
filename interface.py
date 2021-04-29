@@ -170,7 +170,7 @@ class App:
         return False;
 
     def verificaEmpate(self):
-        if tabuleiro.verificaEmpate(self.tab):
+        if tabuleiro.verificaEmpate(self.tab, self.game_round):
             self.empate = True;
             print("Empate")
 

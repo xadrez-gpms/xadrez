@@ -90,7 +90,7 @@ def printMovmentosPossiveisPiece(mov, type):
     for i in range(len(mov)):
         if mov[i][0] == type: print(mov[i]);
     print("#########################")
-def verificaEmpate(tab):
+def verificaEmpate(tab, game_round):
     brancas = [];
     pretas  = [];
     PTc = PCc = PBc = PQc = PRc = PPc = 0;
@@ -113,6 +113,9 @@ def verificaEmpate(tab):
                 if tab[i][j] == PQ: PQc += 1;
                 if tab[i][j] == PR: PRc += 1;
                 if tab[i][j] == PP: PPc += 1;
+    movPossiveis = movimentosPossiveisComVerificacao(tab, game_round) # verifica afogado
+    if len(movPossiveis) == 0:
+        return True;
     if len(brancas) <= 1 or len(pretas) <= 1:
         return True;
     if len(brancas) == 2 or len(brancas) == 3:
@@ -129,6 +132,7 @@ def verificaEmpate(tab):
         if PRc == 1 and PBc >= 2: return False  # caso tenha um rei e dois bispos
         if PRc == 1 and PBc >= 1 and PCc >= 1: return False  # caso tenha um rei, um bispo e um cavalo
         return True
+
     return False;
 
 def printTabuleiro(tab):
@@ -262,6 +266,25 @@ def movimentosPossiveis(tab):
                     for y_dest in range(len(tab[x_ori])):
                         if checaMovimentaPeça(tab, piece, x_ori, y_ori, x_dest, y_dest):
                             arr.append([piece, x_ori, y_ori, x_dest, y_dest]);
+    return arr;
+
+def movimentosPossiveisComVerificacao(tab, game_round):
+    arr = [];
+    for x_ori in range(len(tab)):
+        for y_ori in range(len(tab[x_ori])):
+            if tab[x_ori][y_ori] != VV:
+                piece = getPeca(tab, x_ori, y_ori);
+                if (is_branca(piece) and game_round == PRETO) or (is_preta(piece) and game_round == BRANCO):
+                    continue;
+                for x_dest in range(len(tab)):
+                    for y_dest in range(len(tab[x_ori])):
+                        if checaMovimentaPeça(tab, piece, x_ori, y_ori, x_dest, y_dest):
+                            tabAux = deepcopy(tab);
+                            movimentaPeca(tabAux, piece, x_ori, y_ori, x_dest, y_dest, True);
+                            newMov = movimentosPossiveis(tabAux);
+                            nextRound = BRANCO if game_round == PRETO else PRETO;
+                            if not verificaXeque(tabAux, newMov, nextRound):
+                                arr.append([piece, x_ori, y_ori, x_dest, y_dest]);
     return arr;
 
 def checaMovimentaPeça(tab, type, x_ori, y_ori, x_dest, y_dest):
