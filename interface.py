@@ -19,7 +19,7 @@ except ImportError:
 BOARD_OFFSET = 14 # sprite do tabuleiro possui borda de 14 pixels
 SPRITE_SIZE = 52 # tamanho do sprite das peças
 TARGET_FPS = 60 # Taxa Desejada de Quadros por segundo
-AI_TIMER = 750 # Tempo (em milisegundos) para aguardar antes de chamar a função da IA para movimentar a peça.
+AI_TIMER = 800 # Tempo (em milisegundos) para aguardar antes de chamar a função da IA para movimentar a peça.
 SCREEN_TITLE = "Xadrez GPMS UFF 2020.2"
 
 ## Início da lista dos sprites
@@ -178,6 +178,7 @@ class App:
 
     # TRATAR INPUTS DO USUÁRIO AQUI | Executa sempre que um evento novo é detectado
     def on_event(self, event):
+        global AI_TIMER;
         if event.type == pygame.QUIT:
             self._running = False
         if event.type == pygame.MOUSEBUTTONUP and event.button == 1: # clique com o botão esquerdo
@@ -201,7 +202,16 @@ class App:
             if event.key == pygame.K_r:
                 if self.game_mode != GameMode.MENU:
                     self.initGame();
-
+            if event.key == pygame.K_1:
+                AI_TIMER = 0;
+            if event.key == pygame.K_2:
+                AI_TIMER = 200;
+            if event.key == pygame.K_3:
+                AI_TIMER = 400;
+            if event.key == pygame.K_4:
+                AI_TIMER = 600;
+            if event.key == pygame.K_5:
+                AI_TIMER = 800;
             if event.key == pygame.K_ESCAPE:
                 if self.game_mode != GameMode.MENU:
                     self.game_mode = GameMode.MENU;
