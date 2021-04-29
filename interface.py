@@ -19,7 +19,7 @@ except ImportError:
 BOARD_OFFSET = 14 # sprite do tabuleiro possui borda de 14 pixels
 SPRITE_SIZE = 52 # tamanho do sprite das peças
 TARGET_FPS = 60 # Taxa Desejada de Quadros por segundo
-AI_TIMER = 1500 # Tempo (em milisegundos) para aguardar antes de chamar a função da IA para movimentar a peça.
+AI_TIMER = 250 # Tempo (em milisegundos) para aguardar antes de chamar a função da IA para movimentar a peça.
 SCREEN_TITLE = "Xadrez GPMS UFF 2020.2"
 
 ## Início da lista dos sprites
@@ -209,18 +209,17 @@ class App:
                 else: exit(0);
 
     def movimentaIA(self):
-        # tratar caso jogador aperte A antes de começar o jogo (no menu)
-        # if(self.game_round != PRETO):
-        # return;
+
         movimentoValido = False;
 
         while not movimentoValido:
+
             movimento = self.ai.selecionarMovimento(self.ai.cache, CorPeca.converteDeTabuleiro(self.game_round));
             piece = Peca.convertePecaParaTipoTabuleiro(movimento.peca.type, movimento.peca.cor);
             if (self.game_round == BRANCO and tabuleiro.is_preta(piece)) or (self.game_round == PRETO and tabuleiro.is_branca(piece)):
                 continue; # IA nao tenta movimentar peças da outra cor
             tabAux = deepcopy(self.tab);
-            tabuleiro.movimentaPeca(tabAux, piece, movimento.peca.pos.x, movimento.peca.pos.y, movimento.pos_fin.x, movimento.pos_fin.y);
+            tabuleiro.movimentaPeca(tabAux, piece, movimento.peca.pos.x, movimento.peca.pos.y, movimento.pos_fin.x, movimento.pos_fin.y, True);
             newMov = tabuleiro.movimentosPossiveis(tabAux);
             nextRound = PRETO if self.game_round == BRANCO else BRANCO;
             if not tabuleiro.verificaXeque(tabAux, newMov, nextRound):
@@ -233,7 +232,7 @@ class App:
 
 
         tabuleiro.movimentaPeca(self.tab, piece, movimento.peca.pos.x, movimento.peca.pos.y,
-                                movimento.pos_fin.x, movimento.pos_fin.y);
+                                movimento.pos_fin.x, movimento.pos_fin.y, False);
 
         self.movPossiveis = tabuleiro.movimentosPossiveis(self.tab);
         self.verificaXeque();
@@ -256,7 +255,7 @@ class App:
         if (self.game_round != self.corJogador and self.game_mode == GameMode.PLAYER_VS_IA) or self.game_mode == GameMode.IA_VS_IA:
             pretas = [tabuleiro.PT,tabuleiro.PB,tabuleiro.PC,tabuleiro.PQ];
             branca = [tabuleiro.BT,tabuleiro.BB,tabuleiro.BC,tabuleiro.BQ];
-            escolha = random.choice(branca if tabuleiro.is_branca(type) else pretas);
+            escolha = random.choices(branca if tabuleiro.is_branca(type) else pretas, cum_weights=[10, 15, 20, 40])[0];
         else:
             pos = pygame.mouse.get_pos()
             w_delimitador = int(self.weight/12);
@@ -298,9 +297,9 @@ class App:
             pos = self.getPosClick();
             piece = tabuleiro.getPeca(self.tab, pos[0], pos[1]);
             if piece == tabuleiro.VV:  # Garante que a peça seja válida
-                print("Nenhuma peça selecionada");
+                print("Nenhuma peça selecionada!");
             elif not self.verificaRodada(piece):  # controlar a rodada aqui tbm
-                print("Não é sua rodada");
+                print("Não é sua rodada!\nRodada atual: {}".format("Peças Brancas." if self.game_round == BRANCO else "Peças Pretas."));
             else:
                 self.pickUpCord = pos;
         else:
@@ -309,7 +308,7 @@ class App:
 
             # Verifica se o movimento deixa o rei em cheque ou se tira condição de xeque
             tabAux = deepcopy(self.tab);
-            tabuleiro.movimentaPeca(tabAux, piece, self.pickUpCord[0], self.pickUpCord[1], newPos[0], newPos[1]);
+            tabuleiro.movimentaPeca(tabAux, piece, self.pickUpCord[0], self.pickUpCord[1], newPos[0], newPos[1], True);
             newMov = tabuleiro.movimentosPossiveis(tabAux);
             nextRound = PRETO if self.game_round == BRANCO else BRANCO;
             if tabuleiro.verificaXeque(tabAux, newMov, nextRound):
@@ -320,7 +319,7 @@ class App:
                 self.pickUpCord = None;
                 return;
             else: # movimento valido
-                if tabuleiro.movimentaPeca(self.tab, piece, self.pickUpCord[0], self.pickUpCord[1], newPos[0], newPos[1]):
+                if tabuleiro.movimentaPeca(self.tab, piece, self.pickUpCord[0], self.pickUpCord[1], newPos[0], newPos[1], False):
                     self.movPossiveis = tabuleiro.movimentosPossiveis(self.tab);
                     self.verificaXeque();
                     self.promocaoPeao = tabuleiro.promocaoPeao(piece, newPos[0]);
@@ -429,14 +428,15 @@ class App:
             self._running = False
 
         while( self._running ):
+            
             self.clock.tick(TARGET_FPS); # define o FPS em TARGET_FPS
+            self.on_loop();
 
             for event in pygame.event.get():
-                self.on_event(event)
+                self.on_event(event);
 
-            self.on_render()
-            self.on_loop()
-        self.on_cleanup()
+            self.on_render();
+        self.on_cleanup();
 
 if __name__ == "__main__" :
     theApp = App()

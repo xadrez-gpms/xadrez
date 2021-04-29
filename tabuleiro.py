@@ -315,8 +315,8 @@ def verificaXequeMate(tab, movs, game_round):
                 tabAux = deepcopy(tab);
 
     return True
-
-def movimentaPeca(tab, type, x_ori, y_ori, x_dest, y_dest):
+# @validacao_xeque | verdadeiro = movimento usada para validar o xeque, não atualizar as flags do tabuleiro.
+def movimentaPeca(tab, type, x_ori, y_ori, x_dest, y_dest, validacao_xeque):
     if(movimentaPecasRoque(tab, type, x_ori, y_ori, x_dest, y_dest)): # movimento foi 1 roque
         ajustarStatusEnPassant();
         return True;
@@ -327,9 +327,10 @@ def movimentaPeca(tab, type, x_ori, y_ori, x_dest, y_dest):
         setPeca(tab, type, x_dest, y_dest);
         if(type == BR or type == PR or type == BT or type == PT): # Se for movimentação da torre ou do rei, ajusta o dicionário para o roque
             ajustaStatusRoque(type, Coord(x_ori, y_ori));
-        elif((type == BP or type == PB) and ((x_dest - x_ori) == 2 or (x_dest - x_ori) == -2)): # movimento abre espaço para En Passant
-            ajustarStatusEnPassant();
-            status_en_passant.update({"col_{}".format(chr(65+(y_ori))): True});
+        elif((type == BP or type == PP) and ((x_dest - x_ori) == 2 or (x_dest - x_ori) == -2)): # movimento abre espaço para En Passant
+            if(not validacao_xeque):
+                ajustarStatusEnPassant();
+                status_en_passant.update({"col_{}".format(chr(65+(y_ori))): True});
             return True;
         ajustarStatusEnPassant();
         return True;
@@ -337,13 +338,15 @@ def movimentaPeca(tab, type, x_ori, y_ori, x_dest, y_dest):
         setPeca(tab, VV, x_ori, y_ori);
         setPeca(tab, VV, x_ori, y_ori-1);
         setPeca(tab, type, x_dest, y_dest);
-        ajustarStatusEnPassant();
+        if(not validacao_xeque):
+            ajustarStatusEnPassant();
         return True;
     elif(aux == EnPassant.DIREITA):
         setPeca(tab, VV, x_ori, y_ori);
         setPeca(tab, type, x_dest, y_dest);
         setPeca(tab, VV, x_ori, y_ori+1);
-        ajustarStatusEnPassant();
+        if(not validacao_xeque):
+            ajustarStatusEnPassant();
         return True;
 
     return False;
@@ -406,6 +409,8 @@ def movimentaPecasRoque(tab, type, x_ori, y_ori, x_dest, y_dest):
         else: 
             return False;
 
+    if(turno == None):
+        return False;
     otherMoves = movimentosPossiveis(otherTab);
     if(verificaXeque(otherTab, otherMoves, turno)):
         return False;
@@ -484,8 +489,8 @@ def verificaRoque(tab, rei, torre, pos_torre: Coord):
 def ajustarStatusEnPassant():
     for i in range(8):
         if(status_en_passant.get("col_{}".format(chr(i+65))) != False): # Coluna i está com o En Passant disponível para ela
+            print("En Passant da coluna {} não está mais disponível!".format(chr(i+65)));
             status_en_passant.update({"col_{}".format(chr(i+65)): False});
-            print("En Passant da col_{} não está mais disponível!".format(chr(i+65)));
 
 def verificaEnPassant(tab, peao, pos_peao: Coord):
     left = False;
