@@ -108,7 +108,7 @@ class App:
     # tabuleiro
     def initGame(self):
         self.tab = tabuleiro.initTab();
-        tabuleiro.printTabuleiro(self.tab);
+        #tabuleiro.printTabuleiro(self.tab);
         self.movPossiveis = tabuleiro.movimentosPossiveis(self.tab);
         self.xeque_branco = False;
         self.xeque_preto  = False;
