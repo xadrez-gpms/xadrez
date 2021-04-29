@@ -20,14 +20,12 @@ ___
     1. Escolha o modo de jogo desejado.
 	<img title="Imagem do Menu Inicial do Jogo" src="https://i.imgur.com/Xs23UTW.png" width="400"/>
 	
-	**Observações:**
+	###Observações:
 	2. Caso deseje jogar contra a IA ou assistir à uma partida de __IA vs IA__, lembre-se que a IA utiliza um temporizador para realizar cada movimento.
         1. Por padrão este temporizador está configurado para 800 ms (4/5 de 1 segundo).
         2. Você pode utilizar as teclas 0 a 5 para alterar o temporizador da IA enquanto estiver em uma partida.
-        
-        **Os temporizadores por tecla são os seguintes:**
         Tecla | Temporizador
-        ----- | -----------
+        ------------ | -------------
         **0** | 0 ms
         **1** | 200 ms
         **2** | 400 ms
