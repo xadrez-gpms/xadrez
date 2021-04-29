@@ -93,14 +93,43 @@ def printMovmentosPossiveisPiece(mov, type):
 def verificaEmpate(tab):
     brancas = [];
     pretas  = [];
+    PTc = PCc = PBc = PQc = PRc = PPc = 0;
+    BTc = BCc = BBc = BQc = BRc = BPc = 0;
     for i in range(len(tab)):
         for j in range(len(tab[i])):
             if is_branca(tab[i][j]):
                 brancas.append(tab[i][j]);
+                if tab[i][j] == BT: BTc += 1;
+                if tab[i][j] == BC: BCc += 1;
+                if tab[i][j] == BB: BBc += 1;
+                if tab[i][j] == BQ: BQc += 1;
+                if tab[i][j] == BR: BRc += 1;
+                if tab[i][j] == BP: BPc += 1;
             if is_preta(tab[i][j]):
                 pretas.append(tab[i][j]);
+                if tab[i][j] == PT: PTc += 1;
+                if tab[i][j] == PC: PCc += 1;
+                if tab[i][j] == PB: PBc += 1;
+                if tab[i][j] == PQ: PQc += 1;
+                if tab[i][j] == PR: PRc += 1;
+                if tab[i][j] == PP: PPc += 1;
     if len(brancas) <= 1 or len(pretas) <= 1:
         return True;
+    if len(brancas) == 2 or len(brancas) == 3:
+        if BRc == 1 and  BQc >= 1: return False # caso tenha um rei e uma rainha
+        if BRc == 1 and  BTc >= 1: return False # caso tenha um rei e uma torre
+        if BRc == 1 and  BPc >= 1: return False # caso tenha um rei e um peao que possa ser promovido para Dama ou Torre
+        if BRc == 1 and  BBc >= 2: return False # caso tenha um rei e dois bispos
+        if BRc == 1 and  BBc >= 1 and BCc >= 1: return False # caso tenha um rei, um bispo e um cavalo
+        return True
+    if len(pretas) == 2 or len(pretas) == 3:
+        if PRc == 1 and PQc >= 1: return False  # caso tenha um rei e uma rainha
+        if PRc == 1 and PTc >= 1: return False  # caso tenha um rei e uma torre
+        if PRc == 1 and PPc >= 1: return False  # caso tenha um rei e um peao que possa ser promovido para Dama ou Torre
+        if PRc == 1 and PBc >= 2: return False  # caso tenha um rei e dois bispos
+        if PRc == 1 and PBc >= 1 and PCc >= 1: return False  # caso tenha um rei, um bispo e um cavalo
+        return True
+    return False;
 
 def printTabuleiro(tab):
     tabStr = "";
