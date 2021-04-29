@@ -218,6 +218,8 @@ class App:
         while not movimentoValido:
             movimento = self.ai.selecionarMovimento(self.ai.cache, CorPeca.converteDeTabuleiro(self.game_round));
             piece = Peca.convertePecaParaTipoTabuleiro(movimento.peca.type, movimento.peca.cor);
+            if (self.game_round == BRANCO and tabuleiro.is_preta(piece)) or (self.game_round == PRETO and tabuleiro.is_branca(piece)):
+                continue; # IA nao tenta movimentar peças da outra cor
             tabAux = deepcopy(self.tab);
             tabuleiro.movimentaPeca(tabAux, piece, movimento.peca.pos.x, movimento.peca.pos.y, movimento.pos_fin.x, movimento.pos_fin.y);
             newMov = tabuleiro.movimentosPossiveis(tabAux);
@@ -227,7 +229,6 @@ class App:
             else: # else deve ser removido na versao final
                 if self.xeque_preto or self.xeque_branco:
                     print("IA tentou movimento que não salva o rei")
-                    pygame.time.wait(1000)
                 else:
                     print("IA tentou colocar seu proprio rei em cheque")
 
