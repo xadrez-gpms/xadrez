@@ -18,24 +18,30 @@ ___
     > ~~No momento não está implementado, sempre inicia no modo __Jogador vs Jogador__ independente da sua escolha.~~
 	
     1. Escolha o modo de jogo desejado.
-	<img title="Imagem do Menu Inicial do Jogo" src="https://i.imgur.com/Xs23UTW.png" width="400"/>
+	    <img title="Imagem do Menu Inicial do Jogo" src="https://i.imgur.com/Xs23UTW.png" width="400"/>
 	
-	###Observações:
+	    ###Observações:
 	2. Caso deseje jogar contra a IA ou assistir à uma partida de __IA vs IA__, lembre-se que a IA utiliza um temporizador para realizar cada movimento.
         1. Por padrão este temporizador está configurado para 800 ms (4/5 de 1 segundo).
         2. Você pode utilizar as teclas 0 a 5 para alterar o temporizador da IA enquanto estiver em uma partida.
+
         Tecla | Temporizador
-        ------------ | -------------
+        ----- | ------------
         **0** | 0 ms
         **1** | 200 ms
         **2** | 400 ms
         **3** | 600 ms
         **4** | 800 ms
         **5** | 1000 ms
-        Lembrando que este é um delay **adicional** para a movimentação da IA, não considerando o tempo de processamento da jogada.
+
+        > Lembrando que este é um delay **adicional** para a movimentação da IA, não considerando o tempo de processamento da jogada.
+
     3. Alternativamente, ao apertar a tecla ***Esc*** no menu você fecha o jogo.
+
 3. Para mover as peças utilize o mouse clicando com o botão esquerdo.
+
     <img title="Imagem do Tabuleiro com as peças em posição inicial" src="https://i.imgur.com/czQfjVv.png" width="400" />
+
 4. O jogador **SEMPRE** está com as peças **brancas** no modo __Jogador vs IA__.
 5. O jogador **PODE** mover as peças de ambas as cores, *alternadamente*, no modo __Jogador vs Jogador__.
     1. ~~Em qualquer turno você pode ativar a IA para realizar __1 jogada__ por você.~~
@@ -51,10 +57,14 @@ ___
 - __Esc__ 
 	- Em partida, volta para o *menu inicial*.
 	- No *menu inicial*, fecha o jogo.
+
 **Úteis para Debug**
+
 - __F__ - Exibe o tabuleiro lógico, no momento atual, no console.
 - __M__ - Exibe no console a estrutura de dado com todas as jogadas disponíveis na rodada atual.
+
 **Removidas (disponíveis até o Release 2)**
+
 - __A__ - Realiza uma movimentação para o jogador utilizando a IA.
 
 
