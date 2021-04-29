@@ -52,6 +52,7 @@ BLACK = 1;
 
 xeque = pygame.image.load('sprites/xeque.png');
 xequemate = pygame.image.load('sprites/xeque-mate.png');
+empate = pygame.image.load('sprites/empate.png');
 
 
 ## Fim da lista dos sprites
@@ -67,6 +68,7 @@ promocaoPreto = pygame.transform.scale(promocaoPreto, (size))
 menuGame = pygame.transform.scale(menuGame, (size))
 xeque   = pygame.transform.scale(xeque, (size));
 xequemate   = pygame.transform.scale(xequemate, (size));
+empate   = pygame.transform.scale(empate, (size));
 
 class App:
 
@@ -389,7 +391,7 @@ class App:
         pass
     # VISUAL LOGIC | Tudo relacionado a interface deve entrar aqui
     def on_render(self):
-
+        global AI_TIMER
         if self.game_mode == GameMode.MENU:
             self._display_surf.blit(menuGame, (0, 0))
         else:
@@ -402,8 +404,10 @@ class App:
                     self._display_surf.blit(promocaoPreto, (0, 0))
             if self.is_xeque_mate:
                 self._display_surf.blit(xequemate, (0, 0))
+            if self.empate:
+                self._display_surf.blit(empate, (0, 0))
         pygame.display.flip();
-        if (self.xeque_preto or self.xeque_branco) and not self.exibeXeque:
+        if (self.xeque_preto or self.xeque_branco) and not self.exibeXeque and (self.game_mode != GameMode.IA_VS_IA or AI_TIMER > 500):
             self._display_surf.blit(xeque, (0, 0))
             pygame.display.flip();
             pygame.time.wait(1000);
