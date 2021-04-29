@@ -327,6 +327,10 @@ def movimentaPeca(tab, type, x_ori, y_ori, x_dest, y_dest):
         setPeca(tab, type, x_dest, y_dest);
         if(type == BR or type == PR or type == BT or type == PT): # Se for movimentação da torre ou do rei, ajusta o dicionário para o roque
             ajustaStatusRoque(type, Coord(x_ori, y_ori));
+        elif((type == BP or type == PB) and ((x_dest - x_ori) == 2 or (x_dest - x_ori) == -2)): # movimento abre espaço para En Passant
+            ajustarStatusEnPassant();
+            status_en_passant.update({"col_{}".format(chr(65+(y_ori))): True});
+            return True;
         ajustarStatusEnPassant();
         return True;
     elif(aux == EnPassant.ESQUERDA):
@@ -503,19 +507,27 @@ def verificaEnPassant(tab, peao, pos_peao: Coord):
     if(right): # verifica se a peça à direita é o peão para o En Passant
         dir = getPeca(tab, pos_peao.x, pos_peao.y+1);
         if(cor == BRANCO 
-           and dir == PP):
+           and dir == PP
+           and status_en_passant.get("col_{}".format(chr(65+(pos_peao.y+1))))
+        ):
                 return EnPassant.DIREITA;
         elif(cor == PRETO
-           and dir == BP):
+           and dir == BP
+           and status_en_passant.get("col_{}".format(chr(65+(pos_peao.y+1))))
+        ):
                 return EnPassant.DIREITA;
 
     if(left): # verifica se a peça à esquerda é o peão para o En Passant
         esq = getPeca(tab, pos_peao.x, pos_peao.y-1);
         if(cor == BRANCO 
-           and esq == PP):
+           and esq == PP
+           and status_en_passant.get("col_{}".format(chr(65+(pos_peao.y-1))))
+        ):
                 return EnPassant.ESQUERDA;
         elif(cor == PRETO
-           and esq == BP):
+           and esq == BP
+           and status_en_passant.get("col_{}".format(chr(65+(pos_peao.y-1))))
+        ):
                 return EnPassant.ESQUERDA;
 
     return False;

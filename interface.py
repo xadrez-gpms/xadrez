@@ -198,9 +198,6 @@ class App:
                 if self.game_mode != GameMode.MENU:
                     tabuleiro.printMovmentosPossiveis(tabuleiro.movimentosPossiveis(self.tab)); # printa o tabuleiro no console quando aperta a tecla F
 
-            # Por hora a IA está sendo ativada por aqui
-            if event.key == pygame.K_a:
-                self.movimentaIA();
             if event.key == pygame.K_r:
                 if self.game_mode != GameMode.MENU:
                     self.initGame();
