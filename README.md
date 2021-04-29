@@ -33,15 +33,15 @@ ___
             1. Tecla ***5*** --> 1000 ms
 		1. Lembrando que este é um delay **adicional** para a movimentação da IA, não considerando o tempo de processamento da jogada.
 
-	1. Alternativamente, ao apertar a tecla ***Esc*** no menu você fecha o jogo.
+    1. Alternativamente, ao apertar a tecla ***Esc*** no menu você fecha o jogo.
 1. Para mover as peças utilize o mouse clicando com o botão esquerdo.
     <img title="Imagem do Tabuleiro com as peças em posição inicial" src="https://i.imgur.com/czQfjVv.png" width="400" />
 1. O jogador **SEMPRE** está com as peças **brancas** no modo __Jogador vs IA__.
 1. O jogador **PODE** mover as peças de ambas as cores, *alternadamente*, no modo __Jogador vs Jogador__.
     1. ~~Em qualquer turno você pode ativar a IA para realizar __1 jogada__ por você.~~
-	> Função desabilitada!
+    > Função desabilitada!
     1. ~~Para ativar o uso da IA utilize a tecla ***A***.~~
-	> Função desabilitada!
+    > Função desabilitada!
 1. O jogador **PODE** pressionar a tecla ***Esc*** a qualquer momento durante a partida para retornar ao *menu inicial*.
 
 ## Teclas
@@ -69,7 +69,7 @@ ___
     1. As casas entre o rei e a torre devem estar desocupadas;
     1. O rei não pode estar em xeque, e também não pode ficar em xeque depois do roque;
     1. ~~Nenhuma das casas onde o rei passar ou ficar deverá estar no raio de ação de uma peça adversária. Isto não se aplica à torre envolvida.~~ 
-		**Não Implementado!**
+        **Não Implementado!**
 ___
 - ##### Exemplo de tabuleiro onde é possível fazer o ***Roque***:
 <div width="810">
@@ -78,11 +78,13 @@ ___
 </div>
 1. Selecionar o Rei Branco.
 1. Selecionar a Torre Branca.
-	1. O resultado é um Pequeno Roque nas peças Brancas.
+    - O resultado é um Pequeno Roque nas peças Brancas.
 1. Selecionar o Rei Preto.
 1. Selecionar a Torre Preta.
-	1. O resultado é um Grande Roque nas peças Pretas.
+    - O resultado é um Grande Roque nas peças Pretas.
+
 ___
+
 1. Tecnicamente é tratada como uma **jogada do Rei**, portanto para realizar um roque você deve primeiro clicar no Rei.
 1. Uma vez que tenha selecionado o Rei, selecione a Torre a qual deseja realizar o Roque.
 1. Lembre-se que, caso não atenda aos requisitos, a jogada não será realizada.
@@ -96,16 +98,18 @@ ___
 
 ___
 - ##### Exemplo de tabuleiro onde é possível fazer o ***En Passant***:
-><img src="https://i.imgur.com/VAQsNet.png" title="Imagem do Tabuleiro de Xadrez com a possibilidade de En Passant" width="400" />
-><img src="https://i.imgur.com/lo1zZ8U.png" title="Imagem de um tabuleiro de Xadrez após a execução de uma jogada En Passant" width="400"/>
+<div width="810">
+<img src="https://i.imgur.com/VAQsNet.png" title="Imagem do Tabuleiro de Xadrez com a possibilidade de En Passant" width="400" />
+<img src="https://i.imgur.com/lo1zZ8U.png" title="Imagem de um tabuleiro de Xadrez após a execução de uma jogada En Passant" width="400"/>
+</div>
 
-> 1. O peão branco se movimentou duas casas para frente.
+1. O peão branco se movimentou duas casas para frente.
 2. O peão preto está em uma posição que pode interceptar seu movimento enquanto o peão branco atravessa a casa (condição do En Passant).
 3. O peão preto intercepta o peão branco, concluindo assim a jogada.
 
 
-1. Clique no peão que está em tal situação.
-1. Clique na casa a qual o seu peão se moveria caso o peão adversário tivesse se movido apenas 1 casa.
+- Clique no peão que está em tal situação.
+- Clique na casa a qual o seu peão se moveria caso o peão adversário tivesse se movido apenas 1 casa.
 ___
 # Problemas Conhecidos:
 
