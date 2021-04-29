@@ -170,7 +170,7 @@ class App:
         return False;
 
     def verificaEmpate(self):
-        if tabuleiro.verificaEmpate(self.tab, self.game_round) and not self.verificaXeque():
+        if tabuleiro.verificaEmpate(self.tab, self.game_round) and not self.is_xeque_mate:
             self.empate = True;
 
     def modoDeJogo(self):
