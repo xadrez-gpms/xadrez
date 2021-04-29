@@ -361,7 +361,7 @@ class App:
     def on_loop(self):
         if not self.is_xeque_mate and not self.empate:
             if(self.game_round != self.corJogador and self.game_mode == GameMode.PLAYER_VS_IA) or self.game_mode == GameMode.IA_VS_IA:
-                #pygame.time.wait(1000)
+                pygame.time.wait(AI_TIMER)
                 self.movimentaIA();
         if not self.empate:
             self.verificaEmpate();

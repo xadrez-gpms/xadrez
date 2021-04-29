@@ -333,6 +333,7 @@ def movimentaPecasRoque(tab, type, x_ori, y_ori, x_dest, y_dest):
         return False;
 
     tipoRoque = verificaRoque(otherTab, type, otherType, Coord(x_dest, y_dest));
+    turno = None;
 
     if(type == PR and otherType == PT): # roque preto
         turno = "Preto";
