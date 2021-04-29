@@ -62,9 +62,6 @@ promocaoBranco = pygame.transform.scale(promocaoBranco, (size))
 promocaoPreto = pygame.transform.scale(promocaoPreto, (size))
 menuGame = pygame.transform.scale(menuGame, (size))
 
-
-
-
 class App:
 
     boardSurface = pygame.Surface((BOARD_WIDTH, BOARD_HEIGHT));
@@ -104,6 +101,7 @@ class App:
     pickUpCord      = None;
     promocaoPeao    = False;
     statusPromocao  = None;
+    is_xeque_mate   = False;
     corJogador      = BRANCO;
 
     # tabuleiro
@@ -176,7 +174,7 @@ class App:
             self._running = False
         if event.type == pygame.MOUSEBUTTONUP and event.button == 1: # clique com o botão esquerdo
             if self.game_mode != GameMode.MENU:
-                if not self.promocaoPeao:
+                if not self.promocaoPeao and not self.is_xeque_mate:
                     self.movimentacao();
                 else: self.promovePeao();
             else:
@@ -208,16 +206,31 @@ class App:
         # tratar caso jogador aperte A antes de começar o jogo (no menu)
         # if(self.game_round != PRETO):
         # return;
+        movimentoValido = False;
 
-        movimento = self.ai.selecionarMovimento(self.ai.cache, CorPeca.converteDeTabuleiro(self.game_round));
-        tabuleiro.movimentaPeca(self.tab,
-                                Peca.convertePecaParaTipoTabuleiro(movimento.peca.type, movimento.peca.cor),
-                                movimento.peca.pos.x, movimento.peca.pos.y,
+        while not movimentoValido:
+            movimento = self.ai.selecionarMovimento(self.ai.cache, CorPeca.converteDeTabuleiro(self.game_round));
+            piece = Peca.convertePecaParaTipoTabuleiro(movimento.peca.type, movimento.peca.cor);
+            tabAux = deepcopy(self.tab);
+            tabuleiro.movimentaPeca(tabAux, piece, movimento.peca.pos.x, movimento.peca.pos.y, movimento.pos_fin.x, movimento.pos_fin.y);
+            newMov = tabuleiro.movimentosPossiveis(tabAux);
+            nextRound = PRETO if self.game_round == BRANCO else BRANCO;
+            if not tabuleiro.verificaXeque(tabAux, newMov, nextRound):
+                movimentoValido = True;
+            else: # else deve ser removido na versao final
+                if self.xeque_preto or self.xeque_branco:
+                    print("IA tentou movimento que não salva o rei")
+                    pygame.time.wait(1000)
+                else:
+                    print("IA tentou colocar seu proprio rei em cheque")
+
+
+        tabuleiro.movimentaPeca(self.tab, piece, movimento.peca.pos.x, movimento.peca.pos.y,
                                 movimento.pos_fin.x, movimento.pos_fin.y);
+
+
         self.promocaoPeao = tabuleiro.promocaoPeao(tabuleiro.getPeca(self.tab, movimento.pos_fin.x, movimento.pos_fin.y), movimento.pos_fin.x);
         if self.promocaoPeao:
-            print("new x: "+str(movimento.pos_fin.x));
-            print("new y: " + str(movimento.pos_fin.y));
             self.statusPromocao = [tabuleiro.getPeca(self.tab, movimento.pos_fin.x, movimento.pos_fin.y), movimento.pos_fin.x, movimento.pos_fin.y];
             self.promovePeao();
         else:
@@ -268,8 +281,7 @@ class App:
 
             # Verifica se o movimento deixa o rei em cheque ou se tira condição de xeque
             tabAux = deepcopy(self.tab);
-            tabuleiro.setPeca(tabAux, tabuleiro.VV, self.pickUpCord[0], self.pickUpCord[1]);
-            tabuleiro.setPeca(tabAux, piece, newPos[0], newPos[1]);
+            tabuleiro.movimentaPeca(tabAux, piece, self.pickUpCord[0], self.pickUpCord[1], newPos[0], newPos[1]);
             newMov = tabuleiro.movimentosPossiveis(tabAux);
             nextRound = PRETO if self.game_round == BRANCO else BRANCO;
             if tabuleiro.verificaXeque(tabAux, newMov, nextRound):
@@ -292,6 +304,7 @@ class App:
                                 self.xeque_preto = True;
                         else:
                             print("Xeque mate");
+                            self.is_xeque_mate = True;
                     else:
                         if self.game_round == BRANCO:
                             self.xeque_branco = False;
@@ -333,9 +346,10 @@ class App:
 
     #GAME LOGIC | Coisas necessárias para cada frame
     def on_loop(self):
-        if(self.game_round != self.corJogador and self.game_mode == GameMode.PLAYER_VS_IA) or self.game_mode == GameMode.IA_VS_IA:
-            pygame.time.wait(1000)
-            self.movimentaIA();
+        if not self.is_xeque_mate:
+            if(self.game_round != self.corJogador and self.game_mode == GameMode.PLAYER_VS_IA) or self.game_mode == GameMode.IA_VS_IA:
+                pygame.time.wait(1000)
+                self.movimentaIA();
         pass
     # VISUAL LOGIC | Tudo relacionado a interface deve entrar aqui
     def on_render(self):
