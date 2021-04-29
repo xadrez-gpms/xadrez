@@ -228,6 +228,8 @@ class App:
         tabuleiro.movimentaPeca(self.tab, piece, movimento.peca.pos.x, movimento.peca.pos.y,
                                 movimento.pos_fin.x, movimento.pos_fin.y);
 
+        self.movPossiveis = tabuleiro.movimentosPossiveis(self.tab);
+        self.verificaXeque();
 
         self.promocaoPeao = tabuleiro.promocaoPeao(tabuleiro.getPeca(self.tab, movimento.pos_fin.x, movimento.pos_fin.y), movimento.pos_fin.x);
         if self.promocaoPeao:
@@ -237,6 +239,7 @@ class App:
             self.proximaRodada();
         self.movimentos = tabuleiro.movimentosPossiveis(self.tab);
         self.ai.cache = self.ai.estruturarCache(self.movimentos);
+
 
     def promovePeao(self):
         type = self.statusPromocao[0];
@@ -264,6 +267,24 @@ class App:
             tabuleiro.setPeca(self.tab, escolha, x, y);
             self.promocaoPeao = False;
             self.proximaRodada();
+
+    def verificaXeque(self):
+        if tabuleiro.verificaXeque(self.tab, self.movPossiveis, self.game_round):
+            if not tabuleiro.verificaXequeMate(self.tab, self.movPossiveis, self.game_round):
+                if self.game_round == PRETO and self.game_round == PRETO:
+                    print("O Rei branco esta em xeque");
+                    self.xeque_branco = True;
+                elif self.game_round == BRANCO and self.game_round == BRANCO:
+                    print("O Rei preto esta em xeque");
+                    self.xeque_preto = True;
+            else:
+                print("Xeque mate");
+                self.is_xeque_mate = True;
+        else:
+            if self.game_round == BRANCO:
+                self.xeque_branco = False;
+            if self.game_round == PRETO:
+                self.xeque_preto = False;
 
     def movimentacao(self):
         if self.pickUpCord == None :
@@ -294,22 +315,7 @@ class App:
             else: # movimento valido
                 if tabuleiro.movimentaPeca(self.tab, piece, self.pickUpCord[0], self.pickUpCord[1], newPos[0], newPos[1]):
                     self.movPossiveis = tabuleiro.movimentosPossiveis(self.tab);
-                    if tabuleiro.verificaXeque(self.tab, self.movPossiveis, self.game_round):
-                        if not tabuleiro.verificaXequeMate(self.tab, self.movPossiveis, self.game_round):
-                            if self.game_round == PRETO and self.game_round == PRETO:
-                                print("O Rei branco esta em xeque");
-                                self.xeque_branco = True;
-                            elif self.game_round == BRANCO and self.game_round == BRANCO:
-                                print("O Rei preto esta em xeque");
-                                self.xeque_preto = True;
-                        else:
-                            print("Xeque mate");
-                            self.is_xeque_mate = True;
-                    else:
-                        if self.game_round == BRANCO:
-                            self.xeque_branco = False;
-                        if self.game_round == PRETO:
-                            self.xeque_preto = False;
+                    self.verificaXeque();
                     self.promocaoPeao = tabuleiro.promocaoPeao(piece, newPos[0]);
                     if self.promocaoPeao:
                         self.statusPromocao = [piece, newPos[0], newPos[1]];
