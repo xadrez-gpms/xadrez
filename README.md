@@ -18,21 +18,21 @@ ___
     > ~~No momento não está implementado, sempre inicia no modo __Jogador vs Jogador__ independente da sua escolha.~~
 	
     1. Escolha o modo de jogo desejado.
-	    <img title="Imagem do Menu Inicial do Jogo" src="https://i.imgur.com/Xs23UTW.png" width="400"/>
+	    
+    <img title="Imagem do Menu Inicial do Jogo" src="https://i.imgur.com/Xs23UTW.png" width="400"/>
 	
-	    ###Observações:
 	2. Caso deseje jogar contra a IA ou assistir à uma partida de __IA vs IA__, lembre-se que a IA utiliza um temporizador para realizar cada movimento.
         1. Por padrão este temporizador está configurado para 800 ms (4/5 de 1 segundo).
         2. Você pode utilizar as teclas 0 a 5 para alterar o temporizador da IA enquanto estiver em uma partida.
 
-        Tecla | Temporizador
-        ----- | ------------
-        **0** | 0 ms
-        **1** | 200 ms
-        **2** | 400 ms
-        **3** | 600 ms
-        **4** | 800 ms
-        **5** | 1000 ms
+                            Tecla | Temporizador
+                            ----- | ------------
+                            **0** | 0 ms
+                            **1** | 200 ms
+                            **2** | 400 ms
+                            **3** | 600 ms
+                            **4** | 800 ms
+                            **5** | 1000 ms
 
         > Lembrando que este é um delay **adicional** para a movimentação da IA, não considerando o tempo de processamento da jogada.
 
