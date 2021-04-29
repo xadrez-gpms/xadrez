@@ -170,7 +170,7 @@ class App:
         return False;
 
     def verificaEmpate(self):
-        if tabuleiro.verificaEmpate(self.tab, self.game_round):
+        if tabuleiro.verificaEmpate(self.tab, self.game_round) and not self.verificaXeque():
             self.empate = True;
 
     def modoDeJogo(self):
@@ -292,7 +292,6 @@ class App:
     def verificaXeque(self):
         if tabuleiro.verificaXeque(self.tab, self.movPossiveis, self.game_round):
             if not tabuleiro.verificaXequeMate(self.tab, self.movPossiveis, self.game_round):
-
                 if self.game_round == PRETO and self.game_round == PRETO:
                     self.xeque_branco = True;
                 elif self.game_round == BRANCO and self.game_round == BRANCO:
@@ -390,7 +389,7 @@ class App:
                     self._display_surf.blit(promocaoPreto, (0, 0))
             if self.is_xeque_mate:
                 self._display_surf.blit(xequemate, (0, 0))
-            if self.empate:
+            if self.empate and not self.is_xeque_mate:
                 self._display_surf.blit(empate, (0, 0))
         pygame.display.flip();
         if (self.xeque_preto or self.xeque_branco) and not self.exibeXeque and (self.game_mode != GameMode.IA_VS_IA or AI_TIMER > 500):
