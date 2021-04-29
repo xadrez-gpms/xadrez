@@ -4,7 +4,7 @@ Trabalho da Disciplina [***Gerência de Projeto e Manutenção de Software***](http
 - No momento o jogo possui uma **IA BÁSICA**:
 	> Movimentação aleatória.
 	
-	> IA mais sofisticada está nos planos de desenvolvimento.
+	> IA mais sofisticada está nos planos de desenvolvimento. (fora do escopo da entrega final da disciplina) 
 - Está validando os movimentos do jogador. 
 	> Não há feedback visual no momento.
 	
@@ -14,28 +14,63 @@ ___
 
 # Como Jogar?
 1. Navegar até a pasta do projeto e executar o arquivo *interface.py*.
-2. Escolha o modo de jogo no menu
-    > No momento não está implementado, sempre inicia no modo __Jogador vs Jogador__ independente da sua escolha.
+2. Escolha o modo de jogo no *menu inicial.*
+    > ~~No momento não está implementado, sempre inicia no modo __Jogador vs Jogador__ independente da sua escolha.~~
+    1. Escolha o modo de jogo desejado.
+        > Caso deseje jogar contra a IA ou assistir à uma partida de __IA vs IA__ lembre-se que a IA utiliza um temporizador para realizar cada movimento.
+        > Atualmente este temporizador está configurado para 750 ms (3/4 de 1 segundo).
+    1. Alternativamente, ao apertar a tecla ***Esc*** no menu você fecha o jogo.
 
     > ![Imagem do Menu Inicial do Jogo](https://i.imgur.com/Xs23UTW.png "Menu Inicial do Jogo")
 1. Para mover as peças utilize o mouse clicando com o botão esquerdo.
     >![Imagem do Tabuleiro com as peças em posição inicial](https://i.imgur.com/czQfjVv.png "Imagem do Tabuleiro com as peças em posição inicial")
 1. O jogador **SEMPRE** está com as peças **brancas** no modo __Jogador vs IA__.
 1. O jogador **PODE** mover as peças de ambas as cores, *alternadamente*, no modo __Jogador vs Jogador__.
-    1. Em qualquer turno você pode ativar a IA para realizar __1 jogada__ por você. 
+    1. ~~Em qualquer turno você pode ativar a IA para realizar __1 jogada__ por você. ~~
         > ~~No turno das peças pretas você pode ativar o uso da IA.~~ 
-    1. Para ativar o uso da IA utilize a tecla ***A***.
+    1. ~~Para ativar o uso da IA utilize a tecla ***A***.~~
+        > Função desabilitada!
+1. O jogador **PODE** pressionar a tecla ***Esc*** a qualquer momento durante a partida para retornar ao *menu inicial*.
 
+## Movimentos Especiais
 
+### Roque
+> O Roque é uma jogada especial que envolve a movimentação de duas peças em um único lance, o rei e uma das torres. O objetivo da jogada é proteger o rei, tirando-o do centro.
+
+- Antes de executar a jogada, é necessário o atendimento aos seguintes requisitos:
+
+    1. O rei e a torre envolvida não podem ter se movimentado nenhuma vez desde o início do jogo;
+    1. As casas entre o rei e a torre devem estar desocupadas;
+    1. O rei não pode estar em xeque, e também não pode ficar em xeque depois do roque;
+    1. ~~Nenhuma das casas onde o rei passar ou ficar deverá estar no raio de ação de uma peça adversária. Isto não se aplica à torre envolvida.~~
+        **Não Implementado!**
+
+1. Tecnicamente é tratada como uma jogada do Rei, portanto para realizar um roque você deve primeiro clicar no Rei.
+1. Uma vez que tenha selecionado o Rei, selecione a Torre a qual deseja realizar o Roque.
+1. Lembre-se que, caso não atenda aos requisitos, a jogada não será realizada.
+
+### En Passant
+>En passant é um movimento especial de captura do Peão no jogo de xadrez. Na ocasião do avanço por duas casas do peão, caso haja um peão adversário na coluna adjacente na quarta fileira para as brancas, ou quinta para as pretas, este pode capturar o peão como se "de passagem", movendo-o para a casa por onde o peão capturado passou sobre. 
+
+- A captura en passant deve ser feita imediatamente após o peão ter sido movido por duas casas, caso contrário o jogador adversário perde o direito de fazê-lo posteriormente. 
+- Tal movimento é a única ocasião no xadrez na qual a peça que captura não é movida para a casa ocupada pela peça capturada. 
+- Para realizar um ***En Passant*** é necessário ter um peão podendo interceptar o peão adversário que moveu-se por duas casas.
+> <img src="https://i.imgur.com/VAQsNet.png" title="Imagem do Tabuleiro de Xadrez com a possibilidade de En Passant" width="200"/>
+    1. *O peão branco se movimentou duas casas para frente.*
+    2. *O peão preto está em uma posição que pode interceptar seu movimento enquanto o peão branco atravessa a casa (condição do En Passant).*
+> <img src="https://i.imgur.com/lo1zZ8U.png" title="Imagem de um tabuleiro de Xadrez após a execução de uma jogada En Passant" width="200"/>
+    3. *O peão preto intercepta o peão branco, concluindo assim a jogada.*
+
+1. Clique no peão que está em tal situação.
+1. Clique na casa a qual o seu peão se moveria caso o peão adversário tivesse se movido apenas 1 casa.
 
 # Problemas Conhecidos:
 
-- O movimento especial *En Passant* não está disponível.
-- A movimentação da IA **não está fazendo validação da jogada**.
-    > Isso significa que a IA pode realizar jogadas ilegais. 
-    > Exemplo: Rei Preto está em xeque mas a IA move o Cavalo preto de G8 para H6, ainda mantendo o Rei Preto em xeque.
-- O Menu para escolha de Modo de Jogo não tem efeito prático.
+- Visto que a IA é simples e utiliza movimentação aleatória ela pode ficar presa em um loop para escolher sua jogada quando estiver em xeque.
+- ~~O Menu para escolha de Modo de Jogo não tem efeito prático.~~
 - ~~Os movimentos "Pequeno Roque" e "Grande Roque" ainda não estão disponíveis.~~ 
+- ~~O movimento especial *En Passant* não está disponível.~~
+- ~~A movimentação da IA **não está fazendo validação da jogada.~~
 ___
 
 # Releases:

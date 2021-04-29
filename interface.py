@@ -19,7 +19,7 @@ except ImportError:
 BOARD_OFFSET = 14 # sprite do tabuleiro possui borda de 14 pixels
 SPRITE_SIZE = 52 # tamanho do sprite das peças
 TARGET_FPS = 60 # Taxa Desejada de Quadros por segundo
-AI_TIMER = 250 # Tempo (em milisegundos) para aguardar antes de chamar a função da IA para movimentar a peça.
+AI_TIMER = 750 # Tempo (em milisegundos) para aguardar antes de chamar a função da IA para movimentar a peça.
 SCREEN_TITLE = "Xadrez GPMS UFF 2020.2"
 
 ## Início da lista dos sprites
