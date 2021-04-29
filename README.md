@@ -21,9 +21,9 @@ ___
         > Atualmente este temporizador está configurado para 750 ms (3/4 de 1 segundo).
     1. Alternativamente, ao apertar a tecla ***Esc*** no menu você fecha o jogo.
 
-    > ![Imagem do Menu Inicial do Jogo](https://i.imgur.com/Xs23UTW.png "Menu Inicial do Jogo")
+    > <img title="Imagem do Menu Inicial do Jogo" src="https://i.imgur.com/Xs23UTW.png" width="400"/>
 1. Para mover as peças utilize o mouse clicando com o botão esquerdo.
-    >![Imagem do Tabuleiro com as peças em posição inicial](https://i.imgur.com/czQfjVv.png "Imagem do Tabuleiro com as peças em posição inicial")
+    > <img title="Imagem do Tabuleiro com as peças em posição inicial" src="https://i.imgur.com/czQfjVv.png" width="400" />
 1. O jogador **SEMPRE** está com as peças **brancas** no modo __Jogador vs IA__.
 1. O jogador **PODE** mover as peças de ambas as cores, *alternadamente*, no modo __Jogador vs Jogador__.
     1. ~~Em qualquer turno você pode ativar a IA para realizar __1 jogada__ por você. ~~
@@ -55,11 +55,12 @@ ___
 - A captura en passant deve ser feita imediatamente após o peão ter sido movido por duas casas, caso contrário o jogador adversário perde o direito de fazê-lo posteriormente. 
 - Tal movimento é a única ocasião no xadrez na qual a peça que captura não é movida para a casa ocupada pela peça capturada. 
 - Para realizar um ***En Passant*** é necessário ter um peão podendo interceptar o peão adversário que moveu-se por duas casas.
-> <img src="https://i.imgur.com/VAQsNet.png" title="Imagem do Tabuleiro de Xadrez com a possibilidade de En Passant" width="200"/>
-    1. *O peão branco se movimentou duas casas para frente.*
-    2. *O peão preto está em uma posição que pode interceptar seu movimento enquanto o peão branco atravessa a casa (condição do En Passant).*
-> <img src="https://i.imgur.com/lo1zZ8U.png" title="Imagem de um tabuleiro de Xadrez após a execução de uma jogada En Passant" width="200"/>
-    3. *O peão preto intercepta o peão branco, concluindo assim a jogada.*
+> <img src="https://i.imgur.com/VAQsNet.png" title="Imagem do Tabuleiro de Xadrez com a possibilidade de En Passant" width="400"/>
+    1. O peão branco se movimentou duas casas para frente.
+    2. O peão preto está em uma posição que pode interceptar seu movimento enquanto o peão branco atravessa a casa (condição do En Passant).
+    
+> <img src="https://i.imgur.com/lo1zZ8U.png" title="Imagem de um tabuleiro de Xadrez após a execução de uma jogada En Passant" width="400"/>
+    3. O peão preto intercepta o peão branco, concluindo assim a jogada.
 
 1. Clique no peão que está em tal situação.
 1. Clique na casa a qual o seu peão se moveria caso o peão adversário tivesse se movido apenas 1 casa.
