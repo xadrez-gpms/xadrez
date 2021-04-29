@@ -50,6 +50,8 @@ white_rook = pygame.image.load('sprites/rookW3.png')
 WHITE = 0;
 BLACK = 1;
 
+xeque = pygame.image.load('sprites/xeque.png');
+
 ## Fim da lista dos sprites
 
 BRANCO = tabuleiro.BRANCO;
@@ -61,6 +63,7 @@ adjustedBoard = pygame.transform.scale(board, (size))
 promocaoBranco = pygame.transform.scale(promocaoBranco, (size))
 promocaoPreto = pygame.transform.scale(promocaoPreto, (size))
 menuGame = pygame.transform.scale(menuGame, (size))
+xeque   = pygame.transform.scale(xeque, (size));
 
 class App:
 
@@ -104,6 +107,7 @@ class App:
     is_xeque_mate   = False;
     empate     = False;
     corJogador      = BRANCO;
+    exibeXeque      = False;
 
     # tabuleiro
     def initGame(self):
@@ -120,6 +124,7 @@ class App:
         self.statusPromocao = None;
         self.is_xeque_mate = False;
         self.empate = False;
+        self.exibeXeque = False;
 
     def __init__(self):
         self._running = True
@@ -289,6 +294,7 @@ class App:
     def verificaXeque(self):
         if tabuleiro.verificaXeque(self.tab, self.movPossiveis, self.game_round):
             if not tabuleiro.verificaXequeMate(self.tab, self.movPossiveis, self.game_round):
+
                 if self.game_round == PRETO and self.game_round == PRETO:
                     print("O Rei branco esta em xeque");
                     self.xeque_branco = True;
@@ -303,6 +309,7 @@ class App:
                 self.xeque_branco = False;
             if self.game_round == PRETO:
                 self.xeque_preto = False;
+            self.exibeXeque = False;
 
     def movimentacao(self):
         if self.pickUpCord == None :
@@ -379,6 +386,7 @@ class App:
         pass
     # VISUAL LOGIC | Tudo relacionado a interface deve entrar aqui
     def on_render(self):
+
         if self.game_mode == GameMode.MENU:
             self._display_surf.blit(menuGame, (0, 0))
         else:
@@ -390,6 +398,12 @@ class App:
                 else:
                     self._display_surf.blit(promocaoPreto, (0, 0))
         pygame.display.flip();
+        if (self.xeque_preto or self.xeque_branco) and not self.exibeXeque:
+            self._display_surf.blit(xeque, (0, 0))
+            pygame.display.flip();
+            pygame.time.wait(1000);
+            self.exibeXeque = True;
+
 
     # Quando estiver encerrando o programa
     def on_cleanup(self):
