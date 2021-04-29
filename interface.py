@@ -162,6 +162,7 @@ class App:
     def verificaEmpate(self):
         if tabuleiro.verificaEmpate(self.tab):
             self.empate = True;
+            print("Empate")
 
     def modoDeJogo(self):
         pos = pygame.mouse.get_pos()
@@ -181,8 +182,9 @@ class App:
             self._running = False
         if event.type == pygame.MOUSEBUTTONUP and event.button == 1: # clique com o botão esquerdo
             if self.game_mode != GameMode.MENU:
-                if not self.promocaoPeao and not self.is_xeque_mate and not self.empate:
-                    self.movimentacao();
+                if not self.promocaoPeao and not self.is_xeque_mate:
+                    if not self.empate:
+                        self.movimentacao();
                 else: self.promovePeao();
             else:
                 self.modoDeJogo();
