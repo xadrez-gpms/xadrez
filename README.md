@@ -20,11 +20,11 @@ ___
     1. Escolha o modo de jogo desejado.
 	<img title="Imagem do Menu Inicial do Jogo" src="https://i.imgur.com/Xs23UTW.png" width="400"/>
 	
-	##### Observações:
+	**Observações:**
     	1. Caso deseje jogar contra a IA ou assistir à uma partida de __IA vs IA__, lembre-se que a IA utiliza um temporizador para realizar cada movimento.
         1. Por padrão este temporizador está configurado para 800 ms (4/5 de 1 segundo).
         1. Você pode utilizar as teclas 0 a 5 para alterar o temporizador da IA enquanto estiver em uma partida.
-        ###### Os temporizadores por tecla são os seguintes:
+        **Os temporizadores por tecla são os seguintes:**
             1. Tecla ***0*** --> 0 ms
             1. Tecla ***1*** --> 200 ms
             1. Tecla ***2*** --> 400 ms
@@ -72,13 +72,13 @@ ___
 		**Não Implementado!**
 ___
 - ##### Exemplo de tabuleiro onde é possível fazer o ***Roque***:
-<img src="https://i.imgur.com/ri5m0ZU.png" title="Tabuleiro de xadrez onde as peças brancas podem fazer um pequeno roque e as peças pretas podem fazer um grande roque" width="400" />
-<img src="https://i.imgur.com/gpC0au4.png" title="Tabuleiro de xadrez após as peças brancas realizarem um pequeno roque e as peças pretas realizarem um grande roque." width="400"/>
-1. Selecionar o Rei Branco
-2. Selecionar a Torre Branca
+<img src="https://i.imgur.com/ri5m0ZU.png" title="Tabuleiro de xadrez onde as peças brancas podem fazer um pequeno roque e as peças pretas podem fazer um grande roque" width="300" />
+<img src="https://i.imgur.com/gpC0au4.png" title="Tabuleiro de xadrez após as peças brancas realizarem um pequeno roque e as peças pretas realizarem um grande roque." width="300"/>
+1. Selecionar o Rei Branco.
+1. Selecionar a Torre Branca.
 	1. O resultado é um Pequeno Roque nas peças Brancas.
-3. Selecionar o Rei Preto
-4. Selecionar a Torre Preta.
+1. Selecionar o Rei Preto.
+1. Selecionar a Torre Preta.
 	1. O resultado é um Grande Roque nas peças Pretas.
 ___
 1. Tecnicamente é tratada como uma **jogada do Rei**, portanto para realizar um roque você deve primeiro clicar no Rei.
