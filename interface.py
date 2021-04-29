@@ -202,16 +202,18 @@ class App:
             if event.key == pygame.K_r:
                 if self.game_mode != GameMode.MENU:
                     self.initGame();
-            if event.key == pygame.K_1:
+            if event.key == pygame.K_0:
                 AI_TIMER = 0;
-            if event.key == pygame.K_2:
+            if event.key == pygame.K_1:
                 AI_TIMER = 200;
-            if event.key == pygame.K_3:
+            if event.key == pygame.K_2:
                 AI_TIMER = 400;
-            if event.key == pygame.K_4:
+            if event.key == pygame.K_3:
                 AI_TIMER = 600;
-            if event.key == pygame.K_5:
+            if event.key == pygame.K_4:
                 AI_TIMER = 800;
+            if event.key == pygame.K_5:
+                AI_TIMER = 1000;
             if event.key == pygame.K_ESCAPE:
                 if self.game_mode != GameMode.MENU:
                     self.game_mode = GameMode.MENU;
