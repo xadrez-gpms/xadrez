@@ -14,6 +14,7 @@ ___
 
 # Como Jogar?
 1. Navegar até a pasta do projeto e executar o arquivo *interface.py*.
+    1. Alternativamente você pode executar o arquivo *Xadrez.exe*.
 2. Escolha o modo de jogo no *menu inicial.*
     > ~~No momento não está implementado, sempre inicia no modo __Jogador vs Jogador__ independente da sua escolha.~~
 	
@@ -136,7 +137,7 @@ ___
 
 Informações sobre o release estão [disponíveis aqui.](https://github.com/xadrez-gpms/xadrez/blob/main/RELEASE.md)
 
-Você pode realizar o download de um binário para instalação através deste link. (*indisponível no momento*)
+Você pode realizar o download do projeto através [deste link](https://github.com/xadrez-gpms/xadrez/archive/refs/heads/main.zip).
 ___
 # Recursos
 
